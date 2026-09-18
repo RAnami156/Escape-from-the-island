@@ -2,12 +2,16 @@
 
 [ext_resource type="Texture2D" uid="uid://csju0ncvrygao" path="res://asets/Sprout Lands - Sprites - Basic pack/istockphoto-182361617-612x612.jpg" id="1_itxqv"]
 [ext_resource type="PackedScene" uid="uid://don1xstqrlpce" path="res://scene/player.tscn" id="2_v0l8b"]
+[ext_resource type="PackedScene" uid="uid://b2w0x1oof6fa" path="res://scene/npc_1.tscn" id="2_wp4xf"]
 
 [node name="main" type="Node2D" unique_id=1160497426]
 
 [node name="Istockphoto182361617612x612" type="Sprite2D" parent="." unique_id=1747862034]
 position = Vector2(571, 311)
 texture = ExtResource("1_itxqv")
+
+[node name="npc_1" parent="." unique_id=1644685617 instance=ExtResource("2_wp4xf")]
+position = Vector2(620, 275)
 
 [node name="player" parent="." unique_id=1884075297 instance=ExtResource("2_v0l8b")]
 position = Vector2(528, 312)
