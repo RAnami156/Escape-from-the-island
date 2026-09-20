@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://cjlnc3pyvxgnf"
-path="res://.godot/imported/Free Chicken Sprites.png-8b410f9dc75f78081e0b25644c51e4d8.ctex"
+uid="uid://eks6jv5q2xao"
+path="res://.godot/imported/romariochar-Sheet.png-fa5762488427b69d4909f3b74ea432e2.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://asets/Sprout Lands - Sprites - Basic pack/Characters/Free Chicken Sprites.png"
-dest_files=["res://.godot/imported/Free Chicken Sprites.png-8b410f9dc75f78081e0b25644c51e4d8.ctex"]
+source_file="res://asets/romariochar-Sheet.png"
+dest_files=["res://.godot/imported/romariochar-Sheet.png-fa5762488427b69d4909f3b74ea432e2.ctex"]
 
 [params]
 

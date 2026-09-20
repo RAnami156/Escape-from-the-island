@@ -1,8 +1,8 @@
-[gd_scene format=3 uid="uid://b2w0x1oof6fa"]
+[gd_scene format=3 uid="uid://bpreiakp2k8dj"]
 
-[ext_resource type="Script" uid="uid://bgiuoah153et6" path="res://script/npc_1.gd" id="1_flykp"]
-[ext_resource type="Texture2D" uid="uid://cisomewmdw4op" path="res://asets/icon.svg" id="1_fogob"]
-[ext_resource type="FontFile" uid="uid://bcmxb24dbljpw" path="res://asets/minecraft.ttf" id="3_xjep2"]
+[ext_resource type="Script" uid="uid://cy4yf72xuegns" path="res://script/npc_1_g.gd" id="1_cn2sx"]
+[ext_resource type="Texture2D" uid="uid://cisomewmdw4op" path="res://asets/icon.svg" id="2_yt4my"]
+[ext_resource type="FontFile" uid="uid://bcmxb24dbljpw" path="res://asets/minecraft.ttf" id="3_1k2s6"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_x244a"]
 radius = 29.274563
@@ -10,13 +10,14 @@ radius = 29.274563
 [sub_resource type="CircleShape2D" id="CircleShape2D_c105b"]
 radius = 64.28063
 
-[node name="npc_1" type="CharacterBody2D" unique_id=1644685617]
+[node name="npc_1_g" type="CharacterBody2D" unique_id=1644685617]
+modulate = Color(0, 1, 0.17254902, 1)
 collision_mask = 0
-script = ExtResource("1_flykp")
+script = ExtResource("1_cn2sx")
 
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=1597038166]
 scale = Vector2(0.21875, 0.21875)
-texture = ExtResource("1_fogob")
+texture = ExtResource("2_yt4my")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=323268657]
 shape = SubResource("CircleShape2D_x244a")
@@ -37,7 +38,7 @@ offset_left = 834.0
 offset_top = 824.0
 offset_right = 1118.0
 offset_bottom = 909.0
-theme_override_fonts/font = ExtResource("3_xjep2")
+theme_override_fonts/font = ExtResource("3_1k2s6")
 theme_override_font_sizes/font_size = 22
 placeholder_text = "напиши сюда"
 alignment = 1
@@ -46,7 +47,7 @@ alignment = 1
 modulate = Color(0, 0, 0, 1)
 position = Vector2(954, 1033.5)
 scale = Vector2(16.875, 1.3046875)
-texture = ExtResource("1_fogob")
+texture = ExtResource("2_yt4my")
 
 [node name="text" type="Label" parent="CanvasLayer" unique_id=1466429651]
 offset_left = 437.0
@@ -54,7 +55,7 @@ offset_top = 961.0
 offset_right = 23810.0
 offset_bottom = 4711.0
 scale = Vector2(0.33, 0.33)
-theme_override_fonts/font = ExtResource("3_xjep2")
+theme_override_fonts/font = ExtResource("3_1k2s6")
 theme_override_font_sizes/font_size = 100
 text = "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been 
 the industry's standard dummy text ever since 1966, when designers at Letraset and James Mosley, the librarian at St Bride Printing Library in London,
