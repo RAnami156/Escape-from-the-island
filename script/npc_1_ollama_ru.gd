@@ -8,6 +8,7 @@ extends CharacterBody2D
 @onready var input: LineEdit = $CanvasLayer/LineEdit
 @onready var text: Label = $CanvasLayer/text
 @onready var http_request: HTTPRequest = $HTTPRequest
+@onready var anim = $AnimatedSprite2D
 
 
 # ============================================================
@@ -198,6 +199,9 @@ func _ready() -> void:
 	input.visible = false
 	input.text = ""
 	text.text = ""
+
+	# Обычная анимация.
+	anim.play("Idle")
 
 	if not input.text_submitted.is_connected(_on_text_submitted):
 		input.text_submitted.connect(_on_text_submitted)
@@ -452,6 +456,9 @@ func send_message_to_ai(player_text: String) -> void:
 
 	_update_player_movement_state()
 
+	# NPC думает.
+	anim.play("Thinking")
+
 	print("[OLLAMA] Sending...")
 
 
@@ -538,6 +545,9 @@ func send_message_to_ai(player_text: String) -> void:
 		waiting_for_response = false
 		pending_player_text = ""
 
+		# Возвращаем Idle при ошибке.
+		anim.play("Idle")
+
 		_update_player_movement_state()
 
 		print(
@@ -558,6 +568,9 @@ func _on_request_completed(
 ) -> void:
 
 	waiting_for_response = false
+
+	# Ответ получен — возвращаем Idle.
+	anim.play("Idle")
 
 
 	# --------------------------------------------------------

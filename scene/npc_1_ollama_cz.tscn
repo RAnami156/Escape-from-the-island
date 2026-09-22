@@ -3,6 +3,7 @@
 [ext_resource type="Script" uid="uid://c2hclp7xgfhtu" path="res://script/npc_1_ollama_cz.gd" id="1_x5xkk"]
 [ext_resource type="Texture2D" uid="uid://cisomewmdw4op" path="res://asets/icon.svg" id="2_ttpm0"]
 [ext_resource type="FontFile" uid="uid://bcmxb24dbljpw" path="res://asets/minecraft.ttf" id="3_1risc"]
+[ext_resource type="FontFile" uid="uid://dxa4u7yhh3vnh" path="res://asets/1 Minecraft-Regular.otf" id="4_oalye"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_x244a"]
 radius = 29.274563
@@ -55,9 +56,9 @@ offset_top = 961.0
 offset_right = 23810.0
 offset_bottom = 4711.0
 scale = Vector2(0.33, 0.33)
-theme_override_fonts/font = ExtResource("3_1risc")
+theme_override_fonts/font = ExtResource("4_oalye")
 theme_override_font_sizes/font_size = 100
-text = "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been 
+text = "+ěščřžýáí is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been 
 the industry's standard dummy text ever since 1966, when designers at Letraset and James Mosley, the librarian at St Bride Printing Library in London,
  took a 1914 Cicero translation and scrambled it to make dummy text for Letraset's Body Type sheets. It has survived not only many decades, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised thanks to these sheets and more recently with desktop publishing software like Aldus PageMaker and Microsoft Word including versions of Lorem Ipsum."
 

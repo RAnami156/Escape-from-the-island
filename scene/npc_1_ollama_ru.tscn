@@ -3,15 +3,158 @@
 [ext_resource type="Script" uid="uid://cph8tpicnnvsr" path="res://script/npc_1_ollama_ru.gd" id="2_gw5t6"]
 [ext_resource type="Texture2D" uid="uid://cisomewmdw4op" path="res://asets/icon.svg" id="2_p44ak"]
 [ext_resource type="FontFile" uid="uid://bcmxb24dbljpw" path="res://asets/minecraft.ttf" id="3_k8we1"]
-
-[sub_resource type="CircleShape2D" id="CircleShape2D_x244a"]
-radius = 29.274563
+[ext_resource type="Texture2D" uid="uid://c70uuek2s4xu" path="res://asets/monkey (2)-Sheet.png" id="4_k8we1"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_c105b"]
 radius = 64.28063
 
+[sub_resource type="AtlasTexture" id="AtlasTexture_q343c"]
+atlas = ExtResource("4_k8we1")
+region = Rect2(0, 0, 128, 128)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_7fpnu"]
+atlas = ExtResource("4_k8we1")
+region = Rect2(128, 0, 128, 128)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ivsbi"]
+atlas = ExtResource("4_k8we1")
+region = Rect2(256, 0, 128, 128)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_7h7ol"]
+atlas = ExtResource("4_k8we1")
+region = Rect2(384, 0, 128, 128)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_trtyr"]
+atlas = ExtResource("4_k8we1")
+region = Rect2(512, 0, 128, 128)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ux87y"]
+atlas = ExtResource("4_k8we1")
+region = Rect2(640, 0, 128, 128)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_b7g1m"]
+atlas = ExtResource("4_k8we1")
+region = Rect2(0, 128, 128, 128)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_we4ih"]
+atlas = ExtResource("4_k8we1")
+region = Rect2(128, 128, 128, 128)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_660ha"]
+atlas = ExtResource("4_k8we1")
+region = Rect2(256, 128, 128, 128)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_82vxp"]
+atlas = ExtResource("4_k8we1")
+region = Rect2(0, 256, 128, 128)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_6rrwl"]
+atlas = ExtResource("4_k8we1")
+region = Rect2(128, 256, 128, 128)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_phqch"]
+atlas = ExtResource("4_k8we1")
+region = Rect2(256, 256, 128, 128)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_5lsmt"]
+atlas = ExtResource("4_k8we1")
+region = Rect2(384, 256, 128, 128)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_1l1vv"]
+atlas = ExtResource("4_k8we1")
+region = Rect2(512, 256, 128, 128)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_0s5sg"]
+atlas = ExtResource("4_k8we1")
+region = Rect2(640, 256, 128, 128)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_od1sx"]
+atlas = ExtResource("4_k8we1")
+region = Rect2(768, 256, 128, 128)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_naak7"]
+atlas = ExtResource("4_k8we1")
+region = Rect2(896, 256, 128, 128)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_x244a"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_q343c")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_7fpnu")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ivsbi")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_7h7ol")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_trtyr")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ux87y")
+}],
+"loop": 1,
+"name": &"Idle",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_b7g1m")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_we4ih")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_660ha")
+}],
+"loop": 1,
+"name": &"Talking",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_82vxp")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_6rrwl")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_phqch")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_5lsmt")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_1l1vv")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_0s5sg")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_od1sx")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_1l1vv")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_0s5sg")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_od1sx")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_naak7")
+}],
+"loop": 1,
+"name": &"Thinking",
+"speed": 6.0
+}]
+
 [node name="npc_1_ollama_ru" type="CharacterBody2D" unique_id=1644685617]
-modulate = Color(1, 0, 1, 1)
 collision_mask = 0
 script = ExtResource("2_gw5t6")
 max_output_tokens = 256
@@ -36,11 +179,12 @@ world_memory = "
 "
 
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=1597038166]
+visible = false
 scale = Vector2(0.21875, 0.21875)
 texture = ExtResource("2_p44ak")
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=323268657]
-shape = SubResource("CircleShape2D_x244a")
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="." unique_id=1015547831]
+polygon = PackedVector2Array(6, -29, 11, -19, 20, -13, 22, -7, 23, -4, 24, -1, 24, 2, 25, 5, 29, 6, 34, -6, 37, -12, 33, -15, 33, -17, 38, -15, 40, -15, 47, -24, 43, -13, 48, -9, 49, -3, 43, -8, 36, 8, 43, 12, 45, 17, 42, 24, 11, 27, -12, 28, -35, 22, -38, 16, -36, 10, -24, 7, -21, 7, -21, -6, -19, -13, -15, -16, -11, -19, -9, -20, -4, -30)
 
 [node name="Area2D" type="Area2D" parent="." unique_id=1897364586]
 collision_layer = 0
@@ -80,6 +224,10 @@ theme_override_font_sizes/font_size = 100
 text = "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been 
 the industry's standard dummy text ever since 1966, when designers at Letraset and James Mosley, the librarian at St Bride Printing Library in London,
  took a 1914 Cicero translation and scrambled it to make dummy text for Letraset's Body Type sheets. It has survived not only many decades, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised thanks to these sheets and more recently with desktop publishing software like Aldus PageMaker and Microsoft Word including versions of Lorem Ipsum."
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=448478908]
+sprite_frames = SubResource("SpriteFrames_x244a")
+animation = &"Idle"
 
 [connection signal="body_entered" from="Area2D" to="." method="_on_area_2d_body_entered"]
 [connection signal="body_exited" from="Area2D" to="." method="_on_area_2d_body_exited"]

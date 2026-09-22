@@ -12,17 +12,17 @@ load_path = "res://.godot/imported/istockphoto-182361617-612x612.jpg-86186417d43
 position = Vector2(571, 311)
 texture = SubResource("CompressedTexture2D_brvut")
 
+[node name="npc_1_ollama_ru" parent="." unique_id=1644685617 instance=ExtResource("2_wp4xf")]
+position = Vector2(601, 298)
+
 [node name="player" parent="." unique_id=1884075297 instance=ExtResource("2_v0l8b")]
 position = Vector2(528, 312)
 
 [node name="Camera2D" type="Camera2D" parent="player" unique_id=945813532]
-zoom = Vector2(10, 10)
+zoom = Vector2(7, 7)
 position_smoothing_enabled = true
 
 [node name="StaticBody2D" type="StaticBody2D" parent="." unique_id=1554261429]
 
 [node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="StaticBody2D" unique_id=193883884]
 polygon = PackedVector2Array(685, 229, 685, 229, 765, 219, 784, 297, 733, 315, 699, 315, 679, 287, 696, 265, 712, 252)
-
-[node name="npc_1_ollama_ru" parent="." unique_id=1644685617 instance=ExtResource("2_wp4xf")]
-position = Vector2(614, 284)
