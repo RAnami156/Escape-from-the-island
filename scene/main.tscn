@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://sps826g22ajn"]
 
 [ext_resource type="PackedScene" uid="uid://don1xstqrlpce" path="res://scene/player.tscn" id="2_v0l8b"]
-[ext_resource type="PackedScene" uid="uid://bpreiakp2k8dj" path="res://scene/npc_1_g.tscn" id="3_wp4xf"]
+[ext_resource type="PackedScene" uid="uid://baw8ke07buvuh" path="res://scene/npc_1_ollama_ru.tscn" id="2_wp4xf"]
 
 [sub_resource type="CompressedTexture2D" id="CompressedTexture2D_brvut"]
 load_path = "res://.godot/imported/istockphoto-182361617-612x612.jpg-86186417d43c4ca53810f993abedc662.ctex"
@@ -19,5 +19,10 @@ position = Vector2(528, 312)
 zoom = Vector2(10, 10)
 position_smoothing_enabled = true
 
-[node name="npc_1" parent="." unique_id=1644685617 instance=ExtResource("3_wp4xf")]
-position = Vector2(618, 285)
+[node name="StaticBody2D" type="StaticBody2D" parent="." unique_id=1554261429]
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="StaticBody2D" unique_id=193883884]
+polygon = PackedVector2Array(685, 229, 685, 229, 765, 219, 784, 297, 733, 315, 699, 315, 679, 287, 696, 265, 712, 252)
+
+[node name="npc_1_ollama_ru" parent="." unique_id=1644685617 instance=ExtResource("2_wp4xf")]
+position = Vector2(614, 284)

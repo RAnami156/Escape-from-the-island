@@ -1,0 +1,65 @@
+[gd_scene format=3 uid="uid://boriywlk62f23"]
+
+[ext_resource type="Script" uid="uid://c2hclp7xgfhtu" path="res://script/npc_1_ollama_cz.gd" id="1_x5xkk"]
+[ext_resource type="Texture2D" uid="uid://cisomewmdw4op" path="res://asets/icon.svg" id="2_ttpm0"]
+[ext_resource type="FontFile" uid="uid://bcmxb24dbljpw" path="res://asets/minecraft.ttf" id="3_1risc"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_x244a"]
+radius = 29.274563
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_c105b"]
+radius = 64.28063
+
+[node name="npc_1_ollama_cz" type="CharacterBody2D" unique_id=1644685617]
+modulate = Color(1, 0, 1, 1)
+collision_mask = 0
+script = ExtResource("1_x5xkk")
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=1597038166]
+scale = Vector2(0.21875, 0.21875)
+texture = ExtResource("2_ttpm0")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=323268657]
+shape = SubResource("CircleShape2D_x244a")
+
+[node name="Area2D" type="Area2D" parent="." unique_id=1897364586]
+collision_layer = 0
+collision_mask = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D" unique_id=224326009]
+shape = SubResource("CircleShape2D_c105b")
+
+[node name="HTTPRequest" type="HTTPRequest" parent="." unique_id=827291519]
+
+[node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=1913535278]
+
+[node name="LineEdit" type="LineEdit" parent="CanvasLayer" unique_id=1975410061]
+offset_left = 834.0
+offset_top = 824.0
+offset_right = 1118.0
+offset_bottom = 909.0
+theme_override_fonts/font = ExtResource("3_1risc")
+theme_override_font_sizes/font_size = 22
+placeholder_text = "напиши сюда"
+alignment = 1
+
+[node name="Sprite2D" type="Sprite2D" parent="CanvasLayer" unique_id=2085070655]
+modulate = Color(0, 0, 0, 1)
+position = Vector2(954, 1033.5)
+scale = Vector2(16.875, 1.3046875)
+texture = ExtResource("2_ttpm0")
+
+[node name="text" type="Label" parent="CanvasLayer" unique_id=1466429651]
+offset_left = 437.0
+offset_top = 961.0
+offset_right = 23810.0
+offset_bottom = 4711.0
+scale = Vector2(0.33, 0.33)
+theme_override_fonts/font = ExtResource("3_1risc")
+theme_override_font_sizes/font_size = 100
+text = "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been 
+the industry's standard dummy text ever since 1966, when designers at Letraset and James Mosley, the librarian at St Bride Printing Library in London,
+ took a 1914 Cicero translation and scrambled it to make dummy text for Letraset's Body Type sheets. It has survived not only many decades, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised thanks to these sheets and more recently with desktop publishing software like Aldus PageMaker and Microsoft Word including versions of Lorem Ipsum."
+
+[connection signal="body_entered" from="Area2D" to="." method="_on_area_2d_body_entered"]
+[connection signal="body_exited" from="Area2D" to="." method="_on_area_2d_body_exited"]
