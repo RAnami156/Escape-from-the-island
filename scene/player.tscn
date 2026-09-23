@@ -3,6 +3,8 @@
 [ext_resource type="Script" uid="uid://ccqmnqpjv328w" path="res://script/player.gd" id="1_hjaqi"]
 [ext_resource type="Texture2D" uid="uid://eks6jv5q2xao" path="res://asets/romariochar-Sheet.png" id="2_hjaqi"]
 
+[sub_resource type="CircleShape2D" id="CircleShape2D_x244a"]
+
 [sub_resource type="AtlasTexture" id="AtlasTexture_fvtld"]
 atlas = ExtResource("2_hjaqi")
 region = Rect2(96, 48, 48, 48)
@@ -270,18 +272,16 @@ animations = [{
 "speed": 6.0
 }]
 
-[sub_resource type="CircleShape2D" id="CircleShape2D_x244a"]
-
 [node name="player" type="CharacterBody2D" unique_id=1884075297]
 collision_layer = 2
 collision_mask = 7
 script = ExtResource("1_hjaqi")
 
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=721654549]
+position = Vector2(-1, 7)
+shape = SubResource("CircleShape2D_x244a")
+
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=776546798]
 sprite_frames = SubResource("SpriteFrames_c105b")
 animation = &"down"
 autoplay = "idle_down"
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=721654549]
-position = Vector2(-1, 7)
-shape = SubResource("CircleShape2D_x244a")

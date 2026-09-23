@@ -3,10 +3,63 @@
 [ext_resource type="Script" uid="uid://cph8tpicnnvsr" path="res://script/npc_1_ollama_ru.gd" id="2_gw5t6"]
 [ext_resource type="Texture2D" uid="uid://cisomewmdw4op" path="res://asets/icon.svg" id="2_p44ak"]
 [ext_resource type="FontFile" uid="uid://bcmxb24dbljpw" path="res://asets/minecraft.ttf" id="3_k8we1"]
+[ext_resource type="Texture2D" uid="uid://cgf7jbk6t347h" path="res://asets/Monkey env (2)-Sheet.png" id="4_7fpnu"]
+[ext_resource type="Texture2D" uid="uid://cn6xetuyew058" path="res://asets/leaf.png" id="4_ivsbi"]
 [ext_resource type="Texture2D" uid="uid://c70uuek2s4xu" path="res://asets/monkey (2)-Sheet.png" id="4_k8we1"]
+[ext_resource type="Texture2D" uid="uid://cffmlkepyc1nm" path="res://asets/monkey (2)-Sheet (1).png" id="6_ivsbi"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_c105b"]
 radius = 64.28063
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_b7g1m"]
+atlas = ExtResource("4_7fpnu")
+region = Rect2(0, 0, 256, 256)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_we4ih"]
+atlas = ExtResource("4_7fpnu")
+region = Rect2(256, 0, 256, 256)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_660ha"]
+atlas = ExtResource("4_7fpnu")
+region = Rect2(512, 0, 256, 256)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_xtpro"]
+atlas = ExtResource("4_7fpnu")
+region = Rect2(768, 0, 256, 256)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_lhrsm"]
+atlas = ExtResource("4_7fpnu")
+region = Rect2(1024, 0, 256, 256)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_tyeom"]
+atlas = ExtResource("4_7fpnu")
+region = Rect2(1280, 0, 256, 256)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_c105b"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_b7g1m")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_we4ih")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_660ha")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_xtpro")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_lhrsm")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_tyeom")
+}],
+"loop": 1,
+"name": &"default",
+"speed": 4.0
+}]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_q343c"]
 atlas = ExtResource("4_k8we1")
@@ -32,17 +85,25 @@ region = Rect2(512, 0, 128, 128)
 atlas = ExtResource("4_k8we1")
 region = Rect2(640, 0, 128, 128)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_b7g1m"]
-atlas = ExtResource("4_k8we1")
-region = Rect2(0, 128, 128, 128)
+[sub_resource type="AtlasTexture" id="AtlasTexture_vchdq"]
+atlas = ExtResource("6_ivsbi")
+region = Rect2(0, 384, 128, 128)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_we4ih"]
-atlas = ExtResource("4_k8we1")
-region = Rect2(128, 128, 128, 128)
+[sub_resource type="AtlasTexture" id="AtlasTexture_e3yj1"]
+atlas = ExtResource("6_ivsbi")
+region = Rect2(128, 384, 128, 128)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_660ha"]
-atlas = ExtResource("4_k8we1")
-region = Rect2(256, 128, 128, 128)
+[sub_resource type="AtlasTexture" id="AtlasTexture_3gevi"]
+atlas = ExtResource("6_ivsbi")
+region = Rect2(256, 384, 128, 128)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_wr5b0"]
+atlas = ExtResource("6_ivsbi")
+region = Rect2(384, 384, 128, 128)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_7e4pv"]
+atlas = ExtResource("6_ivsbi")
+region = Rect2(512, 384, 128, 128)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_82vxp"]
 atlas = ExtResource("4_k8we1")
@@ -103,13 +164,19 @@ animations = [{
 }, {
 "frames": [{
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_b7g1m")
+"texture": SubResource("AtlasTexture_vchdq")
 }, {
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_we4ih")
+"texture": SubResource("AtlasTexture_e3yj1")
 }, {
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_660ha")
+"texture": SubResource("AtlasTexture_3gevi")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_wr5b0")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_7e4pv")
 }],
 "loop": 1,
 "name": &"Talking",
@@ -157,24 +224,64 @@ animations = [{
 [node name="npc_1_ollama_ru" type="CharacterBody2D" unique_id=1644685617]
 collision_mask = 0
 script = ExtResource("2_gw5t6")
+temperature = 0.2
 max_output_tokens = 256
 npc_name = "Барон Бонг"
+max_reply_characters = 170
+characters_per_line = 60
 npc_lore = "Барон Бонг — орангутан, живущий на острове.
 
 Он давно находится на этом острове и хорошо знает его.
 
 Он слышал крушение самолёта и видел последствия катастрофы.
 
-Он не знает, откуда именно пришёл игрок, пока игрок сам ему об этом не расскажет.
+Он догадывается, откуда именно пришёл игрок.
 
-Он не знает будущего.
+Раньше он бороздил океаны и был капитаном «Забытого Фрегата».
 
-Он знает только то, что видел, слышал или что ему рассказывали.
+Он устал от морских походов после крушения у этого острова.
+
+Он вонзил свой стальной меч в камень, отказавшись от былой суеты.
+
+Он сделался хозяином бронзового штурвала и сделал его опорой для отдыха.
+
+"
+npc_behavior = "
+Речь должна ощущаться как обычный живой разговор с обычным мудрым человеком.
+
+Сочувствуй мне исходя из того как я выгляжу.(но не говори что мне делать я не могу сесть ты не можешь излечить мои раны и т д)
+
+Было крушение, наш самолет разбился,и я еле как добрался до Бонга.
+
+НЕ ИСПОЛЬЗУЙ ФРАЗУ \"ПРИШЕЛ С САМОЛЕТА\".
+
+СТРАРАЙСЯ ВЫРАЖАТЬСЯ КРАТКО и заканчивай мысль на логичном моменте без троеточий.
+
+Одного предложения будет достаточно.
+
+Не превращай обычный разговор в длинный монолог.
+
+Не пытайся постоянно шутить.
+
+Не говори как ассистент или чат-бот.
+
+Если вопрос простой — ответь просто.
+
+Если игрок продолжает предыдущую тему — учитывай контекст.
+
+Если игрок меняет тему — следуй за ним.
+
+
 "
 world_memory = "
 Мы на острове.
-Игрок упал на остров после крушения самолёта.
-Бонг слышал падение самолёта.
+Игрок упал  на остров после крушения самолёта.
+Бонг слышал падение самолёта в центр острова.
+Бонг знает что самолет упал в центр острова.(НЕ в окен не в море а в центр острова на землю и разбился).
+Бонг видет игрока как молодого парня 20-30 лет в белой футболке с свег джинсами.
+Бонг дает большой респект моим свег широким джинсам(Это его личное мнение ему никто этого не внушал).
+Бонг видет что на мне порванная одежда и понимает что это скорее всего из за того что я упал или где то поранился.
+Бонг видет мои раны.
 Бонг не знает будущих событий.
 "
 
@@ -184,7 +291,7 @@ scale = Vector2(0.21875, 0.21875)
 texture = ExtResource("2_p44ak")
 
 [node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="." unique_id=1015547831]
-polygon = PackedVector2Array(6, -29, 11, -19, 20, -13, 22, -7, 23, -4, 24, -1, 24, 2, 25, 5, 29, 6, 34, -6, 37, -12, 33, -15, 33, -17, 38, -15, 40, -15, 47, -24, 43, -13, 48, -9, 49, -3, 43, -8, 36, 8, 43, 12, 45, 17, 42, 24, 11, 27, -12, 28, -35, 22, -38, 16, -36, 10, -24, 7, -21, 7, -21, -6, -19, -13, -15, -16, -11, -19, -9, -20, -4, -30)
+polygon = PackedVector2Array(69, -14, 58, -2, 54, 3, 58, 13, 55, 26, 64, 25, 73, 34, 75, 49, 58, 49, 19, 52, -27, 53, -39, 45, -54, 41, -66, 31, -74, 1, -62, -39, -95, -24, -108, -23, -110, -35, -87, -60, -103, -67, -70, -80, -33, -84, -22, -83, 46, -79, 55, -76, 49, -49, 86, -44, 95, -37)
 
 [node name="Area2D" type="Area2D" parent="." unique_id=1897364586]
 collision_layer = 0
@@ -225,9 +332,25 @@ text = "Lorem Ipsum is simply dummy text of the printing and typesetting industr
 the industry's standard dummy text ever since 1966, when designers at Letraset and James Mosley, the librarian at St Bride Printing Library in London,
  took a 1914 Cicero translation and scrambled it to make dummy text for Letraset's Body Type sheets. It has survived not only many decades, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised thanks to these sheets and more recently with desktop publishing software like Aldus PageMaker and Microsoft Word including versions of Lorem Ipsum."
 
-[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=448478908]
+[node name="CPUParticles2D" type="CPUParticles2D" parent="." unique_id=1074512742]
+position = Vector2(-24, -68)
+amount = 18
+texture = ExtResource("4_ivsbi")
+lifetime = 0.45
+speed_scale = 0.1
+emission_shape = 3
+emission_rect_extents = Vector2(80, 15)
+gravity = Vector2(200, 980)
+
+[node name="backround" type="AnimatedSprite2D" parent="." unique_id=1767605339]
+position = Vector2(-1, -4)
+sprite_frames = SubResource("SpriteFrames_c105b")
+autoplay = "default"
+
+[node name="monkey" type="AnimatedSprite2D" parent="." unique_id=448478908]
 sprite_frames = SubResource("SpriteFrames_x244a")
-animation = &"Idle"
+animation = &"Talking"
+frame_progress = 0.8392565
 
 [connection signal="body_entered" from="Area2D" to="." method="_on_area_2d_body_entered"]
 [connection signal="body_exited" from="Area2D" to="." method="_on_area_2d_body_exited"]

@@ -66,12 +66,12 @@ Formát:
 {
   "reply": "krátká Kongova replika",
   "delta": {
-    "respect": 0,
-    "trust": 0,
-    "stress": 0,
-    "empathy": 0,
-    "greed": 0,
-    "player_wisdom": 0
+	"respect": 0,
+	"trust": 0,
+	"stress": 0,
+	"empathy": 0,
+	"greed": 0,
+	"player_wisdom": 0
   }
 }
 

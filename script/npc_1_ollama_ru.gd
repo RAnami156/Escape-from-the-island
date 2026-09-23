@@ -8,7 +8,7 @@ extends CharacterBody2D
 @onready var input: LineEdit = $CanvasLayer/LineEdit
 @onready var text: Label = $CanvasLayer/text
 @onready var http_request: HTTPRequest = $HTTPRequest
-@onready var anim = $AnimatedSprite2D
+@onready var anim = $monkey
 
 
 # ============================================================
@@ -44,9 +44,20 @@ var max_history: int = 12
 
 
 # ============================================================
+# TEXT SETTINGS
+# ============================================================
+
+@export_category("Text")
+
+@export_range(1, 200, 1)
+var characters_per_line: int = 43
+
+@export_range(0.001, 0.2, 0.001)
+var typing_speed: float = 0.03
+
+
+# ============================================================
 # NPC LORE
-#
-# Здесь полностью описывается персонаж и его знания.
 # ============================================================
 
 @export_multiline
@@ -67,8 +78,6 @@ var npc_lore: String = """
 
 # ============================================================
 # NPC BEHAVIOR
-#
-# Здесь полностью описывается поведение NPC.
 # ============================================================
 
 @export_multiline
@@ -97,8 +106,6 @@ var npc_behavior: String = """
 
 # ============================================================
 # WORLD MEMORY
-#
-# Здесь хранятся факты мира.
 # ============================================================
 
 @export_category("World")
@@ -114,9 +121,6 @@ var world_memory: String = """
 
 # ============================================================
 # RELATIONSHIP SETTINGS
-#
-# Здесь задаются начальные значения статистик
-# и максимальное изменение за одну реплику.
 # ============================================================
 
 @export_category("Relationship")
@@ -189,13 +193,12 @@ var conversation_history: Array = []
 # ============================================================
 
 func _ready() -> void:
-	
-	# Начальные значения берутся из Inspector.
+
 	relationship["respect"] = respect_start
 	relationship["friendship"] = friendship_start
 	relationship["irritation"] = irritation_start
 	relationship["deal_affinity"] = deal_affinity_start
-	
+
 	input.visible = false
 	input.text = ""
 	text.text = ""
@@ -293,14 +296,6 @@ func _on_text_submitted(player_text: String) -> void:
 
 # ============================================================
 # SYSTEM PROMPT
-#
-# Поведение NPC определяется через:
-#
-# npc_lore
-# npc_behavior
-# world_memory
-#
-# Код контролирует только JSON-структуру.
 # ============================================================
 
 func build_system_prompt() -> String:
@@ -390,9 +385,6 @@ func get_system_prompt() -> String:
 
 # ============================================================
 # RESPONSE SCHEMA
-#
-# Единственная жёсткая структура,
-# которую контролирует код.
 # ============================================================
 
 func get_response_schema() -> Dictionary:
@@ -465,9 +457,7 @@ func send_message_to_ai(player_text: String) -> void:
 	var messages: Array = []
 
 
-	# --------------------------------------------------------
 	# SYSTEM
-	# --------------------------------------------------------
 
 	messages.append({
 		"role": "system",
@@ -475,18 +465,14 @@ func send_message_to_ai(player_text: String) -> void:
 	})
 
 
-	# --------------------------------------------------------
 	# HISTORY
-	# --------------------------------------------------------
 
 	for message in conversation_history:
 
 		messages.append(message)
 
 
-	# --------------------------------------------------------
 	# CURRENT PLAYER MESSAGE
-	# --------------------------------------------------------
 
 	messages.append({
 		"role": "user",
@@ -494,9 +480,7 @@ func send_message_to_ai(player_text: String) -> void:
 	})
 
 
-	# --------------------------------------------------------
 	# REQUEST
-	# --------------------------------------------------------
 
 	var request_body := {
 
@@ -545,7 +529,6 @@ func send_message_to_ai(player_text: String) -> void:
 		waiting_for_response = false
 		pending_player_text = ""
 
-		# Возвращаем Idle при ошибке.
 		anim.play("Idle")
 
 		_update_player_movement_state()
@@ -569,15 +552,14 @@ func _on_request_completed(
 
 	waiting_for_response = false
 
-	# Ответ получен — возвращаем Idle.
-	anim.play("Idle")
-
 
 	# --------------------------------------------------------
 	# HTTP REQUEST ERROR
 	# --------------------------------------------------------
 
 	if result != HTTPRequest.RESULT_SUCCESS:
+
+		anim.play("Idle")
 
 		print(
 			"[OLLAMA ERROR] HTTPRequest result: ",
@@ -596,6 +578,8 @@ func _on_request_completed(
 	# --------------------------------------------------------
 
 	if response_code != 200:
+
+		anim.play("Idle")
 
 		print(
 			"[OLLAMA ERROR] HTTP: ",
@@ -624,6 +608,8 @@ func _on_request_completed(
 
 	if outer_json == null or not outer_json is Dictionary:
 
+		anim.play("Idle")
+
 		print("[OLLAMA ERROR] Invalid outer JSON.")
 
 		pending_player_text = ""
@@ -634,6 +620,8 @@ func _on_request_completed(
 
 
 	if not outer_json.has("message"):
+
+		anim.play("Idle")
 
 		print("[OLLAMA ERROR] Missing message.")
 
@@ -648,6 +636,8 @@ func _on_request_completed(
 
 
 	if not ollama_message.has("content"):
+
+		anim.play("Idle")
 
 		print("[OLLAMA ERROR] Missing content.")
 
@@ -671,6 +661,8 @@ func _on_request_completed(
 
 
 	if response_json == null or not response_json is Dictionary:
+
+		anim.play("Idle")
 
 		print("[OLLAMA ERROR] Invalid NPC JSON.")
 		print("[OLLAMA CONTENT]: ", ai_content)
@@ -759,7 +751,7 @@ func _on_request_completed(
 	# DISPLAY
 	# --------------------------------------------------------
 
-	text.text = response_text
+	await type_text(response_text)
 
 
 	# --------------------------------------------------------
@@ -806,6 +798,29 @@ func _on_request_completed(
 
 
 # ============================================================
+# TYPING TEXT
+# ============================================================
+
+func type_text(value: String) -> void:
+
+	# Пока текст печатается — Talking.
+	anim.play("Talking")
+
+	text.text = ""
+
+	for i in range(value.length()):
+
+		text.text += value[i]
+
+		await get_tree().create_timer(
+			typing_speed
+		).timeout
+
+	# После окончания печати — Idle.
+	anim.play("Idle")
+
+
+# ============================================================
 # APPLY RELATIONSHIP DELTA
 # ============================================================
 
@@ -826,11 +841,6 @@ func apply_relationship_delta(
 			delta[key]
 		)
 
-
-		# ----------------------------------------------------
-		# Максимальное изменение каждой статистики
-		# задаётся отдельно в Inspector.
-		# ----------------------------------------------------
 
 		var change_limit: int = 5
 
@@ -891,8 +901,8 @@ func apply_relationship_delta(
 #
 # Максимум 150 символов.
 #
-# Каждые 43 символа создаётся новый ряд,
-# но слова не разрезаются.
+# Количество символов в строке задаётся
+# через characters_per_line в Inspector.
 # ============================================================
 
 func prepare_text(value: String) -> String:
@@ -910,9 +920,7 @@ func prepare_text(value: String) -> String:
 	value = value.strip_edges()
 
 
-	# --------------------------------------------------------
 	# Убираем markdown.
-	# --------------------------------------------------------
 
 	value = value.replace(
 		"**",
@@ -925,9 +933,7 @@ func prepare_text(value: String) -> String:
 	)
 
 
-	# --------------------------------------------------------
 	# Убираем существующие переносы.
-	# --------------------------------------------------------
 
 	value = value.replace(
 		"\n",
@@ -943,9 +949,7 @@ func prepare_text(value: String) -> String:
 		)
 
 
-	# --------------------------------------------------------
 	# МАКСИМАЛЬНАЯ ДЛИНА
-	# --------------------------------------------------------
 
 	if value.length() > max_reply_characters:
 
@@ -971,11 +975,7 @@ func prepare_text(value: String) -> String:
 		value += "…"
 
 
-	# --------------------------------------------------------
-	# ПЕРЕНОС КАЖДЫЕ 43 СИМВОЛА
-	#
-	# Слово никогда не разрезается.
-	# --------------------------------------------------------
+	# ПЕРЕНОС ПО КОЛИЧЕСТВУ СИМВОЛОВ.
 
 	var words := value.split(" ")
 
@@ -993,7 +993,7 @@ func prepare_text(value: String) -> String:
 			current_line.length()
 			+ 1
 			+ word.length()
-			<= 43
+			<= characters_per_line
 		):
 
 			current_line += " " + word
@@ -1009,9 +1009,7 @@ func prepare_text(value: String) -> String:
 			current_line = word
 
 
-	# --------------------------------------------------------
 	# Последняя строка.
-	# --------------------------------------------------------
 
 	if not current_line.is_empty():
 
@@ -1024,6 +1022,10 @@ func prepare_text(value: String) -> String:
 
 	return result
 
+
+# ============================================================
+# AREA
+# ============================================================
 
 func _on_area_2d_body_entered(body: Node2D) -> void:
 

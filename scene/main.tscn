@@ -19,10 +19,10 @@ position = Vector2(601, 298)
 position = Vector2(528, 312)
 
 [node name="Camera2D" type="Camera2D" parent="player" unique_id=945813532]
-zoom = Vector2(7, 7)
+zoom = Vector2(5, 5)
 position_smoothing_enabled = true
 
 [node name="StaticBody2D" type="StaticBody2D" parent="." unique_id=1554261429]
 
 [node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="StaticBody2D" unique_id=193883884]
-polygon = PackedVector2Array(685, 229, 685, 229, 765, 219, 784, 297, 733, 315, 699, 315, 679, 287, 696, 265, 712, 252)
+polygon = PackedVector2Array(720, 206, 720, 417, 332, 420, 334, 204, 714, 204, 436, 170, 305, 195, 277, 251, 282, 360, 282, 468, 451, 474, 623, 465, 791, 464, 788, 335, 760, 174, 725, 182)

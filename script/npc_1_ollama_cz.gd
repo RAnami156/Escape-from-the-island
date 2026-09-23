@@ -230,18 +230,18 @@ Formát:
 {
   "reply": "odpověď Konga",
   "delta": {
-    "respect": 0,
-    "trust": 0,
-    "friendship": 0,
-    "affection": 0,
-    "curiosity": 0,
-    "patience": 0,
-    "stress": 0,
-    "empathy": 0,
-    "humor": 0,
-    "greed": 0,
-    "player_wisdom": 0,
-    "familiarity": 0
+	"respect": 0,
+	"trust": 0,
+	"friendship": 0,
+	"affection": 0,
+	"curiosity": 0,
+	"patience": 0,
+	"stress": 0,
+	"empathy": 0,
+	"humor": 0,
+	"greed": 0,
+	"player_wisdom": 0,
+	"familiarity": 0
   }
 }
 """
