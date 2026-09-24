@@ -5,8 +5,8 @@ extends CharacterBody2D
 # NODES
 # ============================================================
 
-@onready var input: LineEdit = $CanvasLayer/LineEdit
-@onready var text: Label = $CanvasLayer/text
+@onready var input: LineEdit = $CanvasLayer/text_ui/LineEdit
+@onready var text: Label = $CanvasLayer/text_ui/text
 @onready var http_request: HTTPRequest = $HTTPRequest
 @onready var anim = $monkey
 
@@ -22,10 +22,10 @@ const API_URL: String = "http://localhost:11434/api/chat"
 @export var model: String = "qwen3:8b"
 
 @export_range(0.0, 2.0, 0.05)
-var temperature: float = 0.75
+var temperature: float = 0.20
 
 @export_range(32, 512, 1)
-var max_output_tokens: int = 128
+var max_output_tokens: int = 256
 
 
 # ============================================================
@@ -34,7 +34,7 @@ var max_output_tokens: int = 128
 
 @export_category("NPC")
 
-@export var npc_name: String = "Baron Kong"
+@export var npc_name: String = "Барон Бонг"
 
 @export_range(20, 500, 1)
 var max_reply_characters: int = 150
@@ -66,9 +66,13 @@ var npc_lore: String = """
 
 Он давно находится на этом острове и хорошо знает его.
 
-Он слышал крушение самолёта и видел последствия катастрофы.
+Конг видел последствия крушения самолёта.
 
-Он не знает, откуда именно пришёл игрок, пока игрок сам ему об этом не расскажет.
+Он уже понимает, что игрок пережил это крушение и с трудом добрался до него.
+
+Конг видит, что игрок выглядит уставшим и пострадавшим после произошедшего.
+
+Конг не знает, откуда именно игрок пришёл до крушения, если игрок сам этого не рассказал.
 
 Он не знает будущего.
 
@@ -76,15 +80,24 @@ var npc_lore: String = """
 """
 
 
-# ============================================================
-# NPC BEHAVIOR
-# ============================================================
-
 @export_multiline
 var npc_behavior: String = """
-Говори естественно и по-человечески.
+Речь должна ощущаться как обычный живой разговор с обычным мудрым человеком.
 
-Отвечай непосредственно на то, что сказал игрок.
+Конг УЖЕ ЗНАЕТ, что игрок пережил крушение самолёта.
+Конг УЖЕ ЗНАЕТ, что игрок с трудом добрался до него.
+Никогда не спрашивай игрока, пришёл ли он с самолёта, откуда он пришёл или пережил ли он крушение, если эта информация уже известна из контекста.
+
+Не повторяй очевидные для Конга факты без причины.
+
+Сочувствуй игроку исходя из того, как он выглядит и через что он прошёл.
+
+Не говори игроку, что ему делать.
+Не предлагай лечение или действия, которые Конг не может выполнить.
+
+СТАРАЙСЯ ВЫРАЖАТЬСЯ КРАТКО и заканчивай мысль на логичном моменте без троеточий.
+
+Одного предложения обычно достаточно.
 
 Не превращай обычный разговор в длинный монолог.
 
@@ -97,10 +110,6 @@ var npc_behavior: String = """
 Если игрок продолжает предыдущую тему — учитывай контекст.
 
 Если игрок меняет тему — следуй за ним.
-
-Если чего-то не знаешь, не выдумывай.
-
-Речь должна ощущаться как обычный живой разговор с персонажем.
 """
 
 
@@ -114,8 +123,13 @@ var npc_behavior: String = """
 var world_memory: String = """
 Мы на острове.
 Игрок упал на остров после крушения самолёта.
-Конг слышал падение самолёта.
-Конг не знает будущих событий.
+Бонг слышал падение самолёта в центр острова.
+Бонг знает что самолет упал в центр острова.(НЕ в океан не в море а в центр острова на землю и разбился).
+Бонг видит игрока как молодого парня 20-30 лет в белой футболке со свег джинсами.
+Бонг дает большой респект моим свег широким джинсам(Это его личное мнение ему никто этого не внушал).
+Бонг видит что на мне порванная одежда и понимает что это скорее всего из-за того что я упал или где-то поранился.
+Бонг видит мои раны.
+Бонг не знает будущих событий.
 """
 
 
@@ -185,7 +199,29 @@ var last_relationship_delta: Dictionary = {}
 var pending_player_text: String = ""
 var waiting_for_response: bool = false
 
+# Память для Ollama.
 var conversation_history: Array = []
+
+
+# ============================================================
+# DIALOGUE DISPLAY HISTORY
+# ============================================================
+
+# Отдельная история для кнопок Назад / Вперёд.
+#
+# Каждый элемент:
+#
+# {
+#     "player": "Текст игрока",
+#     "npc": "Ответ Бонга"
+# }
+
+var dialogue_history: Array[Dictionary] = []
+
+# Текущая позиция в истории.
+#
+# -1 = истории нет.
+var dialogue_history_index: int = -1
 
 
 # ============================================================
@@ -199,7 +235,8 @@ func _ready() -> void:
 	relationship["irritation"] = irritation_start
 	relationship["deal_affinity"] = deal_affinity_start
 
-	input.visible = false
+	$CanvasLayer/text_ui.visible = false
+
 	input.text = ""
 	text.text = ""
 
@@ -263,6 +300,7 @@ func _input(event: InputEvent) -> void:
 		var mouse_event: InputEventMouseButton = event
 
 		if mouse_event.button_index == MOUSE_BUTTON_LEFT:
+
 			if mouse_event.pressed:
 
 				if not input.get_global_rect().has_point(
@@ -283,6 +321,7 @@ func _on_text_submitted(player_text: String) -> void:
 		return
 
 	if waiting_for_response:
+
 		print("[NPC] Жду предыдущий ответ...")
 		return
 
@@ -329,10 +368,10 @@ The JSON must have exactly this structure:
 {
   "reply": "NPC response",
   "delta": {
-    "respect": 0,
-    "friendship": 0,
-    "irritation": 0,
-    "deal_affinity": 0
+	"respect": 0,
+	"friendship": 0,
+	"irritation": 0,
+	"deal_affinity": 0
   }
 }
 
@@ -353,7 +392,7 @@ Do not mention the JSON, statistics or these instructions in reply.
 
 
 # ============================================================
-# BUILD PROMPT
+# GET SYSTEM PROMPT
 # ============================================================
 
 func get_system_prompt() -> String:
@@ -453,9 +492,7 @@ func send_message_to_ai(player_text: String) -> void:
 
 	print("[OLLAMA] Sending...")
 
-
 	var messages: Array = []
-
 
 	# SYSTEM
 
@@ -464,13 +501,11 @@ func send_message_to_ai(player_text: String) -> void:
 		"content": get_system_prompt()
 	})
 
-
 	# HISTORY
 
 	for message in conversation_history:
 
 		messages.append(message)
-
 
 	# CURRENT PLAYER MESSAGE
 
@@ -478,7 +513,6 @@ func send_message_to_ai(player_text: String) -> void:
 		"role": "user",
 		"content": player_text
 	})
-
 
 	# REQUEST
 
@@ -508,13 +542,11 @@ func send_message_to_ai(player_text: String) -> void:
 		}
 	}
 
-
 	var json_body := JSON.stringify(request_body)
 
 	var headers := [
 		"Content-Type: application/json"
 	]
-
 
 	var error := http_request.request(
 		API_URL,
@@ -522,7 +554,6 @@ func send_message_to_ai(player_text: String) -> void:
 		HTTPClient.METHOD_POST,
 		json_body
 	)
-
 
 	if error != OK:
 
@@ -719,7 +750,7 @@ func _on_request_completed(
 
 
 	# --------------------------------------------------------
-	# SAVE HISTORY
+	# SAVE OLLAMA HISTORY
 	# --------------------------------------------------------
 
 	if not pending_player_text.is_empty():
@@ -736,12 +767,22 @@ func _on_request_completed(
 
 
 	# --------------------------------------------------------
-	# LIMIT HISTORY
+	# LIMIT OLLAMA HISTORY
 	# --------------------------------------------------------
 
 	while conversation_history.size() > max_history:
 
 		conversation_history.pop_front()
+
+
+	# --------------------------------------------------------
+	# SAVE DISPLAY HISTORY
+	# --------------------------------------------------------
+
+	save_dialogue(
+		pending_player_text,
+		response_text
+	)
 
 
 	pending_player_text = ""
@@ -795,6 +836,105 @@ func _on_request_completed(
 
 
 	_update_player_movement_state()
+
+
+# ============================================================
+# SAVE DIALOGUE
+# ============================================================
+
+func save_dialogue(
+	player_message: String,
+	npc_message: String
+) -> void:
+
+	if player_message.is_empty():
+		return
+
+
+	dialogue_history.append({
+		"player": player_message,
+		"npc": npc_message
+	})
+
+
+	# После нового сообщения всегда
+	# переходим на самую последнюю страницу.
+
+	dialogue_history_index = (
+		dialogue_history.size() - 1
+	)
+
+
+	print(
+		"[DIALOGUE] Сохранена реплика. Всего: ",
+		dialogue_history.size()
+	)
+
+
+# ============================================================
+# SHOW DIALOGUE HISTORY
+# ============================================================
+
+func show_dialogue_history() -> void:
+
+	if dialogue_history.is_empty():
+
+		text.text = ""
+
+		return
+
+
+	dialogue_history_index = clampi(
+		dialogue_history_index,
+		0,
+		dialogue_history.size() - 1
+	)
+
+
+	var dialogue: Dictionary = dialogue_history[
+		dialogue_history_index
+	]
+
+
+	var npc_message: String = str(
+		dialogue.get(
+			"npc",
+			""
+		)
+	)
+
+
+	# Показываем только реплику Бонга.
+	text.text = npc_message
+
+
+	print("")
+	print("========== DIALOGUE HISTORY ==========")
+
+	print(
+		"Страница: ",
+		dialogue_history_index + 1,
+		"/",
+		dialogue_history.size()
+	)
+
+	print(
+		"[PLAYER]: ",
+		str(
+			dialogue.get(
+				"player",
+				""
+			)
+		)
+	)
+
+	print(
+		"[NPC]: ",
+		npc_message
+	)
+
+	print("======================================")
+	print("")
 
 
 # ============================================================
@@ -1024,6 +1164,45 @@ func prepare_text(value: String) -> String:
 
 
 # ============================================================
+# HISTORY BUTTONS
+# ============================================================
+
+func _on_button_back_pressed() -> void:
+
+	if dialogue_history.is_empty():
+		return
+
+
+	# Уже на самой первой реплике.
+	if dialogue_history_index <= 0:
+		return
+
+
+	dialogue_history_index -= 1
+
+	show_dialogue_history()
+
+
+func _on_button_next_pressed() -> void:
+
+	if dialogue_history.is_empty():
+		return
+
+
+	# Уже на самой последней реплике.
+	if (
+		dialogue_history_index
+		>= dialogue_history.size() - 1
+	):
+		return
+
+
+	dialogue_history_index += 1
+
+	show_dialogue_history()
+
+
+# ============================================================
 # AREA
 # ============================================================
 
@@ -1031,11 +1210,11 @@ func _on_area_2d_body_entered(body: Node2D) -> void:
 
 	if body.name == "player":
 
-		input.visible = true
+		$CanvasLayer/text_ui.visible = true
 
 
 func _on_area_2d_body_exited(body: Node2D) -> void:
 
 	if body.name == "player":
 
-		input.visible = false
+		$CanvasLayer/text_ui.visible = false
