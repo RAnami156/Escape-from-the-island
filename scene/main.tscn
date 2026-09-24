@@ -16,9 +16,10 @@ texture = SubResource("CompressedTexture2D_brvut")
 position = Vector2(601, 298)
 
 [node name="player" parent="." unique_id=1884075297 instance=ExtResource("2_v0l8b")]
-position = Vector2(528, 312)
+position = Vector2(604, 355)
 
 [node name="Camera2D" type="Camera2D" parent="player" unique_id=945813532]
+position = Vector2(-2, -59)
 zoom = Vector2(5, 5)
 position_smoothing_enabled = true
 
