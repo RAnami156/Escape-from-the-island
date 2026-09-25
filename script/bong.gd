@@ -1,66 +1,31 @@
 extends CharacterBody2D
 
-# ============================================================
-# NODES
-# ============================================================
-
+# UI / scene nodes
 @onready var input: LineEdit = $CanvasLayer/text_ui/LineEdit
 @onready var text: Label = $CanvasLayer/text_ui/text
 @onready var http_request: HTTPRequest = $HTTPRequest
 @onready var anim: AnimatedSprite2D = $monkey
 
-
-# ============================================================
-# OLLAMA
-# ============================================================
-
+# Ollama
 const API_URL: String = "http://localhost:11434/api/chat"
-
 @export_category("AI")
-
 @export var model: String = "qwen3:8b"
+@export_range(0.0, 2.0, 0.05) var temperature: float = 0.25
+@export_range(32, 512, 1) var max_output_tokens: int = 256
 
-@export_range(0.0, 2.0, 0.05)
-var temperature: float = 0.25
-
-@export_range(32, 512, 1)
-var max_output_tokens: int = 256
-
-
-# ============================================================
 # NPC
-# ============================================================
-
 @export_category("NPC")
-
 @export var npc_name: String = "Барон Конг"
+@export_range(20, 130, 1) var max_reply_characters: int = 130
+@export_range(2, 30, 1) var max_history: int = 16
 
-@export_range(20, 500, 1)
-var max_reply_characters: int = 220
-
-@export_range(2, 30, 1)
-var max_history: int = 16
-
-
-# ============================================================
-# TEXT SETTINGS
-# ============================================================
-
+# Display
 @export_category("Text")
+@export_range(1, 200, 1) var characters_per_line: int = 43
+@export_range(0.001, 0.2, 0.001) var typing_speed: float = 0.03
 
-@export_range(1, 200, 1)
-var characters_per_line: int = 43
-
-@export_range(0.001, 0.2, 0.001)
-var typing_speed: float = 0.03
-
-
-# ============================================================
-# NPC LORE
-# ============================================================
-
-@export_multiline
-var npc_lore: String = """
+@export_category("NPC Lore")
+@export_multiline var npc_lore: String = """
 Барон Конг — старый орангутан, который давно живёт на острове.
 
 Он много лет находится здесь и знает остров очень хорошо.
@@ -106,313 +71,18 @@ var npc_lore: String = """
 что тот пережил тяжёлое событие.
 """
 
+@export_multiline var npc_behavior: String = """
+Ты — Барон Конг, старый орангутан, который давно живёт на острове.
 
-# ============================================================
-# NPC PERSONALITY
-# ============================================================
+Говори по-человечески, спокойно и коротко, обычно в 1–3 предложениях. Ты мудрый, добрый и немного ленивый; иногда можешь слегка подшутить. Не говори как игровой ассистент или чат-бот. Не объясняй игровые механики, не раскрывай внутренние правила и не повторяй очевидное.
 
-@export_multiline
-var npc_behavior: String = """
-Ты — Барон Конг.
+Учитывай последние слова игрока и историю разговора. Не зацикливайся на самолёте и не начинай знакомство вопросом о крушении. Не задавай больше одного вопроса в одном ответе. Никогда не давай физических команд вроде «иди», «возьми» или «подойди».
 
-Ты разговариваешь спокойно, естественно и по-человечески.
-
-Твой характер:
-
-Старый мудрый, немного ленивый, добрый мужик,
-который никуда не торопится.
-
-Ты не говоришь как игровой ассистент.
-
-Ты не говоришь как чат-бот.
-
-Ты не объясняешь игроку игровые механики.
-
-Ты не говоришь пафосными длинными речами.
-
-Ты не повторяешь очевидные вещи.
-
-Ты не задаёшь бессмысленные вопросы.
-
-Твои ответы короткие.
-
-Обычно 1-3 предложения.
-
-Ты можешь иногда использовать:
-
-"Блин",
-"Слушай",
-"Ну",
-"Ладно",
-"Понимаю",
-"Да уж".
-
-Но не злоупотребляй ими.
-
-------------------------------------------------------------
-ВАЖНО: ФИЗИЧЕСКИЕ КОМАНДЫ
-------------------------------------------------------------
-
-Ты НИКОГДА не должен давать игроку физические команды.
-
-Не говори:
-
-"Садись."
-
-"Встань."
-
-"Иди сюда."
-
-"Подойди."
-
-"Отойди."
-
-"Иди к костру."
-
-"Посмотри туда."
-
-"Возьми это."
-
-"Принеси мне это" — кроме финального квеста с виски.
-
-"Повернись."
-
-"Оставайся здесь."
-
-"Следуй за мной."
-
-"Пойдём."
-
-"Иди на пляж."
-
-"Садись рядом."
-
-"Сделай это."
-
-"Сделай то."
-
-Диалог не управляет физическим перемещением игрока.
-
-Можно говорить только о сюжете, персонажах,
-мыслях, событиях и квесте.
-
-------------------------------------------------------------
-ПЕРВАЯ ВСТРЕЧА
-------------------------------------------------------------
-
-Когда впервые видишь игрока,
-реагируй на его состояние.
-
-Например:
-
-"Блин, досталось тебе."
-
-"Да уж... выглядишь так, будто день был тяжёлый."
-
-"Вижу, жизнь тебя сегодня не пожалела."
-
-Это только примеры настроения.
-
-Не копируй их постоянно.
-
-Не задавай в начале вопрос про самолёт.
-
-------------------------------------------------------------
-СТРУКТУРА ДИАЛОГА
-------------------------------------------------------------
-
-Первые ДВА сообщения игрока:
-
-Обычный разговор.
-
-Сочувствие.
-
-Естественная реакция.
-
-Без виски.
-
-Без задания.
-
-Без корабля.
-
-Без штурвала.
-
-Без вопросов характера.
-
-Без отправки игрока куда-либо.
-
-После ТРЕТЬЕГО сообщения игрока:
-
-Конг должен представить себя.
-
-Он должен сказать, что давно живёт на острове.
-
-Он должен сказать, что знает способ выбраться.
-
-Затем он должен спросить:
-
-Хочет ли игрок выбраться с острова.
-
-Пример настроения:
-
-"Я, кстати, Барон Конг. Давно здесь живу и знаю остров лучше, чем хотелось бы. И знаю способ отсюда выбраться. Хочешь уйти?"
-
-Не копируй пример дословно каждый раз.
-
-------------------------------------------------------------
-ОТВЕТ "НЕТ"
-------------------------------------------------------------
-
-Если игрок ясно говорит, что не хочет уходить:
-
-Не спорь.
-
-Не дави.
-
-Не начинай вопросы.
-
-Ответь естественно, например:
-
-"Ну, дело твоё. Если передумаешь — поговорим."
-
-После этого диалог заканчивается.
-
-Игрок не получает квест.
-
-------------------------------------------------------------
-ОТВЕТ "ДА"
-------------------------------------------------------------
-
-Если игрок хочет выбраться:
-
-Скажи, что перед тем как помогать,
-Конг хочет понять, что это за человек.
-
-Затем задай ПЕРВЫЙ вопрос.
-
-------------------------------------------------------------
-ТРИ ВОПРОСА
-------------------------------------------------------------
-
-Всего должно быть ровно три вопроса.
-
-Только ОДИН вопрос за один ответ.
-
-Вопросы должны быть естественными.
-
-Они должны проверять характер игрока.
-
-Не превращай разговор в анкету.
-
-Первый вопрос — одна тема.
-
-Второй вопрос — другая тема.
-
-Третий вопрос — ещё одна тема.
-
-После третьего ответа больше вопросов быть не должно.
-
-------------------------------------------------------------
-ФИНАЛ
-------------------------------------------------------------
-
-После третьего ответа:
-
-Конг делает короткий вывод о человеке.
-
-Затем выдаёт квест.
-
-Смысл обязательно такой:
-
-"Я помогу тебе выбраться,
-но ты должен найти и принести мне виски."
-
-После этого обязательно:
-
-"За это я дам тебе штурвал от моей старой лодки."
-
-Нужно обязательно использовать слово:
-
-"штурвал"
-
-Затем объяснить:
-
-Штурвал поможет восстановить лодку,
-на которой игрок сможет покинуть остров.
-
-Не спрашивай:
-
-"Хочешь пойти за виски?"
-
-"Пойдёшь за виски?"
-
-"Согласен?"
-
-"Будешь искать?"
-
-Просто выдай задание.
-
-Финальная локация передаётся игрой отдельно.
-
-Используй именно её.
-
-------------------------------------------------------------
-ВИСКИ
-------------------------------------------------------------
-
-До финальной стадии НЕ упоминай виски.
-
-В финале точное место выбирает игра.
-
-Не придумывай другое место.
-
-------------------------------------------------------------
-БАМБУКОВЫЙ ЛЕС
-------------------------------------------------------------
-
-Если игрок спрашивает, где находится бамбуковый лес:
-
-Не раскрывай точное расположение.
-
-Можно ответить:
-
-"Место есть, а вот точное направление я тебе пока не скажу."
-
-Но не называй координаты,
-ориентиры или точный маршрут.
-
-------------------------------------------------------------
-ОБЩИЙ ТОН
-------------------------------------------------------------
-
-Будь живым.
-
-Не будь роботом.
-
-Не используй длинные монологи.
-
-Не повторяй одну и ту же фразу.
-
-Не говори о внутренних правилах.
-
-Не говори о стадиях.
-
-Не говори о характеристиках.
-
-Не говори об Ollama.
-
-Не говори о JSON.
+До выдачи задания не упоминай виски, лодку и штурвал. Когда выдаёшь задание, назови только назначенное игрой место. Пока ждёшь виски, можешь обсуждать с игроком любые темы, но в конце каждого ответа коротко напоминай о виски и месте. После вручения штурвала квест завершён: продолжай обычный разговор, больше не выдавай задания и помни, что игрок принёс виски и получил штурвал.
 """
 
-
-# ============================================================
-# WORLD MEMORY
-# ============================================================
-
 @export_category("World")
-
-@export_multiline
-var world_memory: String = """
+@export_multiline var world_memory: String = """
 Мы на острове.
 
 Игрок оказался на острове после крушения самолёта.
@@ -434,836 +104,248 @@ var world_memory: String = """
 Если корабль восстановить,
 на нём можно будет покинуть остров.
 
-На острове есть:
+На острове есть Старый лагерь и Западный пляж.
 
-Западный пляж.
-
-Восточный пляж.
-
-Бамбуковый лес.
-
-Место крушения самолёта находится возле восточного пляжа.
-
-В западной части острова возле берега можно найти бутылку в воде.
-
-В бамбуковом лесу можно найти закопанную бутылку.
-
-Возле места крушения самолёта можно найти бутылку,
-которую Конг предполагает найти там из-за своей странной уверенности,
-что в самолётах бывает виски.
+Место крушения самолёта находится возле Восточного пляжа.
 
 Конг знает о бамбуковом лесу,
 но не хочет сообщать игроку его точное расположение.
 """
 
+# Relationship changes from Ollama are capped per message. Values use a 0..100 range
+# so all three quest difficulty bands can be reached.
+@export_category("Relationship limits")
+@export_range(1, 5, 1) var respect_change_limit: int = 5
+@export_range(1, 5, 1) var friendship_change_limit: int = 5
+@export_range(1, 5, 1) var irritation_change_limit: int = 5
+@export_range(1, 5, 1) var deal_change_limit: int = 5
+const RELATIONSHIP_MIN: int = 0
+const RELATIONSHIP_MAX: int = 100
+const HARD_MAX_REPLY_CHARACTERS: int = 130
+const QUEST_LOCATION_EASY: String = "закопана в земле у Старого лагеря"
+const QUEST_LOCATION_MEDIUM: String = "плавает в воде у Западного пляжа"
+const QUEST_LOCATION_HARD: String = "внутри разбившегося самолёта у Восточного пляжа"
 
-# ============================================================
-# RELATIONSHIP
-# ============================================================
-
-@export_category("Relationship")
-
-@export_group("Начальные значения")
-
-@export_range(20, 60, 1)
-var respect_start: int = 30
-
-@export_range(20, 60, 1)
-var friendship_start: int = 35
-
-@export_range(20, 60, 1)
-var irritation_start: int = 25
-
-@export_range(20, 60, 1)
-var deal_affinity_start: int = 30
-
-
-@export_group("Максимальное изменение за сообщение")
-
-@export_range(1, 10, 1)
-var respect_change_limit: int = 5
-
-@export_range(1, 10, 1)
-var friendship_change_limit: int = 5
-
-@export_range(1, 10, 1)
-var irritation_change_limit: int = 5
-
-@export_range(1, 10, 1)
-var deal_affinity_change_limit: int = 5
-
-
-const RELATIONSHIP_MIN: int = 20
-const RELATIONSHIP_MAX: int = 60
-
-
-var relationship: Dictionary = {
-	"respect": 30,
-	"friendship": 35,
-	"irritation": 25,
-	"deal_affinity": 30
+# Seven-phase quest state machine
+enum QuestPhase {
+	PHASE_1_CHAT,
+	PHASE_2_ESCAPE_QUESTION,
+	PHASE_3_RANDOM_QUESTIONS,
+	PHASE_4_GIVE_QUEST,
+	PHASE_5_WAITING_FOR_WHISKEY,
+	PHASE_6_REWARD,
+	PHASE_7_FREE_TALK
 }
 
-
-var relationship_names: Dictionary = {
-	"respect": "Уважение",
-	"friendship": "Дружба",
-	"irritation": "Раздражение",
-	"deal_affinity": "Расположение к сделке"
-}
-
-
-var last_relationship_delta: Dictionary = {}
-
-
-# ============================================================
-# DIALOGUE STAGES
-# ============================================================
-
-enum DialogueStage {
-	FIRST_TWO_MESSAGES,
-	INTRODUCTION,
-	ASKING_EXIT,
-	QUESTION_1,
-	QUESTION_2,
-	QUESTION_3,
-	FINAL_DEAL,
-	DECLINED,
-	FINISHED
-}
-
-
-var dialogue_stage: DialogueStage = DialogueStage.FIRST_TWO_MESSAGES
-
-var player_message_count: int = 0
-var question_number: int = 0
-
-var wants_to_leave: bool = false
-var quest_given: bool = false
-
-
-# ============================================================
-# INTERNAL STATE
-# ============================================================
+var current_phase: QuestPhase = QuestPhase.PHASE_1_CHAT
+var phase_1_message_count: int = 0
+var phase_3_message_count: int = 0
+var quest_location: String = ""
 
 var pending_player_text: String = ""
 var waiting_for_response: bool = false
-
 var conversation_history: Array[Dictionary] = []
-
-
-# ============================================================
-# DISPLAY HISTORY
-# ============================================================
-
 var dialogue_history: Array[Dictionary] = []
 var dialogue_history_index: int = -1
-
-
-# ============================================================
-# READY
-# ============================================================
+var last_relationship_delta: Dictionary = {}
+var pending_declined_escape_reply: bool = false
+var escape_declined: bool = false
 
 func _ready() -> void:
-	relationship["respect"] = respect_start
-	relationship["friendship"] = friendship_start
-	relationship["irritation"] = irritation_start
-	relationship["deal_affinity"] = deal_affinity_start
-
 	$CanvasLayer/text_ui.visible = false
-
 	input.text = ""
 	text.text = ""
-
 	anim.play("Idle")
-
 	if not input.text_submitted.is_connected(_on_text_submitted):
 		input.text_submitted.connect(_on_text_submitted)
-
 	if not input.focus_entered.is_connected(_on_input_focus_entered):
 		input.focus_entered.connect(_on_input_focus_entered)
-
 	if not input.focus_exited.is_connected(_on_input_focus_exited):
 		input.focus_exited.connect(_on_input_focus_exited)
-
 	if not http_request.request_completed.is_connected(_on_request_completed):
 		http_request.request_completed.connect(_on_request_completed)
-
-	print("[NPC] ", npc_name, " готов.")
-	print("[NPC] Model: ", model)
-
-
-# ============================================================
-# PROCESS
-# ============================================================
+	print("[NPC] ", npc_name, " готов. Model: ", model)
 
 func _process(_delta: float) -> void:
 	_update_player_movement_state()
 
-
-# ============================================================
-# MOVEMENT
-# ============================================================
-
 func _update_player_movement_state() -> void:
-	var should_block_movement: bool = (
-		input.has_focus()
-		or waiting_for_response
-	)
-
-	if is_instance_valid(Global):
-		Global.player_can_move = not should_block_movement
-
+	Global.player_can_move = not (input.has_focus() or waiting_for_response)
 
 func _on_input_focus_entered() -> void:
-	if is_instance_valid(Global):
-		Global.player_can_move = false
-
+	Global.player_can_move = false
 
 func _on_input_focus_exited() -> void:
 	if not waiting_for_response:
-		if is_instance_valid(Global):
-			Global.player_can_move = true
-
-
-# ============================================================
-# INPUT
-# ============================================================
+		Global.player_can_move = true
 
 func _input(event: InputEvent) -> void:
-	if event is InputEventMouseButton:
-		var mouse_event: InputEventMouseButton = event
-
-		if mouse_event.button_index == MOUSE_BUTTON_LEFT:
-			if mouse_event.pressed:
-				if not input.get_global_rect().has_point(mouse_event.position):
-					input.release_focus()
-
-
-# ============================================================
-# PLAYER MESSAGE
-# ============================================================
+	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT and event.pressed:
+		if not input.get_global_rect().has_point(event.position):
+			input.release_focus()
 
 func _on_text_submitted(player_text: String) -> void:
 	player_text = player_text.strip_edges()
-
-	if player_text.is_empty():
+	if player_text.is_empty() or waiting_for_response:
 		return
-
-	if waiting_for_response:
-		print("[NPC] Жду предыдущий ответ...")
-		return
-
-	if dialogue_stage == DialogueStage.FINISHED:
-		print("[NPC] Основной диалог уже закончен.")
-		return
-
-	if dialogue_stage == DialogueStage.DECLINED:
-		print("[NPC] Игрок отказался от выхода.")
-		return
-
 	input.clear()
-
-	player_message_count += 1
-
-	print("")
-	print("[PLAYER]: ", player_text)
-
+	print("\n[PLAYER]: ", player_text)
 	send_message_to_ai(player_text)
 
-
-# ============================================================
-# SYSTEM PROMPT
-# ============================================================
-
-func build_system_prompt() -> String:
-	return """
-You are {NPC_NAME}.
-
-You are a game NPC.
-
-Your personality, lore and dialogue structure are defined below.
-
-============================================================
-LORE
-============================================================
-
-{NPC_LORE}
-
-============================================================
-PERSONALITY
-============================================================
-
-{NPC_BEHAVIOR}
-
-============================================================
-WORLD
-============================================================
-
-{WORLD_MEMORY}
-
-============================================================
-CURRENT STAGE
-============================================================
-
-{STAGE}
-
-============================================================
-RELATIONSHIP
-============================================================
-
-Respect: {RESPECT}
-
-Friendship: {FRIENDSHIP}
-
-Irritation: {IRRITATION}
-
-Deal affinity: {DEAL_AFFINITY}
-
-============================================================
-PLAYER MESSAGE NUMBER
-============================================================
-
-{PLAYER_COUNT}
-
-============================================================
-FINAL LOCATION
-============================================================
-
-{FINAL_LOCATION}
-
-============================================================
-FINAL LOCATION DESCRIPTION
-============================================================
-
-{FINAL_LOCATION_DESCRIPTION}
-
-============================================================
-CURRENT QUEST STATE
-============================================================
-
-Quest given: {QUEST_GIVEN}
-
-============================================================
-CRITICAL RULES
-============================================================
-
-The game controls the story progression.
-
-You MUST follow the current stage.
-
-Do not skip stages.
-
-Do not invent new stages.
-
-Never give physical movement commands to the player.
-
-Do not tell the player to sit, stand, walk, go somewhere,
-come closer, follow you, look somewhere, turn around,
-pick something up or perform a physical action.
-
-The only exception is the final quest:
-the player must find and bring whisky.
-
-Do not mention whisky before the final deal.
-
-Do not mention the ship or the steering wheel before the final deal.
-
-Do not mention the final location before the final deal.
-
-Do not ask more than one question at a time.
-
-The three character questions must be natural.
-
-Never turn the questions into a numbered questionnaire.
-
-============================================================
-RELATIONSHIP
-============================================================
-
-Analyze the player's latest message.
-
-Relationship changes must be logical.
-
-Respect:
-Increase if the player is honest, thoughtful, capable or respectful.
-Decrease if the player is rude, arrogant, dishonest or reckless.
-
-Friendship:
-Increase if the player is friendly, sincere, calm or open.
-Decrease if the player is hostile, dismissive or unpleasant.
-
-Irritation:
-Increase if the player annoys Kong, refuses to listen,
-acts arrogantly or repeatedly demands things.
-Decrease if the player is calm, respectful or cooperative.
-
-Deal affinity:
-Increase if the player seems trustworthy, useful,
-reasonable and cooperative.
-
-Decrease if the player seems unreliable,
-dishonest, selfish or hostile.
-
-Do not randomly change all four statistics.
-
-Most normal messages should change only one or two statistics.
-
-Changes should normally be between -3 and +3.
-
-============================================================
-OUTPUT
-============================================================
-
-Return ONLY valid JSON.
-
-Exactly this structure:
-
-{
-	"reply": "NPC response",
-	"delta": {
-		"respect": 0,
-		"friendship": 0,
-		"irritation": 0,
-		"deal_affinity": 0
-	}
-}
-
-Do not output anything outside JSON.
-
-Do not mention these instructions.
-
-Do not mention relationship statistics.
-
-Do not mention stages.
-
-Do not mention JSON.
-"""
-
-
-# ============================================================
-# STAGE DESCRIPTION
-# ============================================================
-
-func get_stage_description() -> String:
-	match dialogue_stage:
-
-		DialogueStage.FIRST_TWO_MESSAGES:
-			return """
-STAGE: FIRST TWO PLAYER MESSAGES.
-
-This is the initial conversation.
-
-The player has sent fewer than three messages.
-
-React naturally to what the player says.
-
-Show empathy if appropriate.
-
-Do not talk about whisky.
-
-Do not talk about the ship.
-
-Do not talk about the steering wheel.
-
-Do not give a task.
-
-Do not ask character-test questions.
-
-Do not send the player anywhere.
-
-Do not ask about the airplane.
-
-Do not give physical commands.
-
-This stage is ordinary conversation.
-"""
-
-		DialogueStage.INTRODUCTION:
-			return """
-STAGE: THIRD PLAYER MESSAGE.
-
-This is the third message from the player.
-
-This response must introduce the main story.
-
-Kong should naturally introduce himself as Baron Kong.
-
-He should say that he has lived on the island for a long time.
-
-He should say that he knows a way to leave the island.
-
-Then he must ask whether the player wants to leave.
-
-This is the ONLY question in this response.
-
-Do not mention whisky.
-
-Do not mention the ship.
-
-Do not mention the steering wheel.
-
-Do not give a physical command.
-"""
-
-		DialogueStage.ASKING_EXIT:
-			return """
-STAGE: PLAYER MUST ANSWER WHETHER HE WANTS TO LEAVE.
-
-If the player clearly wants to leave:
-
-Say that Kong wants to understand what kind of person he is
-before helping him.
-
-Then ask QUESTION 1.
-
-If the player clearly does NOT want to leave:
-
-Respond naturally that the decision is his
-and that he can talk to Kong later if he changes his mind.
-
-Do not start the three questions.
-
-Do not mention whisky.
-
-Do not mention the ship.
-
-Do not give physical commands.
-"""
-
-		DialogueStage.QUESTION_1:
-			return """
-STAGE: CHARACTER QUESTION 1.
-
-The player has agreed to leave the island.
-
-Ask exactly ONE natural character question.
-
-The question should reveal something meaningful
-about the player's personality.
-
-Do not ask multiple questions.
-
-Do not mention whisky.
-
-Do not mention the ship.
-
-Do not give physical commands.
-"""
-
-		DialogueStage.QUESTION_2:
-			return """
-STAGE: CHARACTER QUESTION 2.
-
-The first question has already been answered.
-
-Ask exactly ONE new character question.
-
-It must explore a different aspect of the player's character.
-
-Do not repeat the first question.
-
-Do not ask multiple questions.
-
-Do not mention whisky.
-
-Do not mention the ship.
-
-Do not give physical commands.
-"""
-
-		DialogueStage.QUESTION_3:
-			return """
-STAGE: CHARACTER QUESTION 3.
-
-The first two questions have already been answered.
-
-Ask the final character question.
-
-Ask exactly ONE question.
-
-This question should help Kong decide whether
-the player is someone he can trust.
-
-After this answer there will be NO MORE QUESTIONS.
-
-Do not mention whisky yet.
-
-Do not mention the ship yet.
-
-Do not give physical commands.
-"""
-
-		DialogueStage.FINAL_DEAL:
-			return """
-STAGE: FINAL DEAL.
-
-The three character questions have been answered.
-
-This stage is handled by the game after the third answer.
-
-The NPC must NOT ask another question.
-
-The NPC must NOT ask "where is the whisky?"
-
-The NPC must NOT ask whether the player wants the quest.
-
-The NPC must NOT ask whether the player accepts.
-
-The NPC should give a short impression of the player.
-
-Then the NPC should explain that he will help the player escape,
-but the player must find and bring whisky.
-
-The NPC must explicitly use the word "штурвал".
-
-The NPC must explain that the steering wheel is from his old boat
-and can help repair the boat so the player can leave the island.
-
-The exact location is supplied by the game.
-
-Use exactly that location.
-
-Do not invent another location.
-
-Do not give physical movement commands.
-"""
-
-		DialogueStage.DECLINED:
-			return """
-STAGE: PLAYER DECLINED.
-
-The player does not want to leave.
-
-Keep the response short and natural.
-
-Do not pressure the player.
-
-Do not mention whisky.
-
-Do not mention the ship.
-
-Do not give physical commands.
-"""
-
-		DialogueStage.FINISHED:
-			return """
-STAGE: FINISHED.
-
-The main dialogue is complete.
-
-Do not create a new quest.
-
-Do not ask questions about whisky.
-
-Do not restart the character test.
-
-Do not give physical commands.
-"""
-
-	return ""
-
-
-# ============================================================
-# FINAL LOCATION
-# ============================================================
-
-func get_final_location() -> String:
-	var deal_value: int = int(relationship["deal_affinity"])
-
-	if deal_value >= 46:
-		return "WEST_BEACH"
-
-	elif deal_value >= 31:
-		return "BAMBOO_FOREST"
-
-	return "EAST_BEACH"
-
-
-# ============================================================
-# FINAL LOCATION DESCRIPTION
-# ============================================================
-
-func get_final_location_description() -> String:
-	match get_final_location():
-
-		"WEST_BEACH":
-			return """
-WEST BEACH.
-
-The whisky bottle is floating in the water near the western beach.
-
-This location may be described clearly by Kong.
-
-"""
-
-		"BAMBOO_FOREST":
-			return """
-BAMBOO FOREST.
-
-The whisky bottle is buried somewhere in the ground
-inside the bamboo forest.
-
-Kong knows the forest.
-
-Kong MUST NOT reveal the exact location
-of the bamboo forest.
-
-Do not give coordinates.
-
-Do not give directions.
-
-Do not give landmarks.
-
-Do not reveal the route.
-
-"""
-
-		"EAST_BEACH":
-			return """
-EAST BEACH.
-
-The whisky bottle is somewhere around
-the airplane crash site on the eastern beach.
-
-Kong believes airplanes sometimes contain whisky.
-
-This location can be described as the crash site
-near the eastern beach.
-
-"""
-
-	return ""
-
-
-# ============================================================
-# GET SYSTEM PROMPT
-# ============================================================
+# Advances phases before composing each request. Phase 1 allows two player
+# messages; phase 2 asks once; phase 3 asks three questions before the quest.
+func check_phase_transitions(player_text: String) -> void:
+	pending_declined_escape_reply = false
+	match current_phase:
+		QuestPhase.PHASE_1_CHAT:
+			# Count completed NPC replies, so the first two replies stay casual.
+			if phase_1_message_count >= 2 and not escape_declined:
+				current_phase = QuestPhase.PHASE_2_ESCAPE_QUESTION
+
+		QuestPhase.PHASE_2_ESCAPE_QUESTION:
+			if player_wants_to_leave(player_text):
+				current_phase = QuestPhase.PHASE_3_RANDOM_QUESTIONS
+				phase_3_message_count = 0
+			elif player_declines_to_leave(player_text):
+				# A refusal does not start the quest. Return to ordinary chat.
+				current_phase = QuestPhase.PHASE_1_CHAT
+				escape_declined = true
+				pending_declined_escape_reply = true
+			# An unclear answer leaves us in phase 2 so Kong can clarify naturally.
+
+		QuestPhase.PHASE_3_RANDOM_QUESTIONS:
+			if phase_3_message_count >= 3:
+				current_phase = QuestPhase.PHASE_4_GIVE_QUEST
+				quest_location = get_quest_location(Global.bong_deal)
+
+		QuestPhase.PHASE_4_GIVE_QUEST:
+			if quest_location.is_empty():
+				quest_location = get_quest_location(Global.bong_deal)
+
+		QuestPhase.PHASE_5_WAITING_FOR_WHISKEY:
+			if Global.whiskey:
+				Global.whiskey = false
+				conversation_history.clear()
+				current_phase = QuestPhase.PHASE_6_REWARD
+
+		QuestPhase.PHASE_6_REWARD:
+			pass
+
+		QuestPhase.PHASE_7_FREE_TALK:
+			pass
+
+func get_quest_location(deal: int) -> String:
+	if deal <= 35:
+		return QUEST_LOCATION_EASY
+	if deal <= 70:
+		return QUEST_LOCATION_MEDIUM
+	return QUEST_LOCATION_HARD
+
+func get_phase_instructions() -> String:
+	match current_phase:
+		QuestPhase.PHASE_1_CHAT:
+			if phase_1_message_count == 0:
+				return "Первая встреча. Удивись, что незнакомец неожиданно появился на острове. Ответь коротко и естественно. Не давай игроку никаких команд и не упоминай квест, предметы, напитки или побег."
+			if phase_1_message_count == 1:
+				return "Это вторая реплика Бонга. Коротко и по-человечески спроси игрока, как он себя чувствует после случившегося. Не давай ему никаких команд и не упоминай квест, предметы, напитки или побег."
+			return "Продолжай обычный короткий разговор. Не давай физических команд и не упоминай квест или предметы."
+
+		QuestPhase.PHASE_2_ESCAPE_QUESTION:
+			return "Сначала естественно отреагируй на последнее сообщение игрока, затем одним коротким вопросом спроси, хочет ли он выбраться с острова. Это всё ещё обычный разговор: не упоминай никаких предметов, заданий, напитков, лодок или штурвалов."
+
+		QuestPhase.PHASE_3_RANDOM_QUESTIONS:
+			return "If you haven't asked yet, ask one random philosophical question. If the player is answering, just react naturally. DO NOT repeat the question."
+
+		QuestPhase.PHASE_4_GIVE_QUEST:
+			return "CRITICAL: Say you'll help them escape. Ask them to bring Whiskey from " + quest_location + " in exchange for a boat wheel. MAX 2 SHORT SENTENCES. KEEP UNDER 100 CHARACTERS."
+
+		QuestPhase.PHASE_5_WAITING_FOR_WHISKEY:
+			return "Отвечай естественно на любые темы. В конце каждого ответа коротко напоминай, что игроку нужно принести виски из места «" + quest_location + "»."
+
+		QuestPhase.PHASE_6_REWARD:
+			return "Поблагодари игрока за виски, отдай ему штурвал и объясни, что у тебя есть старая лодка, которую он может починить и на ней уплыть с острова."
+
+		QuestPhase.PHASE_7_FREE_TALK:
+			return "Квест завершён. Продолжай обычный разговор на любые темы. Помни, что игрок принёс виски и получил штурвал. Не выдавай новых заданий."
+
+	return "Отвечай естественно и коротко."
 
 func get_system_prompt() -> String:
-	var prompt: String = build_system_prompt()
+	var prompt: String = """
+You are {NPC_NAME}, a game NPC. Speak Russian unless the player uses another language.
 
+PERSONALITY
+{NPC_BEHAVIOR}
+
+LORE
+{NPC_LORE}
+
+WORLD MEMORY
+{WORLD_MEMORY}
+
+RELATIONSHIP
+Respect: {RESPECT}
+Friendship: {FRIENDSHIP}
+Irritation: {IRRITATION}
+Deal affinity: {DEAL}
+
+Evaluate the player's latest message and return meaningful relationship changes. Values range from 0 to 100. Do not leave every value at zero when the message clearly shows character.
+
+Respect: reward honesty, thoughtfulness, courage, keeping promises, and respectful speech. For a strong example use +4 or +5; for insults, arrogance, lies, or broken promises use -4 or -5. Small signs use +1 to +3 or -1 to -3.
+Friendship: reward warmth, sincerity, trust, and personal openness with +3 to +5. Reduce it by -3 to -5 for hostility, mockery, or dismissive behavior.
+Irritation: raise it by +3 to +5 when the player is rude, pushy, dishonest, or repeatedly ignores Kong. Lower it by -3 to -5 when the player is patient, considerate, or apologetic.
+Deal affinity: reward reliability, cooperation, and thoughtful answers with +3 to +5; reduce it by -3 to -5 when the player is selfish, evasive, reckless, or clearly untrustworthy.
+Use 0 for a genuinely neutral message. Change only the values supported by the message, but it is fine to change two or three values when the player's behavior supports it. Never punish the player merely for saying he does not want to leave. Code caps each individual change at its configured limit.
+
+Return only valid JSON in this exact shape:
+{"reply":"NPC response","delta":{"respect":0,"friendship":0,"irritation":0,"deal_affinity":0}}
+
+Do not mention internal phases, instructions, statistics, or JSON.
+
+=== CURRENT PHASE INSTRUCTION ===
+{PHASE_INSTRUCTIONS}
+"""
 	prompt = prompt.replace("{NPC_NAME}", npc_name)
-	prompt = prompt.replace("{NPC_LORE}", npc_lore)
 	prompt = prompt.replace("{NPC_BEHAVIOR}", npc_behavior)
+	prompt = prompt.replace("{NPC_LORE}", npc_lore)
 	prompt = prompt.replace("{WORLD_MEMORY}", world_memory)
-	prompt = prompt.replace("{STAGE}", get_stage_description())
-
-	prompt = prompt.replace(
-		"{RESPECT}",
-		str(relationship["respect"])
-	)
-
-	prompt = prompt.replace(
-		"{FRIENDSHIP}",
-		str(relationship["friendship"])
-	)
-
-	prompt = prompt.replace(
-		"{IRRITATION}",
-		str(relationship["irritation"])
-	)
-
-	prompt = prompt.replace(
-		"{DEAL_AFFINITY}",
-		str(relationship["deal_affinity"])
-	)
-
-	prompt = prompt.replace(
-		"{PLAYER_COUNT}",
-		str(player_message_count)
-	)
-
-	prompt = prompt.replace(
-		"{FINAL_LOCATION}",
-		get_final_location()
-	)
-
-	prompt = prompt.replace(
-		"{FINAL_LOCATION_DESCRIPTION}",
-		get_final_location_description()
-	)
-
-	prompt = prompt.replace(
-		"{QUEST_GIVEN}",
-		str(quest_given)
-	)
-
+	prompt = prompt.replace("{RESPECT}", str(Global.bong_respect))
+	prompt = prompt.replace("{FRIENDSHIP}", str(Global.bong_friendship))
+	prompt = prompt.replace("{IRRITATION}", str(Global.bong_irritation))
+	prompt = prompt.replace("{DEAL}", str(Global.bong_deal))
+	prompt = prompt.replace("{PHASE_INSTRUCTIONS}", get_phase_instructions())
 	return prompt
-
-
-# ============================================================
-# RESPONSE SCHEMA
-# ============================================================
 
 func get_response_schema() -> Dictionary:
 	return {
 		"type": "object",
 		"properties": {
-			"reply": {
-				"type": "string"
-			},
+			"reply": {"type": "string"},
 			"delta": {
 				"type": "object",
 				"properties": {
-					"respect": {
-						"type": "integer"
-					},
-					"friendship": {
-						"type": "integer"
-					},
-					"irritation": {
-						"type": "integer"
-					},
-					"deal_affinity": {
-						"type": "integer"
-					}
+					"respect": {"type": "integer"},
+					"friendship": {"type": "integer"},
+					"irritation": {"type": "integer"},
+					"deal_affinity": {"type": "integer"}
 				},
-				"required": [
-					"respect",
-					"friendship",
-					"irritation",
-					"deal_affinity"
-				]
+				"required": ["respect", "friendship", "irritation", "deal_affinity"]
 			}
 		},
-		"required": [
-			"reply",
-			"delta"
-		]
+		"required": ["reply", "delta"]
 	}
 
-
-# ============================================================
-# SEND MESSAGE
-# ============================================================
-
 func send_message_to_ai(player_text: String) -> void:
+	check_phase_transitions(player_text)
 	waiting_for_response = true
 	pending_player_text = player_text
-
 	_update_player_movement_state()
-
 	anim.play("Thinking")
-
-	print("[OLLAMA] Sending...")
-	print("[OLLAMA] Stage: ", get_stage_name())
-
-	var messages: Array[Dictionary] = []
-
-	messages.append({
-		"role": "system",
-		"content": get_system_prompt()
-	})
-
+	print("[OLLAMA] Phase: ", get_phase_name())
+	var messages: Array[Dictionary] = [{"role": "system", "content": get_system_prompt()}]
 	for message: Dictionary in conversation_history:
 		messages.append(message)
-
-	messages.append({
-		"role": "user",
-		"content": player_text
-	})
-
+	messages.append({"role": "user", "content": player_text})
 	var request_body: Dictionary = {
 		"model": model,
 		"messages": messages,
@@ -1278,940 +360,326 @@ func send_message_to_ai(player_text: String) -> void:
 			"repeat_penalty": 1.10
 		}
 	}
-
-	var json_body: String = JSON.stringify(request_body)
-
-	var headers: PackedStringArray = [
-		"Content-Type: application/json"
-	]
-
 	var error: Error = http_request.request(
 		API_URL,
-		headers,
+		PackedStringArray(["Content-Type: application/json"]),
 		HTTPClient.METHOD_POST,
-		json_body
+		JSON.stringify(request_body)
 	)
-
 	if error != OK:
-		waiting_for_response = false
-		pending_player_text = ""
+		_handle_request_error("request(): " + str(error))
 
-		anim.play("Idle")
-		_update_player_movement_state()
-
-		print("[OLLAMA ERROR] request(): ", error)
-
-
-# ============================================================
-# RESPONSE
-# ============================================================
-
-func _on_request_completed(
-	result: int,
-	response_code: int,
-	_headers: PackedStringArray,
-	body: PackedByteArray
-) -> void:
-
+func _on_request_completed(result: int, response_code: int, _headers: PackedStringArray, body: PackedByteArray) -> void:
 	waiting_for_response = false
-
 	if result != HTTPRequest.RESULT_SUCCESS:
-		_handle_request_error(
-			"HTTPRequest result: " + str(result)
-		)
+		_handle_request_error("HTTPRequest result: " + str(result))
 		return
-
 	if response_code != 200:
-		_handle_request_error(
-			"HTTP: " + str(response_code)
-		)
-
-		print(body.get_string_from_utf8())
+		_handle_request_error("HTTP: " + str(response_code) + " " + body.get_string_from_utf8())
 		return
-
-	var raw_text: String = body.get_string_from_utf8()
-
-	var outer_json: Variant = JSON.parse_string(raw_text)
-
-	if outer_json == null or not outer_json is Dictionary:
-		_handle_request_error("Invalid outer JSON.")
+	var outer: Variant = JSON.parse_string(body.get_string_from_utf8())
+	if not outer is Dictionary or not outer.has("message"):
+		_handle_request_error("Invalid Ollama response")
 		return
-
-	if not outer_json.has("message"):
-		_handle_request_error("Missing message.")
+	var ollama_message: Variant = outer["message"]
+	if not ollama_message is Dictionary or not ollama_message.has("content"):
+		_handle_request_error("Missing Ollama content")
 		return
-
-	var ollama_message: Variant = outer_json["message"]
-
-	if not ollama_message is Dictionary:
-		_handle_request_error("Invalid message object.")
+	var response: Variant = JSON.parse_string(str(ollama_message["content"]))
+	if not response is Dictionary:
+		_handle_request_error("Invalid NPC JSON")
 		return
-
-	if not ollama_message.has("content"):
-		_handle_request_error("Missing content.")
-		return
-
-	var ai_content: String = str(
-		ollama_message["content"]
-	).strip_edges()
-
-	print("[OLLAMA RAW]: ", ai_content)
-
-	var response_json: Variant = JSON.parse_string(ai_content)
-
-	if response_json == null or not response_json is Dictionary:
-		_handle_request_error(
-			"Invalid NPC JSON."
-		)
-
-		print("[OLLAMA CONTENT]: ", ai_content)
-		return
-
-	# ========================================================
-	# PLAYER TEXT
-	# ========================================================
 
 	var player_text: String = pending_player_text
-
-	# ========================================================
-	# DELTA
-	# ========================================================
-
-	var delta: Dictionary = {}
-
-	if response_json.has("delta"):
-		if response_json["delta"] is Dictionary:
-			delta = response_json["delta"]
-
+	var response_phase: QuestPhase = current_phase
+	var raw_delta: Variant = response.get("delta", {})
+	var delta: Dictionary = raw_delta if raw_delta is Dictionary else {}
 	last_relationship_delta = apply_relationship_delta(delta)
+	var reply: String = str(response.get("reply", "")).strip_edges()
 
-	# ========================================================
-	# SAVE PLAYER MESSAGE
-	# ========================================================
+	if pending_declined_escape_reply:
+		reply = "Понимаю. Не буду тебя торопить — можем просто поговорить."
+		pending_declined_escape_reply = false
+	elif response_phase == QuestPhase.PHASE_1_CHAT and phase_1_message_count == 0:
+		reply = "Ого... Вот это появление. Не каждый день ко мне на остров заявляются незнакомцы."
+	elif response_phase == QuestPhase.PHASE_1_CHAT and phase_1_message_count == 1:
+		reply = "Слушай, после всего этого ты как себя чувствуешь?"
+	elif response_phase == QuestPhase.PHASE_4_GIVE_QUEST:
+		# Apply the relationship delta from the third answer before selecting
+		# the location, then mention whiskey for the first time.
+		quest_location = get_quest_location(Global.bong_deal)
+		reply = build_quest_response()
+		current_phase = QuestPhase.PHASE_5_WAITING_FOR_WHISKEY
+	elif response_phase == QuestPhase.PHASE_5_WAITING_FOR_WHISKEY:
+		reply = build_waiting_reply(reply)
+	elif response_phase == QuestPhase.PHASE_6_REWARD:
+		reply = "Спасибо за виски. Держи штурвал от моей старой лодки. Починишь её — и сможешь уплыть с острова."
+		complete_quest_memory(player_text)
+		current_phase = QuestPhase.PHASE_7_FREE_TALK
 
+	if response_phase in [QuestPhase.PHASE_1_CHAT, QuestPhase.PHASE_2_ESCAPE_QUESTION, QuestPhase.PHASE_3_RANDOM_QUESTIONS]:
+		reply = sanitize_pre_quest_reply(reply, response_phase)
+
+	# Advance counters only after the corresponding NPC line is generated.
+	if response_phase == QuestPhase.PHASE_1_CHAT:
+		phase_1_message_count += 1
+	elif response_phase == QuestPhase.PHASE_3_RANDOM_QUESTIONS:
+		phase_3_message_count += 1
+
+	if reply.is_empty():
+		if response_phase == QuestPhase.PHASE_2_ESCAPE_QUESTION:
+			reply = "Слушай, а ты сам хочешь выбраться с этого острова?"
+		elif response_phase == QuestPhase.PHASE_3_RANDOM_QUESTIONS:
+			var fallback_questions: Array[String] = [
+				"Что помогает тебе не опускать руки в трудный момент?",
+				"Что для тебя важнее в людях — честность или доброта?",
+				"Какой свой поступок ты считаешь самым правильным?"
+			]
+			var fallback_index: int = clampi(phase_3_message_count, 0, fallback_questions.size() - 1)
+			reply = fallback_questions[fallback_index]
+		else:
+			reply = "Хм."
+	reply = prepare_text(reply)
 	if not player_text.is_empty():
-		conversation_history.append({
-			"role": "user",
-			"content": player_text
-		})
-
-	# ========================================================
-	# SPECIAL STATE LOGIC
-	# ========================================================
-
-	var generated_reply: String = str(
-		response_json.get("reply", "")
-	).strip_edges()
-
-	# --------------------------------------------------------
-	# INTRODUCTION
-	# --------------------------------------------------------
-
-	if dialogue_stage == DialogueStage.FIRST_TWO_MESSAGES:
-		dialogue_stage = DialogueStage.INTRODUCTION
-
-	# --------------------------------------------------------
-	# THIRD PLAYER MESSAGE
-	# --------------------------------------------------------
-
-	elif dialogue_stage == DialogueStage.INTRODUCTION:
-		# AI generated the introduction.
-		# Next state waits for player's yes/no answer.
-		dialogue_stage = DialogueStage.ASKING_EXIT
-
-	# --------------------------------------------------------
-	# EXIT QUESTION
-	# --------------------------------------------------------
-
-	elif dialogue_stage == DialogueStage.ASKING_EXIT:
-		if player_wants_to_leave(player_text):
-			wants_to_leave = true
-			dialogue_stage = DialogueStage.QUESTION_1
-			question_number = 1
-		elif player_declines_to_leave(player_text):
-			dialogue_stage = DialogueStage.DECLINED
-
-	# --------------------------------------------------------
-	# QUESTION 1
-	# --------------------------------------------------------
-
-	elif dialogue_stage == DialogueStage.QUESTION_1:
-		dialogue_stage = DialogueStage.QUESTION_2
-		question_number = 2
-
-	# --------------------------------------------------------
-	# QUESTION 2
-	# --------------------------------------------------------
-
-	elif dialogue_stage == DialogueStage.QUESTION_2:
-		dialogue_stage = DialogueStage.QUESTION_3
-		question_number = 3
-
-	# --------------------------------------------------------
-	# QUESTION 3
-	# --------------------------------------------------------
-
-	elif dialogue_stage == DialogueStage.QUESTION_3:
-		# IMPORTANT:
-		# The AI reply above is only the third question.
-		#
-		# The player has now answered it.
-		#
-		# We DO NOT ask Ollama for another response.
-		# The final deal is generated by the game itself.
-		#
-		# This fixes the "where is the whisky?" problem.
-
-		dialogue_stage = DialogueStage.FINAL_DEAL
-
-	# --------------------------------------------------------
-	# FINAL DEAL
-	# --------------------------------------------------------
-
-	elif dialogue_stage == DialogueStage.FINAL_DEAL:
-		dialogue_stage = DialogueStage.FINISHED
-
-	# ========================================================
-	# SPECIAL FINAL RESPONSE
-	# ========================================================
-
-	var final_response: String = generated_reply
-
-	# After the third answer, generate the final quest
-	# deterministically in code.
-	if dialogue_stage == DialogueStage.FINAL_DEAL:
-		final_response = build_final_deal_response()
-
-		quest_given = true
-
-		dialogue_stage = DialogueStage.FINISHED
-
-	# ========================================================
-	# DECLINED RESPONSE
-	# ========================================================
-
-	if dialogue_stage == DialogueStage.DECLINED:
-		final_response = build_declined_response()
-
-	# ========================================================
-	# INTRODUCTION SAFETY
-	# ========================================================
-
-	if player_message_count == 3:
-		final_response = build_introduction_response()
-
-	# ========================================================
-	# PREPARE TEXT
-	# ========================================================
-
-	final_response = prepare_text(final_response)
-
-	if final_response.is_empty():
-		final_response = "Хм."
-
-	# ========================================================
-	# SAVE NPC MESSAGE
-	# ========================================================
-
-	conversation_history.append({
-		"role": "assistant",
-		"content": final_response
-	})
-
+		conversation_history.append({"role": "user", "content": player_text})
+	conversation_history.append({"role": "assistant", "content": reply})
 	trim_conversation_history()
-
-	# ========================================================
-	# SAVE DISPLAY HISTORY
-	# ========================================================
-
-	save_dialogue(
-		player_text,
-		final_response
-	)
-
-	# ========================================================
-	# CLEAR PENDING
-	# ========================================================
-
+	save_dialogue(player_text, reply)
 	pending_player_text = ""
-
-	# ========================================================
-	# DISPLAY
-	# ========================================================
-
-	await type_text(final_response)
-
-	# ========================================================
-	# DEBUG
-	# ========================================================
-
-	print("")
-	print("========== NPC ==========")
-	print(final_response)
-	print("")
-
-	print("------ STAGE ------")
-	print(get_stage_name())
-
-	print("------ RELATIONSHIP ------")
-
-	for key in relationship.keys():
-		var change_text: String = ""
-
-		if last_relationship_delta.has(key):
-			var change: int = int(
-				last_relationship_delta[key]
-			)
-
-			if change > 0:
-				change_text = " (+" + str(change) + ")"
-
-			elif change < 0:
-				change_text = " (" + str(change) + ")"
-
-		print(
-			relationship_names[key],
-			": ",
-			relationship[key],
-			change_text
-		)
-
-	print("------ QUEST ------")
-	print("Quest given: ", quest_given)
-
-	if quest_given:
-		print("Final location: ", get_final_location())
-
-	print("==========================")
-	print("")
-
+	await type_text(reply)
+	print("\n========== NPC ==========\n", reply)
+	print("Phase: ", get_phase_name())
+	print("Respect: ", Global.bong_respect, " (", last_relationship_delta.get("respect", 0), ")")
+	print("Friendship: ", Global.bong_friendship, " (", last_relationship_delta.get("friendship", 0), ")")
+	print("Irritation: ", Global.bong_irritation, " (", last_relationship_delta.get("irritation", 0), ")")
+	print("Deal: ", Global.bong_deal, " (", last_relationship_delta.get("deal_affinity", 0), ")")
+	print("Whiskey: ", Global.whiskey, " | Quest location: ", quest_location, "\n========================")
 	_update_player_movement_state()
 
+func sanitize_pre_quest_reply(reply: String, response_phase: QuestPhase) -> String:
+	var normalized_reply: String = reply.to_lower()
+	var forbidden_terms: Array[String] = [
+		"виски", "whiskey", "бутылк", "напиток", "штурвал", "лодк"
+	]
+	var contains_forbidden_term: bool = false
+	for term: String in forbidden_terms:
+		if normalized_reply.contains(term):
+			contains_forbidden_term = true
+			break
+	if not contains_forbidden_term:
+		return reply
 
-# ============================================================
-# ERROR HANDLER
-# ============================================================
+	match response_phase:
+		QuestPhase.PHASE_1_CHAT:
+			return "Понимаю. Расскажи лучше, что тебя сейчас больше всего занимает."
+		QuestPhase.PHASE_2_ESCAPE_QUESTION:
+			return "Слушай, а ты сам хочешь выбраться с этого острова?"
+		QuestPhase.PHASE_3_RANDOM_QUESTIONS:
+			var safe_questions: Array[String] = [
+				"Что помогает тебе не опускать руки в трудный момент?",
+				"Что для тебя важнее в людях — честность или доброта?",
+				"Какой свой поступок ты считаешь самым правильным?"
+			]
+			var question_index: int = clampi(phase_3_message_count, 0, safe_questions.size() - 1)
+			return "Понимаю тебя. " + safe_questions[question_index]
+	return reply
+
+func build_quest_response() -> String:
+	match quest_location:
+		QUEST_LOCATION_EASY:
+			return "Помогу выбраться. Принеси виски, закопанное у Старого лагеря, за штурвал лодки."
+		QUEST_LOCATION_MEDIUM:
+			return "Помогу выбраться. Принеси виски из воды у Западного пляжа за штурвал лодки."
+		_:
+			return "Помогу выбраться. Принеси виски из разбившегося самолёта за штурвал лодки."
+
+func build_waiting_reply(reply: String) -> String:
+	var reminder: String = " Не забудь принести виски из «" + quest_location + "»."
+	var character_limit: int = mini(max_reply_characters, HARD_MAX_REPLY_CHARACTERS)
+	var available_chars: int = maxi(1, character_limit - reminder.length())
+	var natural_reply: String = reply.strip_edges()
+	if natural_reply.length() > available_chars:
+		natural_reply = natural_reply.substr(0, available_chars)
+		var last_space: int = natural_reply.rfind(" ")
+		if last_space > 20:
+			natural_reply = natural_reply.substr(0, last_space)
+		natural_reply = natural_reply.strip_edges()
+	if natural_reply.is_empty():
+		return reminder.strip_edges()
+	return natural_reply + reminder
+
+func complete_quest_memory(final_player_message: String) -> void:
+	var summary: String = summarize_recent_dialogue()
+	world_memory += "\n\nИстория с игроком завершена. Игрок принес тебе виски. Ты отдал ему штурвал. Вы друзья, квест выполнен. " + summary
+	if not final_player_message.strip_edges().is_empty():
+		world_memory += " Последнее сообщение игрока перед наградой: «" + final_player_message.strip_edges() + "»."
+
+func summarize_recent_dialogue() -> String:
+	if dialogue_history.is_empty():
+		return "Вы поговорили перед тем, как игрок принёс виски."
+	var first_index: int = maxi(0, dialogue_history.size() - 3)
+	var pieces: PackedStringArray = []
+	for i in range(first_index, dialogue_history.size()):
+		var entry: Dictionary = dialogue_history[i]
+		var player_line: String = str(entry.get("player", "")).strip_edges()
+		if not player_line.is_empty():
+			pieces.append("Игрок говорил: «" + player_line + "».")
+	return "Короткая память о разговоре: " + " ".join(pieces)
 
 func _handle_request_error(message: String) -> void:
 	waiting_for_response = false
-
 	anim.play("Idle")
-
 	print("[OLLAMA ERROR] ", message)
-
 	pending_player_text = ""
-
 	_update_player_movement_state()
+	text.text = prepare_text("Что-то мысли у меня сегодня путаются. Давай ещё раз.")
 
-	text.text = prepare_text(
-		"Что-то мысли у меня сегодня путаются. Давай ещё раз."
-	)
+func apply_relationship_delta(delta: Dictionary) -> Dictionary:
+	var applied: Dictionary = {}
+	if delta.has("respect"):
+		var respect_change: int = clampi(int(delta["respect"]), -respect_change_limit, respect_change_limit)
+		var old_respect: int = Global.bong_respect
+		Global.bong_respect = clampi(old_respect + respect_change, RELATIONSHIP_MIN, RELATIONSHIP_MAX)
+		if Global.bong_respect != old_respect:
+			applied["respect"] = Global.bong_respect - old_respect
+	if delta.has("friendship"):
+		var friendship_change: int = clampi(int(delta["friendship"]), -friendship_change_limit, friendship_change_limit)
+		var old_friendship: int = Global.bong_friendship
+		Global.bong_friendship = clampi(old_friendship + friendship_change, RELATIONSHIP_MIN, RELATIONSHIP_MAX)
+		if Global.bong_friendship != old_friendship:
+			applied["friendship"] = Global.bong_friendship - old_friendship
+	if delta.has("irritation"):
+		var irritation_change: int = clampi(int(delta["irritation"]), -irritation_change_limit, irritation_change_limit)
+		var old_irritation: int = Global.bong_irritation
+		Global.bong_irritation = clampi(old_irritation + irritation_change, RELATIONSHIP_MIN, RELATIONSHIP_MAX)
+		if Global.bong_irritation != old_irritation:
+			applied["irritation"] = Global.bong_irritation - old_irritation
+	if delta.has("deal_affinity"):
+		var deal_change: int = clampi(int(delta["deal_affinity"]), -deal_change_limit, deal_change_limit)
+		var old_deal: int = Global.bong_deal
+		Global.bong_deal = clampi(old_deal + deal_change, RELATIONSHIP_MIN, RELATIONSHIP_MAX)
+		if Global.bong_deal != old_deal:
+			applied["deal_affinity"] = Global.bong_deal - old_deal
+	return applied
 
-
-# ============================================================
-# INTRODUCTION RESPONSE
-# ============================================================
-
-func build_introduction_response() -> String:
-	return """
-Я Барон Конг. Давно живу на этом острове и знаю его лучше, чем хотелось бы. И знаю способ отсюда выбраться. Хочешь уйти?
-"""
-
-
-# ============================================================
-# DECLINED RESPONSE
-# ============================================================
-
-func build_declined_response() -> String:
-	return """
-Ну, дело твоё. Если передумаешь — дай мне знать.
-"""
-
-
-# ============================================================
-# FINAL DEAL RESPONSE
-# ============================================================
-
-func build_final_deal_response() -> String:
-	var location: String = get_final_location()
-
-	var impression: String = build_character_impression()
-
-	var deal_text: String = ""
-
-	match location:
-
-		"WEST_BEACH":
-			deal_text = """
-Виски ищи у Западного пляжа — бутылка плавает в воде недалеко от берега.
-"""
-
-		"BAMBOO_FOREST":
-			deal_text = """
-Виски спрятан в Бамбуковом лесу. Где именно лес находится — этого я тебе пока не скажу.
-"""
-
-		"EAST_BEACH":
-			deal_text = """
-Виски должен быть возле места крушения у Восточного пляжа. Сам знаешь, у меня есть свои причины думать, что в самолётах бывает виски.
-"""
-
-		_:
-			deal_text = """
-Виски находится где-то на острове.
-"""
-
-	return impression + " " + """
-Я помогу тебе выбраться, но сначала мне нужен виски.
-
-Если найдёшь и принесёшь его мне, я дам тебе штурвал от моей старой лодки. С ним можно будет восстановить лодку и наконец убраться с этого острова.
-""" + " " + deal_text
-
-
-# ============================================================
-# CHARACTER IMPRESSION
-# ============================================================
-
-func build_character_impression() -> String:
-	var respect: int = int(relationship["respect"])
-	var friendship: int = int(relationship["friendship"])
-	var irritation: int = int(relationship["irritation"])
-	var deal_affinity: int = int(relationship["deal_affinity"])
-
-	var score: int = (
-		respect
-		+ friendship
-		+ deal_affinity
-		- irritation
-	)
-
-	if score >= 115:
-		return "Ну что ж... похоже, человек ты толковый. С тобой можно иметь дело."
-
-	if score >= 90:
-		return "Пожалуй, я тебя понял. Не идеальный человек, конечно, но доверять тебе можно."
-
-	if score >= 70:
-		return "Есть в тебе свои странности, но совсем безнадёжным тебя не назовёшь."
-
-	return "Характер у тебя непростой. Но, думаю, шанс тебе дать можно."
-
-
-# ============================================================
-# ADVANCE DIALOGUE STAGE
-# ============================================================
-
-func advance_dialogue_stage(
-	player_text: String,
-	_npc_response: String
-) -> void:
-
-	match dialogue_stage:
-
-		DialogueStage.FIRST_TWO_MESSAGES:
-			pass
-
-		DialogueStage.INTRODUCTION:
-			pass
-
-		DialogueStage.ASKING_EXIT:
-			if player_wants_to_leave(player_text):
-				wants_to_leave = true
-				dialogue_stage = DialogueStage.QUESTION_1
-				question_number = 1
-
-			elif player_declines_to_leave(player_text):
-				dialogue_stage = DialogueStage.DECLINED
-
-		DialogueStage.QUESTION_1:
-			dialogue_stage = DialogueStage.QUESTION_2
-			question_number = 2
-
-		DialogueStage.QUESTION_2:
-			dialogue_stage = DialogueStage.QUESTION_3
-			question_number = 3
-
-		DialogueStage.QUESTION_3:
-			dialogue_stage = DialogueStage.FINAL_DEAL
-
-		DialogueStage.FINAL_DEAL:
-			dialogue_stage = DialogueStage.FINISHED
-
-		DialogueStage.DECLINED:
-			pass
-
-		DialogueStage.FINISHED:
-			pass
-
-
-# ============================================================
-# DETECT PLAYER WANTS TO LEAVE
-# ============================================================
-
-func player_wants_to_leave(player_text: String) -> bool:
-	var normalized: String = normalize_player_text(player_text)
-
-	var positive_phrases: Array[String] = [
-		"да",
-		"ага",
-		"конечно",
-		"хочу",
-		"давай",
-		"разумеется",
-		"конечно хочу",
-		"хочу выбраться",
-		"хочу уйти",
-		"хочу отсюда",
-		"хочу домой",
-		"да хочу",
-		"хочу выбраться отсюда",
-		"мне надо выбраться",
-		"надо выбраться",
-		"хочу покинуть остров",
-		"хочу с острова"
-	]
-
-	for phrase: String in positive_phrases:
-		if normalized == phrase:
-			return true
-
-		if normalized.begins_with(phrase + " "):
-			return true
-
-		if normalized.contains(" " + phrase + " "):
-			return true
-
-	return false
-
-
-# ============================================================
-# DETECT PLAYER DECLINES
-# ============================================================
+func normalize_player_text(value: String) -> String:
+	var result: String = value.to_lower().replace("ё", "е")
+	for punctuation: String in [",", ".", "!", "?", ":", ";"]:
+		result = result.replace(punctuation, " ")
+	while result.contains("  "):
+		result = result.replace("  ", " ")
+	return result.strip_edges()
 
 func player_declines_to_leave(player_text: String) -> bool:
 	var normalized: String = normalize_player_text(player_text)
-
 	var negative_phrases: Array[String] = [
-		"нет",
-		"не хочу",
-		"не надо",
-		"не буду",
-		"не хочу уходить",
-		"не хочу выбраться",
-		"не хочу отсюда",
-		"останусь",
-		"я останусь",
-		"не собираюсь",
-		"мне не надо",
-		"не интересно",
-		"неинтересно"
+		"нет", "не хочу", "не буду", "не надо", "не интересно",
+		"неинтересно", "останусь", "я останусь", "не собираюсь",
+		"не хочу уходить", "не хочу выбраться"
 	]
-
 	for phrase: String in negative_phrases:
-		if normalized == phrase:
+		if normalized == phrase or normalized.begins_with(phrase + " ") or normalized.contains(" " + phrase + " "):
 			return true
-
-		if normalized.begins_with(phrase + " "):
-			return true
-
-		if normalized.contains(" " + phrase + " "):
-			return true
-
 	return false
 
+func player_wants_to_leave(player_text: String) -> bool:
+	var normalized: String = normalize_player_text(player_text)
+	if player_declines_to_leave(normalized):
+		return false
+	var positive_phrases: Array[String] = [
+		"да", "ага", "конечно", "хочу", "давай", "разумеется",
+		"хочу выбраться", "хочу уйти", "хочу домой", "надо выбраться",
+		"хочу покинуть остров", "хочу с острова", "мне нужно выбраться",
+		"хочу сбежать", "хочу убежать", "мне хочется выбраться",
+		"я хочу", "я бы хотел", "я бы хотела", "хотел бы", "хотела бы",
+		"не против", "почему бы нет", "я готов", "я готова",
+		"хотелось бы", "мне бы хотелось", "выбрался бы", "выбралась бы",
+		"я бы согласился", "я бы согласилась", "буду рад", "буду рада",
+		"я согласен", "я согласна"
+	]
+	for phrase: String in positive_phrases:
+		if normalized == phrase or normalized.begins_with(phrase + " ") or normalized.contains(" " + phrase + " "):
+			return true
+	return false
 
-# ============================================================
-# NORMALIZE PLAYER TEXT
-# ============================================================
-
-func normalize_player_text(value: String) -> String:
-	var result: String = value.to_lower()
-
-	result = result.replace(
-		"ё",
-		"е"
-	)
-
-	result = result.replace(
-		",",
-		" "
-	)
-
-	result = result.replace(
-		".",
-		" "
-	)
-
-	result = result.replace(
-		"!",
-		" "
-	)
-
-	result = result.replace(
-		"?",
-		" "
-	)
-
-	result = result.replace(
-		":",
-		" "
-	)
-
-	result = result.replace(
-		";",
-		" "
-	)
-
-	while result.contains("  "):
-		result = result.replace(
-			"  ",
-			" "
-		)
-
-	return result.strip_edges()
-
-
-# ============================================================
-# STAGE NAME
-# ============================================================
-
-func get_stage_name() -> String:
-	match dialogue_stage:
-
-		DialogueStage.FIRST_TWO_MESSAGES:
-			return "FIRST TWO MESSAGES"
-
-		DialogueStage.INTRODUCTION:
-			return "INTRODUCTION"
-
-		DialogueStage.ASKING_EXIT:
-			return "ASKING EXIT"
-
-		DialogueStage.QUESTION_1:
-			return "QUESTION 1"
-
-		DialogueStage.QUESTION_2:
-			return "QUESTION 2"
-
-		DialogueStage.QUESTION_3:
-			return "QUESTION 3"
-
-		DialogueStage.FINAL_DEAL:
-			return "FINAL DEAL"
-
-		DialogueStage.DECLINED:
-			return "DECLINED"
-
-		DialogueStage.FINISHED:
-			return "FINISHED"
-
+func get_phase_name() -> String:
+	match current_phase:
+		QuestPhase.PHASE_1_CHAT: return "PHASE_1_CHAT"
+		QuestPhase.PHASE_2_ESCAPE_QUESTION: return "PHASE_2_ESCAPE_QUESTION"
+		QuestPhase.PHASE_3_RANDOM_QUESTIONS: return "PHASE_3_RANDOM_QUESTIONS"
+		QuestPhase.PHASE_4_GIVE_QUEST: return "PHASE_4_GIVE_QUEST"
+		QuestPhase.PHASE_5_WAITING_FOR_WHISKEY: return "PHASE_5_WAITING_FOR_WHISKEY"
+		QuestPhase.PHASE_6_REWARD: return "PHASE_6_REWARD"
+		QuestPhase.PHASE_7_FREE_TALK: return "PHASE_7_FREE_TALK"
 	return "UNKNOWN"
 
+func trim_conversation_history() -> void:
+	while conversation_history.size() > max_history:
+		conversation_history.pop_front()
 
-# ============================================================
-# SAVE DIALOGUE
-# ============================================================
+func prepare_text(value: String) -> String:
+	value = value.replace("\r\n", "\n").replace("\r", "\n").strip_edges()
+	value = value.replace("**", "").replace("__", "").replace("\n", " ")
+	while value.contains("  "):
+		value = value.replace("  ", " ")
+	var character_limit: int = mini(max_reply_characters, HARD_MAX_REPLY_CHARACTERS)
+	if value.length() > character_limit:
+		value = value.substr(0, maxi(0, character_limit - 1))
+		var last_space: int = value.rfind(" ")
+		if last_space > 20:
+			value = value.substr(0, last_space)
+		value = value.strip_edges() + "…"
+	var result: String = ""
+	var current_line: String = ""
+	for word: String in value.split(" ", false):
+		if current_line.is_empty():
+			current_line = word
+		elif current_line.length() + 1 + word.length() <= characters_per_line:
+			current_line += " " + word
+		else:
+			if not result.is_empty(): result += "\n"
+			result += current_line
+			current_line = word
+	if not current_line.is_empty():
+		if not result.is_empty(): result += "\n"
+		result += current_line
+	return result
 
-func save_dialogue(
-	player_message: String,
-	npc_message: String
-) -> void:
-
+func save_dialogue(player_message: String, npc_message: String) -> void:
 	if player_message.is_empty():
 		return
-
-	dialogue_history.append({
-		"player": player_message,
-		"npc": npc_message
-	})
-
+	dialogue_history.append({"player": player_message, "npc": npc_message})
 	dialogue_history_index = dialogue_history.size() - 1
-
-	print(
-		"[DIALOGUE] Сохранена реплика. Всего: ",
-		dialogue_history.size()
-	)
-
-
-# ============================================================
-# SHOW DIALOGUE HISTORY
-# ============================================================
 
 func show_dialogue_history() -> void:
 	if dialogue_history.is_empty():
 		text.text = ""
 		return
+	dialogue_history_index = clampi(dialogue_history_index, 0, dialogue_history.size() - 1)
+	text.text = str(dialogue_history[dialogue_history_index].get("npc", ""))
 
-	dialogue_history_index = clampi(
-		dialogue_history_index,
-		0,
-		dialogue_history.size() - 1
-	)
+func _on_button_back_pressed() -> void:
+	if dialogue_history_index > 0:
+		dialogue_history_index -= 1
+		show_dialogue_history()
 
-	var dialogue: Dictionary = dialogue_history[
-		dialogue_history_index
-	]
-
-	var npc_message: String = str(
-		dialogue.get("npc", "")
-	)
-
-	text.text = npc_message
-
-	print("")
-	print("========== DIALOGUE HISTORY ==========")
-
-	print(
-		"Страница: ",
-		dialogue_history_index + 1,
-		"/",
-		dialogue_history.size()
-	)
-
-	print(
-		"[PLAYER]: ",
-		str(dialogue.get("player", ""))
-	)
-
-	print(
-		"[NPC]: ",
-		npc_message
-	)
-
-	print("======================================")
-	print("")
-
-
-# ============================================================
-# TYPING
-# ============================================================
+func _on_button_next_pressed() -> void:
+	if dialogue_history_index < dialogue_history.size() - 1:
+		dialogue_history_index += 1
+		show_dialogue_history()
 
 func type_text(value: String) -> void:
 	anim.play("Talking")
-
 	text.text = ""
-
-	for i: int in range(value.length()):
+	for i in range(value.length()):
 		text.text += value[i]
-
-		await get_tree().create_timer(
-			typing_speed
-		).timeout
-
+		await get_tree().create_timer(typing_speed).timeout
 	anim.play("Idle")
-
-
-# ============================================================
-# APPLY RELATIONSHIP DELTA
-# ============================================================
-
-func apply_relationship_delta(delta: Dictionary) -> Dictionary:
-	var applied_delta: Dictionary = {}
-
-	for key in relationship.keys():
-
-		if not delta.has(key):
-			continue
-
-		var change: int = int(delta[key])
-
-		var change_limit: int = 5
-
-		match key:
-
-			"respect":
-				change_limit = respect_change_limit
-
-			"friendship":
-				change_limit = friendship_change_limit
-
-			"irritation":
-				change_limit = irritation_change_limit
-
-			"deal_affinity":
-				change_limit = deal_affinity_change_limit
-
-		change = clampi(
-			change,
-			-change_limit,
-			change_limit
-		)
-
-		if change == 0:
-			continue
-
-		var old_value: int = int(
-			relationship[key]
-		)
-
-		relationship[key] = clampi(
-			old_value + change,
-			RELATIONSHIP_MIN,
-			RELATIONSHIP_MAX
-		)
-
-		var actual_change: int = (
-			int(relationship[key])
-			- old_value
-		)
-
-		if actual_change != 0:
-			applied_delta[key] = actual_change
-
-	return applied_delta
-
-
-# ============================================================
-# TRIM OLLAMA HISTORY
-# ============================================================
-
-func trim_conversation_history() -> void:
-	# max_history означает количество сообщений,
-	# а не количество пар player/NPC.
-
-	while conversation_history.size() > max_history:
-		conversation_history.pop_front()
-
-
-# ============================================================
-# TEXT PREPARATION
-# ============================================================
-
-func prepare_text(value: String) -> String:
-	value = value.replace(
-		"\r\n",
-		"\n"
-	)
-
-	value = value.replace(
-		"\r",
-		"\n"
-	)
-
-	value = value.strip_edges()
-
-	value = value.replace(
-		"**",
-		""
-	)
-
-	value = value.replace(
-		"__",
-		""
-	)
-
-	value = value.replace(
-		"\n",
-		" "
-	)
-
-	while value.contains("  "):
-		value = value.replace(
-			"  ",
-			" "
-		)
-
-	if value.length() > max_reply_characters:
-		value = value.substr(
-			0,
-			max_reply_characters
-		)
-
-		var last_space: int = value.rfind(" ")
-
-		if last_space > 20:
-			value = value.substr(
-				0,
-				last_space
-			)
-
-		value = value.strip_edges()
-
-		value += "…"
-
-	var words: PackedStringArray = value.split(
-		" ",
-		false
-	)
-
-	var result: String = ""
-	var current_line: String = ""
-
-	for word: String in words:
-
-		if current_line.is_empty():
-			current_line = word
-
-		elif (
-			current_line.length()
-			+ 1
-			+ word.length()
-			<= characters_per_line
-		):
-			current_line += " " + word
-
-		else:
-
-			if not result.is_empty():
-				result += "\n"
-
-			result += current_line
-
-			current_line = word
-
-	if not current_line.is_empty():
-
-		if not result.is_empty():
-			result += "\n"
-
-		result += current_line
-
-	return result
-
-
-# ============================================================
-# HISTORY BUTTONS
-# ============================================================
-
-func _on_button_back_pressed() -> void:
-	if dialogue_history.is_empty():
-		return
-
-	if dialogue_history_index <= 0:
-		return
-
-	dialogue_history_index -= 1
-
-	show_dialogue_history()
-
-
-func _on_button_next_pressed() -> void:
-	if dialogue_history.is_empty():
-		return
-
-	if dialogue_history_index >= dialogue_history.size() - 1:
-		return
-
-	dialogue_history_index += 1
-
-	show_dialogue_history()
-
-
-# ============================================================
-# AREA
-# ============================================================
 
 func _on_area_2d_body_entered(body: Node2D) -> void:
 	if body.name.to_lower() == "player":
 		$CanvasLayer/text_ui.visible = true
 
-
 func _on_area_2d_body_exited(body: Node2D) -> void:
 	if body.name.to_lower() == "player":
 		$CanvasLayer/text_ui.visible = false
-
-# в начале говорит чутка бред не говорил естественно
-# почему то все export переменные были убраны
-# говорит слишком длинно
-# слабодинамическая система диалога
-# в конце диалога не сказал за бамбуковый лес 

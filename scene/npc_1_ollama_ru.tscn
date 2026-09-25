@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://baw8ke07buvuh"]
 
-[ext_resource type="Script" uid="uid://cph8tpicnnvsr" path="res://script/npc_1_ollama_ru.gd" id="2_gw5t6"]
+[ext_resource type="Script" uid="uid://dn4ipqrpe1qrf" path="res://script/bong.gd" id="1_ivsbi"]
 [ext_resource type="Texture2D" uid="uid://cisomewmdw4op" path="res://asets/icon.svg" id="2_p44ak"]
 [ext_resource type="FontFile" uid="uid://bcmxb24dbljpw" path="res://asets/minecraft.ttf" id="3_k8we1"]
 [ext_resource type="Texture2D" uid="uid://cgf7jbk6t347h" path="res://asets/Monkey env (2)-Sheet.png" id="4_7fpnu"]
@@ -259,7 +259,8 @@ animations = [{
 
 [node name="npc_1_ollama_ru" type="CharacterBody2D" unique_id=1644685617]
 collision_mask = 0
-script = ExtResource("2_gw5t6")
+script = ExtResource("1_ivsbi")
+max_output_tokens = 128
 
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=1597038166]
 visible = false
