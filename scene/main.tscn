@@ -2,7 +2,6 @@
 
 [ext_resource type="PackedScene" uid="uid://don1xstqrlpce" path="res://scene/player.tscn" id="2_v0l8b"]
 [ext_resource type="PackedScene" uid="uid://baw8ke07buvuh" path="res://scene/npc_1_ollama_ru.tscn" id="2_wp4xf"]
-[ext_resource type="PackedScene" uid="uid://broig4l3f2q0i" path="res://scene/whiskey.tscn" id="3_wp4xf"]
 [ext_resource type="Script" uid="uid://6op62hcsrbhc" path="res://script/camera_2d.gd" id="4_brvut"]
 
 [sub_resource type="CompressedTexture2D" id="CompressedTexture2D_brvut"]
@@ -13,9 +12,6 @@ load_path = "res://.godot/imported/istockphoto-182361617-612x612.jpg-86186417d43
 [node name="Istockphoto182361617612x612" type="Sprite2D" parent="." unique_id=1747862034]
 position = Vector2(571, 311)
 texture = SubResource("CompressedTexture2D_brvut")
-
-[node name="whiskey" parent="." unique_id=1144280868 instance=ExtResource("3_wp4xf")]
-position = Vector2(448, 320)
 
 [node name="npc_1_ollama_ru" parent="." unique_id=1644685617 instance=ExtResource("2_wp4xf")]
 position = Vector2(601, 298)

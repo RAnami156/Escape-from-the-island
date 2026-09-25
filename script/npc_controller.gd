@@ -1,4 +1,4 @@
-class_name NPCController
+class_name NPCCond
 extends CharacterBody2D
 
 
@@ -390,10 +390,10 @@ The JSON must have exactly this structure:
 {
   "reply": "NPC response",
   "delta": {
-    "respect": 0,
-    "friendship": 0,
-    "irritation": 0,
-    "deal_affinity": 0
+	"respect": 0,
+	"friendship": 0,
+	"irritation": 0,
+	"deal_affinity": 0
   }
 }
 

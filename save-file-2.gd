@@ -71,11 +71,7 @@ var typing_speed: float = 0.03
 
 @export var whiskey_scene: PackedScene
 
-@export var whiskey_spawn_bamboo_forest: Vector2 = Vector2(448, 320)
-
-@export var whiskey_spawn_west_beach_baobab: Vector2 = Vector2(448, 320)
-
-@export var whiskey_spawn_plane_wreck: Vector2 = Vector2(448, 320)
+@export var whiskey_spawn_position: Vector2 = Vector2(448, 320)
 
 @export var spawn_whiskey_automatically: bool = true
 
@@ -316,6 +312,24 @@ var whiskey_instance: Node = null
 
 @export_category("Relationship")
 
+const RELATIONSHIP_MIN: int = 0
+const RELATIONSHIP_MAX: int = 100
+
+# Минимальное изменение.
+# Если Qwen решил, что изменение должно быть положительным,
+# оно будет минимум +20.
+#
+# Максимум +40.
+#
+# Аналогично для отрицательных реакций:
+# минимум -20, максимум -40.
+
+@export_range(20, 100, 1)
+var minimum_relationship_change: int = 20
+
+@export_range(20, 100, 1)
+var maximum_relationship_change: int = 40
+
 
 # ============================================================
 # QUEST LOCATIONS
@@ -325,7 +339,7 @@ var whiskey_instance: Node = null
 
 const QUEST_LOCATION_EASY: String = "бамбуковый лес"
 
-const QUEST_LOCATION_MEDIUM: String = "западный пляж, через баобаб"
+const QUEST_LOCATION_MEDIUM: String = "западное море"
 
 const QUEST_LOCATION_HARD: String = "разбившийся самолёт"
 
@@ -674,10 +688,13 @@ func check_phase_transitions(player_text: String) -> void:
 
 	if current_phase == QuestPhase.PHASE_3_RANDOM_QUESTIONS:
 
-		# Фаза 3 задаёт один вопрос. Следующее сообщение игрока —
-		# ответ на него; сразу после этого выдаём квест.
-		current_phase = QuestPhase.PHASE_4_GIVE_QUEST
-		return
+		if phase_3_message_count >= 3:
+
+			current_phase = QuestPhase.PHASE_4_GIVE_QUEST
+
+			select_quest_location()
+
+			return
 
 
 	# --------------------------------------------------------
@@ -731,22 +748,22 @@ func check_phase_transitions(player_text: String) -> void:
 func select_quest_location() -> void:
 
 	# --------------------------------------------------------
-	# Deal determines the quest destination.
+	# Relationship determines difficulty.
 	#
-	# 100+  = bamboo forest
-	# 50..99 = west beach via the baobab
-	# <50   = plane wreck
+	# 0..35  = easy
+	# 36..70 = medium
+	# 71..100 = hard
 	# --------------------------------------------------------
 
 	var deal: int = Global.bong_deal
 
-	if deal >= 100:
+	if deal <= 35:
 
 		quest_location_type = 0
 
 		quest_location = QUEST_LOCATION_EASY
 
-	elif deal >= 50:
+	elif deal <= 70:
 
 		quest_location_type = 1
 
@@ -758,7 +775,7 @@ func select_quest_location() -> void:
 
 		quest_location = QUEST_LOCATION_HARD
 
-	print("[QUEST] Deal: ", deal)
+	print("[QUEST] Difficulty: ", quest_location_type)
 
 	print("[QUEST] Location: ", quest_location)
 
@@ -798,29 +815,26 @@ func spawn_whiskey() -> void:
 	get_tree().current_scene.add_child(whiskey_instance)
 
 
+	# --------------------------------------------------------
+	# Position.
+	#
+	# Currently requested:
+	# 448, 320
+	#
+	# Change whiskey_spawn_position in Inspector later.
+	# --------------------------------------------------------
+
 	if whiskey_instance is Node2D:
 
 		var whiskey_node_2d: Node2D = whiskey_instance as Node2D
 
-		whiskey_node_2d.global_position = get_whiskey_spawn_position()
+		whiskey_node_2d.global_position = whiskey_spawn_position
 
 
 	print(
 		"[WHISKEY] Spawned at ",
-		get_whiskey_spawn_position()
+		whiskey_spawn_position
 	)
-
-
-func get_whiskey_spawn_position() -> Vector2:
-	match quest_location_type:
-		0:
-			return whiskey_spawn_bamboo_forest
-		1:
-			return whiskey_spawn_west_beach_baobab
-		2:
-			return whiskey_spawn_plane_wreck
-
-	return whiskey_spawn_bamboo_forest
 
 
 # ============================================================
@@ -989,9 +1003,52 @@ func get_phase_instructions() -> String:
 		QuestPhase.PHASE_3_RANDOM_QUESTIONS:
 
 			return """
-Задай игроку ровно один вопрос: «Что для тебя важнее всего, когда нужно выбраться из беды: думать о других, держать слово или любой ценой спасать себя?»
-Не задавай дополнительных вопросов. Пока не упоминай виски, бутылку, лодку или штурвал.
+Игрок уже сказал, что хочет выбраться с острова.
+
+Теперь нужно постепенно подготовить его к квесту.
+
+Количество уже заданных вопросов:
+""" + str(phase_3_message_count) + """
+
+ВАЖНО:
+
+Не задавай каждый раз один и тот же вопрос.
+
+Выбирай вопросы случайно и естественно.
+
+Но вопросы должны соответствовать ситуации и характеру Конга.
+
+Подходящие темы:
+
+любые которые тебе понравяться
+
+ОЧЕНЬ ВАЖНО:
+
+Если игрок уже ответил на предыдущий вопрос,
+сначала отреагируй на его ответ.
+
+Не игнорируй ответ игрока.
+
+Не задавай новый вопрос так,
+будто предыдущего сообщения не существовало.
+
+Можно дать короткую реакцию и затем задать следующий вопрос.
+
+Не повторяй уже заданные вопросы.
+
+Не упоминай виски.
+
+Не упоминай бутылку.
+
+Не упоминай лодку.
+
+Не упоминай штурвал.
+
+Не выдавай квест до завершения этой фазы.
+
+Каждая реплика должна закончиться логически.
 """
+
 
 		# ====================================================
 		# PHASE 4
@@ -1289,9 +1346,11 @@ Normal negative reaction:
 Strong negative reaction:
 -31 to -40.
 
-For every player message, apply a meaningful change to at least one value.
+Use 0 when the player's message genuinely does not justify a change.
 
-Use the sign and value that are supported by the player's behavior.
+Do NOT change every value automatically.
+
+Only change values that are actually supported by the player's behavior.
 
 You are allowed to change multiple values in one response.
 
@@ -1410,9 +1469,9 @@ deal_affinity 0
 
 when the player's message clearly reveals personality.
 
-Every player message must affect at least one relationship value.
+Qwen should decide whether a meaningful change happened.
 
-Relationship values have no minimum or maximum limit.
+The code will clamp values to the legal 0..100 range.
 
 ============================================================
 REPLY STYLE
@@ -1852,11 +1911,6 @@ func _on_request_completed(
 
 		delta = raw_delta
 
-	# Ответ игрока на единственный вопрос фазы 3 формирует
-	# фазу 4. Его вклад в отношения учитывается вдвое.
-	if current_phase == QuestPhase.PHASE_4_GIVE_QUEST:
-
-		delta = multiply_relationship_delta(delta, 2)
 
 	last_relationship_delta = apply_relationship_delta(
 		delta
@@ -1885,9 +1939,9 @@ func _on_request_completed(
 		# This is the ONLY place where quest is officially given.
 		# ----------------------------------------------------
 
-		# Сначала применены удвоенные очки сделки за ответ игрока.
-		# Теперь по обновлённому значению выбираем место для виски.
-		select_quest_location()
+		quest_location = get_location_name_for_type(
+			quest_location_type
+		)
 
 		reply = build_quest_response()
 
@@ -1980,7 +2034,7 @@ func _on_request_completed(
 
 	elif response_phase == QuestPhase.PHASE_3_RANDOM_QUESTIONS:
 
-		phase_3_message_count = 1
+		phase_3_message_count += 1
 
 
 	elif response_phase == QuestPhase.PHASE_1_CHAT:
@@ -2133,7 +2187,7 @@ func build_quest_response() -> String:
 
 			return (
 				"Я помогу тебе выбраться. "
-				+ "Найди виски на западном пляже, за баобабом. "
+				+ "Найди виски на западе, в море. "
 				+ "Принеси его мне — получишь штурвал."
 			)
 
@@ -2417,22 +2471,6 @@ func get_safe_fallback_reply(
 # RELATIONSHIP
 # ============================================================
 
-func multiply_relationship_delta(
-	delta: Dictionary,
-	multiplier: int
-) -> Dictionary:
-
-	var result: Dictionary = delta.duplicate()
-
-	for key: String in ["respect", "friendship", "irritation", "deal_affinity"]:
-
-		if result.has(key):
-
-			result[key] = int(result[key]) * multiplier
-
-	return result
-
-
 func apply_relationship_delta(
 	delta: Dictionary
 ) -> Dictionary:
@@ -2450,11 +2488,17 @@ func apply_relationship_delta(
 			delta["respect"]
 		)
 
-		var change: int = raw
+		var change: int = normalize_relationship_change(
+			raw
+		)
 
 		var old_value: int = Global.bong_respect
 
-		Global.bong_respect = old_value + change
+		Global.bong_respect = clampi(
+			old_value + change,
+			RELATIONSHIP_MIN,
+			RELATIONSHIP_MAX
+		)
 
 		applied["respect"] = (
 			Global.bong_respect
@@ -2472,11 +2516,17 @@ func apply_relationship_delta(
 			delta["friendship"]
 		)
 
-		var change: int = raw
+		var change: int = normalize_relationship_change(
+			raw
+		)
 
 		var old_value: int = Global.bong_friendship
 
-		Global.bong_friendship = old_value + change
+		Global.bong_friendship = clampi(
+			old_value + change,
+			RELATIONSHIP_MIN,
+			RELATIONSHIP_MAX
+		)
 
 		applied["friendship"] = (
 			Global.bong_friendship
@@ -2494,11 +2544,17 @@ func apply_relationship_delta(
 			delta["irritation"]
 		)
 
-		var change: int = raw
+		var change: int = normalize_relationship_change(
+			raw
+		)
 
 		var old_value: int = Global.bong_irritation
 
-		Global.bong_irritation = old_value + change
+		Global.bong_irritation = clampi(
+			old_value + change,
+			RELATIONSHIP_MIN,
+			RELATIONSHIP_MAX
+		)
 
 		applied["irritation"] = (
 			Global.bong_irritation
@@ -2516,11 +2572,17 @@ func apply_relationship_delta(
 			delta["deal_affinity"]
 		)
 
-		var change: int = raw
+		var change: int = normalize_relationship_change(
+			raw
+		)
 
 		var old_value: int = Global.bong_deal
 
-		Global.bong_deal = old_value + change
+		Global.bong_deal = clampi(
+			old_value + change,
+			RELATIONSHIP_MIN,
+			RELATIONSHIP_MAX
+		)
 
 		applied["deal_affinity"] = (
 			Global.bong_deal
@@ -2529,6 +2591,51 @@ func apply_relationship_delta(
 
 
 	return applied
+
+
+# ============================================================
+# RELATIONSHIP CHANGE NORMALIZATION
+# ============================================================
+
+func normalize_relationship_change(
+	raw_change: int
+) -> int:
+
+	# --------------------------------------------------------
+	# Zero stays zero.
+	# --------------------------------------------------------
+
+	if raw_change == 0:
+
+		return 0
+
+
+	# --------------------------------------------------------
+	# Positive values:
+	# minimum +20
+	# maximum +40
+	# --------------------------------------------------------
+
+	if raw_change > 0:
+
+		return clampi(
+			raw_change,
+			minimum_relationship_change,
+			maximum_relationship_change
+		)
+
+
+	# --------------------------------------------------------
+	# Negative values:
+	# minimum -20
+	# maximum -40
+	# --------------------------------------------------------
+
+	return clampi(
+		raw_change,
+		-maximum_relationship_change,
+		-minimum_relationship_change
+	)
 
 
 # ============================================================
