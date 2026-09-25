@@ -1,0 +1,24 @@
+[gd_scene format=3 uid="uid://broig4l3f2q0i"]
+
+[ext_resource type="Script" uid="uid://blpy265fc3nbo" path="res://script/whiskey.gd" id="1_d64f6"]
+[ext_resource type="Texture2D" uid="uid://cisomewmdw4op" path="res://asets/icon.svg" id="2_ktntq"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_c105b"]
+radius = 14.0
+
+[node name="whiskey" type="Node2D" unique_id=1144280868]
+scale = Vector2(0.5, 0.5)
+script = ExtResource("1_d64f6")
+
+[node name="Icon" type="Sprite2D" parent="." unique_id=1022618104]
+scale = Vector2(0.140625, 0.140625)
+texture = ExtResource("2_ktntq")
+
+[node name="Area2D" type="Area2D" parent="." unique_id=766996165]
+collision_layer = 0
+collision_mask = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D" unique_id=1346633304]
+shape = SubResource("CircleShape2D_c105b")
+
+[connection signal="body_entered" from="Area2D" to="." method="_on_area_2d_body_entered"]
