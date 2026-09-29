@@ -1,13 +1,17 @@
-[gd_scene format=3 uid="uid://cqxvlolwkmx5k"]
+[gd_scene format=3 uid="uid://cy2id8te67mnd"]
 
-[ext_resource type="Script" uid="uid://d0k3cvh3yftw0" path="res://script/npc_flycatcher_ollama_ru.gd" id="1_p7tar"]
-[ext_resource type="Texture2D" uid="uid://b2bd3cq3v5dnx" path="res://asets/flytrap-noun-Venus_flytrap-457ff51d_1-x3.webp" id="2_wa8mu"]
-[ext_resource type="Texture2D" uid="uid://cisomewmdw4op" path="res://asets/icon.svg" id="3_ttyes"]
-[ext_resource type="FontFile" uid="uid://bcmxb24dbljpw" path="res://asets/minecraft.ttf" id="4_rk7qn"]
-[ext_resource type="Texture2D" uid="uid://cn6xetuyew058" path="res://asets/leaf.png" id="5_wo7mn"]
+[ext_resource type="Script" uid="uid://cfdf1nwikxxwu" path="res://script/npc_panda_ollama_ru.gd" id="1_ha6mg"]
+[ext_resource type="PackedScene" uid="uid://dttm5ntxvikgo" path="res://scene/book.tscn" id="2_653kr"]
+[ext_resource type="Texture2D" uid="uid://dyt5sn6rncaju" path="res://asets/6344da39807836b9f08231ac42ceecb8.jpg" id="2_fie2b"]
+[ext_resource type="Texture2D" uid="uid://cisomewmdw4op" path="res://asets/icon.svg" id="3_l0evu"]
+[ext_resource type="FontFile" uid="uid://bcmxb24dbljpw" path="res://asets/minecraft.ttf" id="4_8bfbl"]
+[ext_resource type="Texture2D" uid="uid://cn6xetuyew058" path="res://asets/leaf.png" id="5_rxj6u"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_c105b"]
+size = Vector2(108, 104)
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_c105b"]
-radius = 135.00371
+radius = 64.28063
 
 [sub_resource type="GDScript" id="GDScript_trtyr"]
 script/source = "extends Node2D
@@ -71,16 +75,17 @@ animations = [{
 "speed": 6.0
 }]
 
-[node name="npc_flycatcher_ollama_ru" type="CharacterBody2D" unique_id=1644685617]
+[node name="npc_1_ollama_ru" type="CharacterBody2D" unique_id=1644685617]
 collision_mask = 0
-script = ExtResource("1_p7tar")
+script = ExtResource("1_ha6mg")
+book_scene = ExtResource("2_653kr")
 
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=1597038166]
-scale = Vector2(0.82142854, 0.82142854)
-texture = ExtResource("2_wa8mu")
+scale = Vector2(0.15692307, 0.15692306)
+texture = ExtResource("2_fie2b")
 
-[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="." unique_id=1015547831]
-polygon = PackedVector2Array(34, 25, -4, 69, -45, 22, -37, -26, 31, -25)
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=744922843]
+shape = SubResource("RectangleShape2D_c105b")
 
 [node name="Area2D" type="Area2D" parent="." unique_id=1897364586]
 collision_layer = 0
@@ -102,7 +107,7 @@ script = SubResource("GDScript_trtyr")
 modulate = Color(0, 0, 0, 1)
 position = Vector2(953.9998, 1033.5)
 scale = Vector2(16.874998, 1.3046874)
-texture = ExtResource("3_ttyes")
+texture = ExtResource("3_l0evu")
 
 [node name="button_next" type="Button" parent="CanvasLayer/text_ui" unique_id=1735556637]
 offset_left = 1867.9998
@@ -122,7 +127,7 @@ offset_top = 993.99994
 offset_right = 25241.0
 offset_bottom = 4744.0
 scale = Vector2(0.33, 0.33)
-theme_override_fonts/font = ExtResource("4_rk7qn")
+theme_override_fonts/font = ExtResource("4_8bfbl")
 theme_override_font_sizes/font_size = 200
 text = ">"
 
@@ -132,7 +137,7 @@ offset_top = 991.99994
 offset_right = 23384.0
 offset_bottom = 4742.0
 scale = Vector2(0.33, 0.33)
-theme_override_fonts/font = ExtResource("4_rk7qn")
+theme_override_fonts/font = ExtResource("4_8bfbl")
 theme_override_font_sizes/font_size = 200
 text = "<"
 
@@ -141,29 +146,28 @@ offset_left = 834.0
 offset_top = 824.0
 offset_right = 1118.0
 offset_bottom = 909.0
-theme_override_fonts/font = ExtResource("4_rk7qn")
+theme_override_fonts/font = ExtResource("4_8bfbl")
 theme_override_font_sizes/font_size = 22
 placeholder_text = "напиши сюда"
 alignment = 1
 script = SubResource("GDScript_7h7ol")
 
 [node name="text" type="Label" parent="CanvasLayer/text_ui" unique_id=1466429651]
-offset_left = 437.0
-offset_top = 961.0
-offset_right = 23810.0
-offset_bottom = 4711.0
+offset_left = 115.99988
+offset_top = 965.99994
+offset_right = 23489.0
+offset_bottom = 4716.0
 scale = Vector2(0.33, 0.33)
-theme_override_fonts/font = ExtResource("4_rk7qn")
+theme_override_fonts/font = ExtResource("4_8bfbl")
 theme_override_font_sizes/font_size = 100
 text = "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been 
 the industry's standard dummy text ever since 1966, when designers at Letraset and James Mosley, the librarian at St Bride Printing Library in London,
  took a 1914 Cicero translation and scrambled it to make dummy text for Letraset's Body Type sheets. It has survived not only many decades, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised thanks to these sheets and more recently with desktop publishing software like Aldus PageMaker and Microsoft Word including versions of Lorem Ipsum."
 
 [node name="CPUParticles2D" type="CPUParticles2D" parent="." unique_id=1074512742]
-visible = false
 position = Vector2(-24, -68)
 amount = 18
-texture = ExtResource("5_wo7mn")
+texture = ExtResource("5_rxj6u")
 lifetime = 0.45
 speed_scale = 0.1
 emission_shape = 3
@@ -179,7 +183,7 @@ autoplay = "default"
 
 [node name="monkey" type="AnimatedSprite2D" parent="." unique_id=448478908]
 sprite_frames = SubResource("SpriteFrames_x244a")
-animation = &"Idle"
+animation = &"Thinking"
 
 [connection signal="body_entered" from="Area2D" to="." method="_on_area_2d_body_entered"]
 [connection signal="body_exited" from="Area2D" to="." method="_on_area_2d_body_exited"]

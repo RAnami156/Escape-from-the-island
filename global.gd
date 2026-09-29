@@ -18,3 +18,13 @@ var flycatcher_irritation: int = 100
 var flycatcher_deal: int = -67
 
 var fly: bool = false
+
+#pandа 
+
+var panda_respect: int = 10
+var panda_friendship: int = 10
+var panda_irritation: int = 30
+var panda_deal: int = 0
+
+var book: bool = false
+var bamboo_boards: bool = false

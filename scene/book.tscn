@@ -1,18 +1,19 @@
-[gd_scene format=3 uid="uid://bu1lv2bfsseun"]
+[gd_scene format=3 uid="uid://dttm5ntxvikgo"]
 
-[ext_resource type="Script" uid="uid://dgbx7n1sxykgx" path="res://script/fly.gd" id="1_ry56p"]
-[ext_resource type="Texture2D" uid="uid://b61j1lftb7kyo" path="res://asets/3580f99ca4851bfa6a0d0594c656ba32.jpg" id="2_ry56p"]
+[ext_resource type="Script" uid="uid://c858vt0rhji4v" path="res://script/book.gd" id="1_rnjoa"]
+[ext_resource type="Texture2D" uid="uid://cgw2meaa5jqxg" path="res://asets/49eaa0c72ee58819f1beadaa29435475.jpg" id="2_rnjoa"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_c105b"]
 radius = 14.0
 
-[node name="fly2" type="Node2D" unique_id=1144280868]
+[node name="book" type="Node2D" unique_id=1144280868]
 scale = Vector2(0.5, 0.5)
-script = ExtResource("1_ry56p")
+script = ExtResource("1_rnjoa")
 
 [node name="Icon" type="Sprite2D" parent="." unique_id=1022618104]
-scale = Vector2(0.04444444, 0.04444444)
-texture = ExtResource("2_ry56p")
+position = Vector2(-3.6621097e-07, 3.6621094e-07)
+scale = Vector2(0.016000003, 0.016)
+texture = ExtResource("2_rnjoa")
 
 [node name="Area2D" type="Area2D" parent="." unique_id=766996165]
 collision_layer = 0

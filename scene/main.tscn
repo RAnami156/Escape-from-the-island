@@ -4,6 +4,7 @@
 [ext_resource type="PackedScene" uid="uid://baw8ke07buvuh" path="res://scene/npc_1_ollama_ru.tscn" id="2_wp4xf"]
 [ext_resource type="PackedScene" uid="uid://cqxvlolwkmx5k" path="res://scene/npc_flycatcher_ollama_ru.tscn" id="4_0ha60"]
 [ext_resource type="Script" uid="uid://6op62hcsrbhc" path="res://script/camera_2d.gd" id="4_brvut"]
+[ext_resource type="PackedScene" uid="uid://cy2id8te67mnd" path="res://scene/npc_panda_ollama_ru.tscn" id="5_0ha60"]
 
 [sub_resource type="CompressedTexture2D" id="CompressedTexture2D_brvut"]
 load_path = "res://.godot/imported/istockphoto-182361617-612x612.jpg-86186417d43c4ca53810f993abedc662.ctex"
@@ -34,3 +35,6 @@ max_zoom = 7.0
 
 [node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="StaticBody2D" unique_id=193883884]
 polygon = PackedVector2Array(862, 179, 873, 415, 265, 420, 243, 204, 842, 186, 436, 170, 126, 178, 54, 308, 91, 445, 282, 468, 451, 474, 623, 465, 950, 496, 947, 342, 932, 160, 880, 173)
+
+[node name="npc_1_ollama_ru2" parent="." unique_id=776375917 instance=ExtResource("5_0ha60")]
+position = Vector2(780, 299)
