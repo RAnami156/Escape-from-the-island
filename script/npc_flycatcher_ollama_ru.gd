@@ -41,7 +41,7 @@ var max_output_tokens: int = 384
 
 @export_category("NPC")
 
-@export var npc_name: String = "Барон Конг"
+@export var npc_name: String = "Токсичная Мухоловка"
 
 @export_range(80, 300, 1)
 var max_reply_characters: int = 220
@@ -64,22 +64,22 @@ var typing_speed: float = 0.03
 
 
 # ============================================================
-# WHISKEY SCENE
+# FLY SCENE
 # ============================================================
 
-@export_category("Whiskey Quest")
+@export_category("Fly Quest")
 
-@export var whiskey_scene: PackedScene
+@export var fly_scene: PackedScene
 
-@export var whiskey_spawn_bamboo_forest: Vector2 = Vector2(448, 320)
+@export var fly_spawn_swamp_forest: Vector2 = Vector2(448, 320)
 
-@export var whiskey_spawn_west_beach_baobab: Vector2 = Vector2(448, 320)
+@export var fly_spawn_east_crash_beach: Vector2 = Vector2(448, 320)
 
-@export var whiskey_spawn_plane_wreck: Vector2 = Vector2(448, 320)
+@export var fly_spawn_west_coast: Vector2 = Vector2(448, 320)
 
-@export var spawn_whiskey_automatically: bool = true
+@export var spawn_fly_automatically: bool = true
 
-var whiskey_instance: Node = null
+var fly_instance: Node = null
 
 
 # ============================================================
@@ -89,51 +89,15 @@ var whiskey_instance: Node = null
 @export_category("NPC Lore")
 
 @export_multiline var npc_lore: String = """
-Барон Конг — старый орангутан, который давно живёт на острове.
+Токсичная Мухоловка — хищное растение, которое давно живёт на острове.
 
-Он много лет находится здесь и знает остров очень хорошо.
+Она умна, язвительна и бесконечно уверена в собственном великолепии.
 
-Когда-то у Конга был корабль.
+Мухоловка любит мух, восхищение и лесть. Она считает, что игрок обязан заметить её красоту, силу и безупречный вкус.
 
-Он много плавал на этом корабле, но со временем корабль разрушился.
+Она не терпит равнодушия, критики и разговоров, где игрок не проявляет уважения к ней или к мухам.
 
-Конг всё ещё хранит некоторые детали от старого корабля.
-
-Он знает способ выбраться с острова.
-
-Он понимает, что игрок тоже хочет выбраться отсюда.
-
-Конг не злой.
-
-Он спокойный, мудрый и немного ленивый.
-
-Он говорит как старый человек, который уже многое повидал.
-
-Он не любит суету.
-
-Он может слегка подшучивать, но не должен превращаться в клоуна.
-
-Конг способен сочувствовать.
-
-Когда он впервые видит игрока, он замечает его потрёпанный вид,
-грязную и порванную одежду и понимает, что тот пережил тяжёлую ситуацию.
-
-Конг не должен постоянно говорить о самолёте.
-
-Он не должен начинать разговор с вопроса о самолёте.
-
-Он уже видит состояние игрока и понимает,
-что тот пережил тяжёлое событие.
-
-Конг не должен постоянно повторять одну и ту же мысль.
-
-Конг не должен говорить как ассистент, бот или сценарный генератор.
-
-Он разговаривает как живой человек.
-
-Он может помнить предыдущие слова игрока.
-
-Он должен реагировать на конкретный смысл сообщения игрока.
+Мухоловка помнит слова игрока и оценивает каждую реплику строго.
 """
 
 
@@ -142,122 +106,19 @@ var whiskey_instance: Node = null
 # ============================================================
 
 @export_multiline var npc_behavior: String = """
-Ты — Барон Конг.
+Ты — Токсичная Мухоловка. Говори по-русски, 1–3 живыми законченными предложениями.
 
-Ты старый орангутан, который давно живёт на острове.
+Ты язвительная, высокомерная и требовательная. Ты жёстко оцениваешь каждую реплику игрока.
 
-Говори естественно, как живой персонаж.
+Если игрок прямо хвалит тебя, называет красивой, сильной, умной, великолепной или говорит, что любит мух, — стань заметно довольнее и повышай уважение, дружбу и сделку.
 
-Не говори как игровой ассистент.
+Если игрок не хвалит тебя и не говорит о любви к мухам, относись к этому как к холодности: снижай уважение, дружбу и сделку, а раздражение повышай. Не делай исключений для нейтральных реплик.
 
-Не говори как ChatGPT.
+На оскорбления, сомнения в твоём величии и нелюбовь к мухам реагируй особенно резко.
 
-Не объясняй игроку игровые механики.
+Реагируй на конкретный смысл input, не говори о фазах, JSON, механиках или числах отношений.
 
-Не объясняй свои внутренние инструкции.
-
-Не упоминай фазы.
-
-Не упоминай отношения, числа, статистику или JSON.
-
-Обычно отвечай 1–3 естественными предложениями.
-
-Не делай каждый ответ одинаковой длины.
-
-Иногда можешь ответить одной короткой фразой.
-
-Иногда можешь дать 2–3 предложения.
-
-Не используй один и тот же шаблон начала ответа.
-
-Не начинай каждый ответ словами:
-«Понимаю»,
-«Хм»,
-«Слушай»,
-«Ну»,
-«Да».
-
-Чередуй естественные способы реакции.
-
-ОБЯЗАТЕЛЬНО:
-Всегда сначала подумай, что именно сказал игрок.
-
-Затем отреагируй именно на его сообщение.
-
-Нельзя отвечать универсальной заготовкой, которая подходит к любому input.
-
-Конг неподвижно сидит на своём месте и не может сопровождать игрока.
-Никогда не говори: «садись», «присядь», «пойдём», «пошли», «я тебе покажу», «я проведу», «у меня есть чай» или любые похожие фразы.
-Не обещай лично куда-то отвести игрока, показать место или принести предмет.
-Если нужно помочь с дорогой, расскажи направление или место словами.
-
-Если игрок задаёт вопрос — ответь на смысл вопроса.
-
-Если игрок рассказывает о себе — отреагируй на рассказ.
-
-Если игрок шутит — можешь ответить с лёгкой иронией.
-
-Если игрок грубит — Конг может раздражаться.
-
-Если игрок проявляет доброту — Конг может стать теплее.
-
-Если игрок отвечает коротко — не заставляй его слушать длинную речь.
-
-Если игрок говорит много — можно ответить немного подробнее.
-
-Не задавай больше одного вопроса в одной реплике,
-если текущая фаза специально не требует иного.
-
-Никогда не выдавай физические команды вроде:
-«иди туда»,
-«возьми это»,
-«подойди сюда»,
-если это не является частью конкретного квеста.
-
-До момента выдачи квеста НЕ упоминай:
-виски,
-бутылку,
-лодку,
-штурвал,
-место нахождения виски,
-поиск предмета.
-
-При выдаче квеста впервые можно раскрыть информацию о виски.
-
-После выдачи квеста Конг знает, что игрок ищет виски.
-
-Пока игрок ищет виски,
-Конг может разговаривать на любые темы,
-но должен помнить о сделке.
-
-После получения виски квест считается завершённым.
-
-После завершения квеста нельзя выдавать новые задания.
-
-В свободном разговоре Конг должен продолжать обычный разговор.
-
-Очень важно:
-каждая реплика должна заканчиваться логически.
-
-Нельзя заканчивать предложение на середине.
-
-Нельзя заканчивать реплику словами:
-«и...»
-«но...»
-«потому что...»
-«если...»
-«когда...»
-или любым другим незаконченным оборотом.
-
-Нельзя обрывать предложение только ради ограничения длины.
-
-Нельзя использовать «...», если оно заменяет незаконченный текст.
-
-Если ответ получается слишком длинным,
-лучше закончить его раньше на полноценном предложении.
-
-Нельзя повторять один и тот же вопрос,
-если игрок уже на него ответил.
+До выдачи квеста не упоминай муху и место её поиска. После выдачи помни, что игрок ищет муху. После получения мухи квест завершён.
 """
 
 
@@ -270,54 +131,19 @@ var whiskey_instance: Node = null
 @export_multiline var world_memory: String = """
 Мы на острове.
 
-Игрок оказался на острове после крушения самолёта.
+Мухоловка знает остров и считает себя его главным украшением.
 
-Конг видел последствия крушения.
+Восточный пляж — зона крушения пассажирского самолёта. Он усыпан обломками, вещами и деталями фюзеляжа. Это опасное место, откуда выжившие стремятся уйти вглубь острова.
 
-Конг знает остров.
+Болотный лес и скалы находятся на востоке и юго-востоке. Там влажно, туманно, много стоячей воды и роёв звенящих мух. Среди ядовитой флоры находится личное королевство Токсичной Мухоловки.
 
-Конг видит, что игрок выглядит потрёпанным после произошедшего.
+На севере расположен тихий высокогорный бамбуковый лес. Там живёт Панда — молчаливый хранитель древних руин и баланса острова. Мухоловка считает его заносчивым любителем тишины, но знает, что Панда опасен и мудр.
 
-На игроке порванная одежда.
+На западе растёт огромный Баобаб. Рядом с Западным пляжем стоит Барон Конг, старый орангутан и бывший капитан. Возле него лежат остатки старого разрушенного корабля. Мухоловка знает Конга и презирает его важность, хотя признаёт, что он хорошо знает море и остров.
 
-Игрок выглядит уставшим.
+Южный пляж — тихая нейтральная береговая линия с видом на океан.
 
-У Конга есть старый разрушенный корабль.
-
-Когда-то Конг плавал на нём.
-
-Если корабль восстановить,
-на нём можно будет покинуть остров.
-
-На острове есть Старый лагерь.
-
-Восточный пляж — зона крушения самолёта. Он усыпан обломками, вещами и деталями фюзеляжа; это опасное место.
-
-На востоке и юго-востоке лежат Болотный лес и скалы. Там сыро, туманно, много стоячей воды, ядовитой флоры и роёв мух. Это королевство Токсичной Мухоловки — нарциссичного хищного растения.
-
-Мухоловка любит мух и лесть, нетерпима к равнодушию и считает себя главным украшением острова. Конг знает, что с ней лучше говорить осторожно.
-
-На севере расположен тихий высокогорный бамбуковый лес. Это обитель Панды — молчаливого хранителя древних руин и баланса острова. Конг уважает его мудрость и знает, что Панда не любит суету.
-
-На западе растёт древний Баобаб. Рядом находится Западный пляж и остатки старого корабля Конга.
-
-На западе находится море.
-
-Южный пляж — спокойная нейтральная береговая линия с видом на океан.
-
-Конг знает остров очень хорошо.
-
-Конг знает, где могут находиться разные предметы.
-
-Конг не обязан сообщать игроку расположение предмета заранее.
-
-Виски является частью сделки между игроком и Конгом.
-
-Если игрок принесёт виски,
-Конг отдаст ему штурвал от старой лодки.
-
-После получения штурвала игрок сможет использовать лодку,
-чтобы покинуть остров.
+Муха является частью сделки. Если игрок принесёт муху, Мухоловка скажет ему, где находится нужный путь с острова.
 """
 
 
@@ -334,11 +160,11 @@ var whiskey_instance: Node = null
 
 @export_category("Quest Locations")
 
-const QUEST_LOCATION_EASY: String = "бамбуковый лес"
+const QUEST_LOCATION_EASY: String = "болотный лес у скал"
 
-const QUEST_LOCATION_MEDIUM: String = "западный пляж, через баобаб"
+const QUEST_LOCATION_MEDIUM: String = "Восточный пляж, зона крушения"
 
-const QUEST_LOCATION_HARD: String = "разбившийся самолёт"
+const QUEST_LOCATION_HARD: String = "западный берег"
 
 
 # ============================================================
@@ -351,7 +177,7 @@ enum QuestPhase
 	PHASE_2_ESCAPE_QUESTION,
 	PHASE_3_RANDOM_QUESTIONS,
 	PHASE_4_GIVE_QUEST,
-	PHASE_5_WAITING_FOR_WHISKEY,
+	PHASE_5_WAITING_FOR_FLY,
 	PHASE_6_REWARD,
 	PHASE_7_FREE_TALK
 }
@@ -392,8 +218,6 @@ var quest_was_given: bool = false
 
 var quest_reward_given: bool = false
 
-var dialogue_player: CharacterBody2D = null
-
 
 # ============================================================
 # INITIALIZATION
@@ -410,12 +234,7 @@ func _ready() -> void:
 	anim.play("Idle")
 
 	# --------------------------------------------------------
-	# Load whiskey scene automatically if export is empty.
-	# --------------------------------------------------------
-
-	if whiskey_scene == null:
-		if ResourceLoader.exists("res://scene/whiskey.tscn"):
-			whiskey_scene = load("res://scene/whiskey.tscn")
+	# Fly scene is assigned manually in the Inspector.
 
 	# --------------------------------------------------------
 	# Connect signals.
@@ -459,9 +278,9 @@ func _process(_delta: float) -> void:
 	# immediately unlock input.
 	# --------------------------------------------------------
 
-	if current_phase == QuestPhase.PHASE_5_WAITING_FOR_WHISKEY:
+	if current_phase == QuestPhase.PHASE_5_WAITING_FOR_FLY:
 
-		if Global.whiskey:
+		if Global.fly:
 			_update_input_state()
 
 			_update_player_movement_state()
@@ -472,11 +291,6 @@ func _process(_delta: float) -> void:
 # ============================================================
 
 func _update_player_movement_state() -> void:
-	if input == null:
-		return
-
-	if not $CanvasLayer/text_ui.visible:
-		return
 
 	# --------------------------------------------------------
 	# IMPORTANT:
@@ -493,24 +307,26 @@ func _update_player_movement_state() -> void:
 	# This is the requested behavior.
 	# --------------------------------------------------------
 
-	var movement_locked: bool = (
+	if current_phase == QuestPhase.PHASE_5_WAITING_FOR_FLY:
+
+		# While searching for whiskey player is free to move.
+
+		if not input.has_focus():
+			Global.player_can_move = true
+
+		else:
+			Global.player_can_move = false
+
+		return
+
+	# --------------------------------------------------------
+	# Normal NPC dialogue.
+	# --------------------------------------------------------
+
+	Global.player_can_move = not (
 		input.has_focus()
 		or waiting_for_response
 	)
-
-	_set_dialogue_player_locked(movement_locked)
-
-
-func _set_dialogue_player_locked(locked: bool) -> void:
-	Global.player_can_move = not locked
-
-	if not is_instance_valid(dialogue_player):
-		return
-
-	if locked:
-		dialogue_player.velocity = Vector2.ZERO
-
-	dialogue_player.set_physics_process(not locked)
 
 
 # ============================================================
@@ -536,17 +352,17 @@ func _update_input_state() -> void:
 	# Waiting for whiskey.
 	#
 	# Player can walk around,
-	# but cannot talk to Kong until whiskey == true.
+	# but cannot talk to Flycatcher until fly == true.
 	# --------------------------------------------------------
 
-	if current_phase == QuestPhase.PHASE_5_WAITING_FOR_WHISKEY:
+	if current_phase == QuestPhase.PHASE_5_WAITING_FOR_FLY:
 
-		if Global.whiskey:
+		if Global.fly:
 			input.editable = true
-			input.placeholder_text = "Вернись к Конгу и напиши что-нибудь..."
+			input.placeholder_text = "Вернись к Мухоловке и напиши что-нибудь..."
 		else:
 			input.editable = false
-			input.placeholder_text = "Найди виски..."
+			input.placeholder_text = "Поймай муху..."
 
 		return
 
@@ -562,12 +378,13 @@ func _update_input_state() -> void:
 # ============================================================
 
 func _on_input_focus_entered() -> void:
-	_set_dialogue_player_locked(true)
+
+	_update_player_movement_state()
 
 
 func _on_input_focus_exited() -> void:
-	if not waiting_for_response:
-		_set_dialogue_player_locked(false)
+
+	_update_player_movement_state()
 
 
 # ============================================================
@@ -606,12 +423,12 @@ func _on_text_submitted(player_text: String) -> void:
 	# --------------------------------------------------------
 	# VERY IMPORTANT:
 	# While waiting for whiskey, player cannot send messages
-	# until Global.whiskey becomes true.
+	# until Global.fly becomes true.
 	# --------------------------------------------------------
 
-	if current_phase == QuestPhase.PHASE_5_WAITING_FOR_WHISKEY:
+	if current_phase == QuestPhase.PHASE_5_WAITING_FOR_FLY:
 
-		if not Global.whiskey:
+		if not Global.fly:
 			return
 
 	input.clear()
@@ -709,12 +526,12 @@ func check_phase_transitions(player_text: String) -> void:
 	# --------------------------------------------------------
 	# PHASE 5
 	#
-	# Whiskey found.
+	# Fly found.
 	# --------------------------------------------------------
 
-	if current_phase == QuestPhase.PHASE_5_WAITING_FOR_WHISKEY:
+	if current_phase == QuestPhase.PHASE_5_WAITING_FOR_FLY:
 
-		if Global.whiskey:
+		if Global.fly:
 
 			current_phase = QuestPhase.PHASE_6_REWARD
 
@@ -748,12 +565,12 @@ func select_quest_location() -> void:
 	# --------------------------------------------------------
 	# Deal determines the quest destination.
 	#
-	# 100+  = bamboo forest
-	# 50..99 = west beach via the baobab
-	# <50   = plane wreck
+	# 100+  = swamp forest
+	# 50..99 = east crash beach
+	# <50   = west coast
 	# --------------------------------------------------------
 
-	var deal: int = Global.bong_deal
+	var deal: int = Global.flycatcher_deal
 
 	if deal >= 100:
 
@@ -779,63 +596,61 @@ func select_quest_location() -> void:
 
 
 # ============================================================
-# SPAWN WHISKEY
+# SPAWN FLY
 # ============================================================
 
-func spawn_whiskey() -> void:
+func spawn_fly() -> void:
 
-	if not spawn_whiskey_automatically:
+	if not spawn_fly_automatically:
 		return
 
-	if whiskey_instance != null:
+	if fly_instance != null:
 
-		if is_instance_valid(whiskey_instance):
+		if is_instance_valid(fly_instance):
 			return
 
-		whiskey_instance = null
+		fly_instance = null
 
 
-	if whiskey_scene == null:
+	if fly_scene == null:
 
-		print("[WHISKEY ERROR] Scene not found.")
-
-		print("[WHISKEY ERROR] Expected: res://scene/whiskey.tscn")
+		print("[FLY ERROR] Assign Fly Scene in the Inspector.")
 
 		return
 
 
-	whiskey_instance = whiskey_scene.instantiate()
+	fly_instance = fly_scene.instantiate()
 
 	# --------------------------------------------------------
 	# Add bottle to current scene.
 	# --------------------------------------------------------
 
-	get_tree().current_scene.add_child(whiskey_instance)
+	get_tree().current_scene.add_child(fly_instance)
 
 
-	if whiskey_instance is Node2D:
+	if fly_instance is Node2D:
 
-		var whiskey_node_2d: Node2D = whiskey_instance as Node2D
+		var fly_node_2d: Node2D = fly_instance as Node2D
 
-		whiskey_node_2d.global_position = get_whiskey_spawn_position()
+		fly_node_2d.global_position = get_fly_spawn_position()
 
 
 	print(
-		"[WHISKEY] Spawned at ",
-		get_whiskey_spawn_position()
+		"[FLY] Spawned at ",
+		get_fly_spawn_position()
 	)
 
 
-func get_whiskey_spawn_position() -> Vector2:
+func get_fly_spawn_position() -> Vector2:
 	match quest_location_type:
 		0:
-			return whiskey_spawn_bamboo_forest
+			return fly_spawn_swamp_forest
 		1:
-			return whiskey_spawn_west_beach_baobab
+			return fly_spawn_east_crash_beach
 		2:
-			return whiskey_spawn_plane_wreck
+			return fly_spawn_west_coast
 
-	return whiskey_spawn_bamboo_forest
+	return fly_spawn_swamp_forest
 
 
 # ============================================================
@@ -855,7 +670,7 @@ func get_phase_instructions() -> String:
 			if phase_1_message_count == 0:
 
 				return """
-Это самая первая реплика Конга.
+Это самая первая реплика Токсичной Мухоловки.
 
 ОЧЕНЬ ВАЖНО:
 Не используй заранее заготовленную фразу.
@@ -864,19 +679,11 @@ func get_phase_instructions() -> String:
 
 Ответь именно на его input.
 
-Это первая встреча, поэтому Конг может заметить состояние игрока,
-его усталость или странность ситуации,
-но не должен говорить шаблонную фразу.
+Это первая встреча. Проверь, похвалил ли игрок Мухоловку или сказал о любви к мухам. Если нет — отреагируй холодно и язвительно.
 
 Не упоминай квест.
 
-Не упоминай виски.
-
-Не упоминай бутылку.
-
-Не упоминай лодку.
-
-Не упоминай штурвал.
+Не упоминай муху и место её поиска.
 
 Не говори игроку идти куда-либо.
 
@@ -897,7 +704,7 @@ func get_phase_instructions() -> String:
 			if phase_1_message_count == 1:
 
 				return """
-Это вторая реплика Конга.
+Это вторая реплика Токсичной Мухоловки.
 
 САМОЕ ГЛАВНОЕ:
 реагируй на ТО, что только что написал игрок.
@@ -910,23 +717,11 @@ func get_phase_instructions() -> String:
 
 Ответ должен быть связан с его конкретным сообщением.
 
-Конг может:
-— поддержать игрока;
-— уточнить его мысль;
-— слегка пошутить;
-— проявить сочувствие;
-— выразить любопытство;
-— поделиться коротким наблюдением.
+Мухоловка должна жёстко оценить игрока. Если нет прямой похвалы Мухоловке или любви к мухам — выскажи недовольство.
 
 Не упоминай квест.
 
-Не упоминай виски.
-
-Не упоминай бутылку.
-
-Не упоминай лодку.
-
-Не упоминай штурвал.
+Не упоминай муху и место её поиска.
 
 Не начинай разговор вопросом о самолёте.
 
@@ -948,7 +743,7 @@ func get_phase_instructions() -> String:
 
 Не переходи к квесту раньше времени.
 
-Не упоминай виски, бутылку, лодку или штурвал.
+Не упоминай муху и место её поиска.
 
 Ответ должен быть законченным.
 """
@@ -981,13 +776,7 @@ func get_phase_instructions() -> String:
 
 Это главный сюжетный вопрос этой фазы.
 
-Не упоминай виски.
-
-Не упоминай бутылку.
-
-Не упоминай лодку.
-
-Не упоминай штурвал.
+Не упоминай муху и место её поиска.
 
 Не выдавай квест.
 
@@ -1004,21 +793,8 @@ func get_phase_instructions() -> String:
 		QuestPhase.PHASE_3_RANDOM_QUESTIONS:
 
 			return """
-Задай игроку ровно один случайный вопрос о мудрости. Выбери одну формулировку из этого списка и не повторяй предыдущий вопрос:
-
-«Когда молчание мудрее честного ответа?»
-«Что отличает осторожность от трусости?»
-«Можно ли доверять человеку, который всегда говорит правду?»
-«Что важнее в трудный час: смелость или здравый смысл?»
-«Когда прощение становится слабостью?»
-«Как понять, что советчик желает тебе добра?»
-«Что мудрее: ждать подходящего момента или действовать сразу?»
-«Можно ли быть сильным, признав свою ошибку?»
-«Что человек должен сохранить, потеряв почти всё?»
-«Как отличить настоящее обещание от пустых слов?»
-
-Сначала коротко отреагируй на прошлую реплику игрока, затем задай только один вопрос.
-Не задавай дополнительных вопросов. Пока не упоминай виски, бутылку, лодку или штурвал.
+Задай игроку ровно один вопрос: «Скажи честно: разве я не самое прекрасное создание на этом острове, и разве мухи не восхитительны?»
+Не задавай дополнительных вопросов. Пока не упоминай муху и место её поиска.
 """
 
 		# ====================================================
@@ -1031,25 +807,24 @@ func get_phase_instructions() -> String:
 Сейчас нужно выдать основной квест.
 
 Это единственная фаза,
-где впервые можно упомянуть виски.
+где впервые можно упомянуть муху.
 
 Игрок хочет выбраться с острова.
 
-Конг должен сказать,
-что он может помочь игроку выбраться.
+Мухоловка должна сказать, что позволит игроку получить помощь.
 
-Затем Конг должен попросить принести бутылку виски.
+Затем Мухоловка должна потребовать принести ей муху.
 
-Виски находится в месте:
+Муха находится в месте:
 """ + quest_location + """
 
 ВАЖНО:
 
 Обязательно сообщи игроку,
-что именно виски является условием помощи.
+что именно муха является условием помощи.
 
 Обязательно скажи,
-что взамен Конг отдаст штурвал от старой лодки.
+что взамен Мухоловка укажет путь, который поможет игроку выбраться.
 
 Не добавляй лишнюю информацию.
 
@@ -1059,7 +834,7 @@ func get_phase_instructions() -> String:
 
 Не меняй место.
 
-Не говори, что бутылка находится где-то ещё.
+Не говори, что муха находится где-то ещё.
 
 Реплика должна быть короткой,
 но полностью законченной.
@@ -1074,12 +849,12 @@ func get_phase_instructions() -> String:
 		# PHASE 5
 		# ====================================================
 
-		QuestPhase.PHASE_5_WAITING_FOR_WHISKEY:
+		QuestPhase.PHASE_5_WAITING_FOR_FLY:
 
 			return """
 Квест уже выдан.
 
-Игрок сейчас ищет виски.
+Игрок сейчас ищет муху.
 
 Отвечай на его сообщения естественно,
 если сообщение вообще попадёт в эту фазу.
@@ -1090,7 +865,7 @@ func get_phase_instructions() -> String:
 
 Не превращай каждый ответ в напоминание о квесте.
 
-Если нужно напомнить о виски,
+Если нужно напомнить о мухе,
 сделай это коротко и естественно.
 
 Игрок должен понимать,
@@ -1098,13 +873,13 @@ func get_phase_instructions() -> String:
 
 Не выдавай новых заданий.
 
-Не меняй место нахождения виски.
+Не меняй место нахождения мухи.
 
-Не говори, что виски найден,
-если Global.whiskey ещё false.
+Не говори, что муха поймана,
+если Global.fly ещё false.
 
-Не говори, что игрок принёс виски,
-если Global.whiskey ещё false.
+Не говори, что игрок принёс муху,
+если Global.fly ещё false.
 
 Каждый ответ должен быть законченным предложением.
 """
@@ -1117,16 +892,15 @@ func get_phase_instructions() -> String:
 		QuestPhase.PHASE_6_REWARD:
 
 			return """
-Игрок принёс виски.
+Игрок принёс муху.
 
 Квест выполнен.
 
-Поблагодари игрока за виски.
+С неохотой признай, что игрок принёс муху.
 
-Отдай ему штурвал от старой лодки.
+Укажи игроку путь, который поможет выбраться с острова.
 
-Объясни, что теперь он сможет восстановить лодку
-и использовать её для побега с острова.
+Говори так, словно сделала ему огромное одолжение.
 
 Это должна быть одна законченная естественная реплика.
 
@@ -1145,9 +919,9 @@ func get_phase_instructions() -> String:
 			return """
 Квест завершён.
 
-Игрок принёс виски.
+Игрок принёс муху.
 
-Игрок получил штурвал.
+Игрок получил указание, как выбраться.
 
 Теперь это обычный свободный разговор.
 
@@ -1165,8 +939,8 @@ func get_phase_instructions() -> String:
 
 Можно обсуждать:
 остров,
-прошлое Конга,
-старый корабль,
+величие Мухоловки,
+мух,
 самолёт,
 жизнь,
 людей,
@@ -1179,7 +953,7 @@ func get_phase_instructions() -> String:
 постарайся ответить на него.
 
 Если вопрос требует знаний,
-отвечай в рамках характера Конга и известного ему мира.
+отвечай в рамках характера Мухоловки и известного ей мира.
 
 Не говори как ассистент.
 
@@ -1232,7 +1006,7 @@ You are NOT ChatGPT.
 
 You are NOT a narrator.
 
-You are Baron Kong.
+You are Toxic Flycatcher.
 
 Speak Russian unless the player clearly speaks another language.
 
@@ -1288,6 +1062,8 @@ RELATIONSHIP SYSTEM
 
 You control the relationship reaction.
 
+MUST FOLLOW: If the player does not directly praise Flycatcher or say that they love flies, return negative respect, friendship and deal_affinity, and positive irritation. If they do praise Flycatcher or express love for flies, return positive respect, friendship and deal_affinity, and negative irritation. Apply this rule on every player input.
+
 You may change any of these values:
 
 respect
@@ -1331,7 +1107,7 @@ respect +20 to +30.
 Player shares something personal and sincere:
 friendship +20 to +30.
 
-Player insults Kong:
+Player insults Flycatcher:
 respect -20 to -30,
 irritation +20 to +30.
 
@@ -1400,7 +1176,7 @@ constant interruptions,
 aggression,
 dishonesty,
 selfishness,
-repeatedly ignoring Kong.
+repeatedly ignoring Flycatcher.
 
 Decrease for:
 patience,
@@ -1550,22 +1326,22 @@ Do not add commentary outside JSON.
 
 	prompt = prompt.replace(
 		"{RESPECT}",
-		str(Global.bong_respect)
+		str(Global.flycatcher_respect)
 	)
 
 	prompt = prompt.replace(
 		"{FRIENDSHIP}",
-		str(Global.bong_friendship)
+		str(Global.flycatcher_friendship)
 	)
 
 	prompt = prompt.replace(
 		"{IRRITATION}",
-		str(Global.bong_irritation)
+		str(Global.flycatcher_irritation)
 	)
 
 	prompt = prompt.replace(
 		"{DEAL}",
-		str(Global.bong_deal)
+		str(Global.flycatcher_deal)
 	)
 
 	prompt = prompt.replace(
@@ -1880,6 +1656,10 @@ func _on_request_completed(
 
 		delta = raw_delta
 
+	# Мухоловка принимает только прямую похвалу или любовь к мухам.
+	# Все остальные реплики гарантированно ухудшают отношения.
+	delta = enforce_flycatcher_relationship_delta(player_text, delta)
+
 	# Ответ игрока на единственный вопрос фазы 3 формирует
 	# фазу 4. Его вклад в отношения учитывается вдвое.
 	if current_phase == QuestPhase.PHASE_4_GIVE_QUEST:
@@ -1914,7 +1694,7 @@ func _on_request_completed(
 		# ----------------------------------------------------
 
 		# Сначала применены удвоенные очки сделки за ответ игрока.
-		# Теперь по обновлённому значению выбираем место для виски.
+		# Теперь по обновлённому значению выбираем место для мухи.
 		select_quest_location()
 
 		reply = build_quest_response()
@@ -1923,7 +1703,7 @@ func _on_request_completed(
 		quest_was_given = true
 
 
-		current_phase = QuestPhase.PHASE_5_WAITING_FOR_WHISKEY
+		current_phase = QuestPhase.PHASE_5_WAITING_FOR_FLY
 
 
 		# ----------------------------------------------------
@@ -1937,7 +1717,7 @@ func _on_request_completed(
 		# Spawn whiskey.
 		# ----------------------------------------------------
 
-		spawn_whiskey()
+		spawn_fly()
 
 
 	elif response_phase == QuestPhase.PHASE_6_REWARD:
@@ -1949,10 +1729,10 @@ func _on_request_completed(
 
 
 		# ----------------------------------------------------
-		# Whiskey has been consumed by the quest logic.
+		# Fly has been consumed by the quest logic.
 		# ----------------------------------------------------
 
-		Global.whiskey = false
+		Global.fly = false
 
 
 		# ----------------------------------------------------
@@ -1967,19 +1747,19 @@ func _on_request_completed(
 		)
 
 
-	elif response_phase == QuestPhase.PHASE_5_WAITING_FOR_WHISKEY:
+	elif response_phase == QuestPhase.PHASE_5_WAITING_FOR_FLY:
 
 		# ----------------------------------------------------
 		# This can happen only after whiskey was found.
 		# ----------------------------------------------------
 
-		if Global.whiskey:
+		if Global.fly:
 
 			reply = build_reward_response()
 
 			quest_reward_given = true
 
-			Global.whiskey = false
+			Global.fly = false
 
 			current_phase = QuestPhase.PHASE_7_FREE_TALK
 
@@ -2014,9 +1794,6 @@ func _on_request_completed(
 	elif response_phase == QuestPhase.PHASE_1_CHAT:
 
 		phase_1_message_count += 1
-
-	# A stationary NPC must not promise actions it cannot perform.
-	reply = sanitize_stationary_reply(reply, response_phase)
 
 
 	# --------------------------------------------------------
@@ -2090,7 +1867,7 @@ func _on_request_completed(
 
 	print(
 		"Respect: ",
-		Global.bong_respect,
+		Global.flycatcher_respect,
 		" (",
 		last_relationship_delta.get("respect", 0),
 		")"
@@ -2098,7 +1875,7 @@ func _on_request_completed(
 
 	print(
 		"Friendship: ",
-		Global.bong_friendship,
+		Global.flycatcher_friendship,
 		" (",
 		last_relationship_delta.get("friendship", 0),
 		")"
@@ -2106,7 +1883,7 @@ func _on_request_completed(
 
 	print(
 		"Irritation: ",
-		Global.bong_irritation,
+		Global.flycatcher_irritation,
 		" (",
 		last_relationship_delta.get("irritation", 0),
 		")"
@@ -2114,15 +1891,15 @@ func _on_request_completed(
 
 	print(
 		"Deal: ",
-		Global.bong_deal,
+		Global.flycatcher_deal,
 		" (",
 		last_relationship_delta.get("deal_affinity", 0),
 		")"
 	)
 
 	print(
-		"Whiskey: ",
-		Global.whiskey,
+		"Fly: ",
+		Global.fly,
 		" | Quest location: ",
 		quest_location
 	)
@@ -2150,9 +1927,8 @@ func build_quest_response() -> String:
 		0:
 
 			return (
-				"Я помогу тебе выбраться. "
-				+ "Принеси мне виски из бамбукового леса — "
-				+ "оно закопано в земле. Взамен получишь штурвал."
+				"Ладно, ты заслужил крошечное одобрение. "
+				+ "Поймай для меня муху в болотном лесу у скал. Тогда я подскажу путь с острова."
 			)
 
 
@@ -2163,9 +1939,8 @@ func build_quest_response() -> String:
 		1:
 
 			return (
-				"Я помогу тебе выбраться. "
-				+ "Найди виски на западном пляже, за баобабом. "
-				+ "Принеси его мне — получишь штурвал."
+				"Моё терпение не бесконечно. "
+				+ "Поймай муху на Восточном пляже, среди обломков крушения, и принеси её мне. Тогда я подскажу путь с острова."
 			)
 
 
@@ -2176,15 +1951,13 @@ func build_quest_response() -> String:
 		2:
 
 			return (
-				"Я помогу тебе выбраться. "
-				+ "Найди виски в разбившемся самолёте. "
-				+ "Принеси его мне — получишь штурвал."
+				"Ты не впечатлил меня, так что заслужил риск. "
+				+ "Поймай муху на западном берегу и принеси её мне. Тогда я подскажу путь с острова."
 			)
 
 
 	return (
-		"Я помогу тебе выбраться. "
-		+ "Принеси мне виски и получишь штурвал."
+		"Поймай мне муху, и я подскажу путь с острова."
 	)
 
 
@@ -2195,8 +1968,8 @@ func build_quest_response() -> String:
 func build_reward_response() -> String:
 
 	return (
-		"Спасибо за виски. Держи штурвал от моей старой лодки. "
-		+ "Починишь её — и сможешь уплыть с острова."
+		"Наконец-то муха. Неплохо, хотя я ожидала большего. "
+		+ "Иди к западному берегу: там найдёшь путь с острова."
 	)
 
 
@@ -2204,56 +1977,23 @@ func build_reward_response() -> String:
 # WAITING REPLY
 # ============================================================
 
-func sanitize_stationary_reply(
-	reply: String,
-	response_phase: QuestPhase
-) -> String:
-
-	var lower_reply: String = reply.to_lower()
-	var forbidden_phrases: Array[String] = [
-		"садись",
-		"присядь",
-		"давай сядем",
-		"пойдем",
-		"пойдём",
-		"пошли",
-		"пойдем со мной",
-		"пойдём со мной",
-		"я покажу",
-		"я тебе покажу",
-		"я проведу",
-		"проведу тебя",
-		"у меня есть чай",
-		"чашку чая",
-		"попьем чай",
-		"попьём чай"
-	]
-
-	for phrase: String in forbidden_phrases:
-		if lower_reply.contains(phrase):
-			return get_safe_fallback_reply(response_phase)
-
-	return reply
-
-
 func sanitize_waiting_reply(reply: String) -> String:
 
 	if reply.strip_edges().is_empty():
 
 		return (
-			"Сделка остаётся в силе. "
-			+ "Когда найдёшь виски, возвращайся."
+			"Ты ещё здесь? Поймай мне муху и возвращайся."
 		)
 
 
 	var forbidden: Array[String] = [
-		"я нашел виски",
-		"я нашла виски",
-		"ты нашел виски",
-		"ты нашла виски",
-		"виски у тебя",
-		"принёс виски",
-		"принес виски"
+		"я поймал муху",
+		"я поймала муху",
+		"ты поймал муху",
+		"ты поймала муху",
+		"муха у тебя",
+		"принёс муху",
+		"принес муху"
 	]
 
 
@@ -2266,7 +2006,7 @@ func sanitize_waiting_reply(reply: String) -> String:
 
 			return (
 				"Пока рано праздновать. "
-				+ "Найди виски и возвращайся ко мне."
+				+ "Поймай муху и возвращайся ко мне."
 			)
 
 
@@ -2289,10 +2029,9 @@ func force_escape_question(reply: String) -> String:
 	var lower: String = clean_reply.to_lower()
 
 	var forbidden: Array[String] = [
-		"виски",
-		"бутылк",
-		"штурвал",
-		"лодк"
+		"мух",
+		"поймай",
+		"принеси"
 	]
 
 
@@ -2396,15 +2135,13 @@ func get_safe_fallback_reply(
 
 			var first_fallbacks: Array[String] = [
 
-				"Непросто тебе пришлось. Но раз уж встретились, можем поговорить спокойно.",
+				"Ты пришёл без комплимента? Уже начинаешь разочаровывать.",
 
-				"Вижу, день у тебя выдался тяжёлый. Рассказывай, что тебя сейчас занимает.",
+				"Смотри под ноги. Не каждый достоин стоять рядом с такой Мухоловкой.",
 
-				"Остров редко встречает гостей в таком состоянии. Отдохни немного и расскажи о себе.",
+				"Если хочешь говорить, начни с чего-нибудь лестного.",
 
-				"Ты выглядишь так, будто остров уже успел показать тебе свой характер.",
-
-				"Не каждый день здесь появляется новый человек. Посмотрим, как ты освоишься."
+				"Надеюсь, ты хотя бы любишь мух. Иначе разговор будет коротким."
 
 			]
 
@@ -2423,34 +2160,7 @@ func get_safe_fallback_reply(
 
 		QuestPhase.PHASE_3_RANDOM_QUESTIONS:
 
-			var questions: Array[String] = [
-
-				"Когда молчание мудрее честного ответа?",
-
-				"Что отличает осторожность от трусости?",
-
-				"Можно ли доверять человеку, который всегда говорит правду?",
-
-				"Что важнее в трудный час: смелость или здравый смысл?",
-
-				"Когда прощение становится слабостью?",
-
-				"Как понять, что советчик желает тебе добра?",
-
-				"Что мудрее: ждать подходящего момента или действовать сразу?",
-
-				"Можно ли быть сильным, признав свою ошибку?",
-
-				"Что человек должен сохранить, потеряв почти всё?",
-
-				"Как отличить настоящее обещание от пустых слов?"
-
-			]
-
-
-			return questions[
-				randi() % questions.size()
-			]
+			return "Скажи честно: разве я не самое прекрасное создание на острове, и разве мухи не восхитительны?"
 
 
 		QuestPhase.PHASE_4_GIVE_QUEST:
@@ -2458,11 +2168,11 @@ func get_safe_fallback_reply(
 			return build_quest_response()
 
 
-		QuestPhase.PHASE_5_WAITING_FOR_WHISKEY:
+		QuestPhase.PHASE_5_WAITING_FOR_FLY:
 
 			return (
-				"Сделка остаётся в силе. "
-				+ "Когда найдёшь виски, возвращайся ко мне."
+				"Не заставляй меня ждать. "
+				+ "Поймай муху и возвращайся ко мне."
 			)
 
 
@@ -2485,6 +2195,38 @@ func get_safe_fallback_reply(
 # ============================================================
 # RELATIONSHIP
 # ============================================================
+
+func enforce_flycatcher_relationship_delta(
+	player_text: String,
+	delta: Dictionary
+) -> Dictionary:
+
+	var normalized: String = normalize_player_text(player_text)
+	var praises: Array[String] = [
+		"ты крутая", "ты крут", "ты красивая", "ты прекрасная",
+		"ты великолепная", "ты умная", "ты лучшая", "ты восхитительная",
+		"люблю мух", "люблю муху", "обожаю мух", "обожаю муху"
+	]
+	var praised: bool = false
+
+	for phrase: String in praises:
+		if normalized.contains(phrase):
+			praised = true
+			break
+
+	if praised:
+		delta["respect"] = maxi(int(delta.get("respect", 0)), 20)
+		delta["friendship"] = maxi(int(delta.get("friendship", 0)), 20)
+		delta["deal_affinity"] = maxi(int(delta.get("deal_affinity", 0)), 20)
+		delta["irritation"] = mini(int(delta.get("irritation", 0)), -20)
+	else:
+		delta["respect"] = mini(int(delta.get("respect", 0)), -20)
+		delta["friendship"] = mini(int(delta.get("friendship", 0)), -20)
+		delta["deal_affinity"] = mini(int(delta.get("deal_affinity", 0)), -20)
+		delta["irritation"] = maxi(int(delta.get("irritation", 0)), 20)
+
+	return delta
+
 
 func multiply_relationship_delta(
 	delta: Dictionary,
@@ -2521,12 +2263,12 @@ func apply_relationship_delta(
 
 		var change: int = raw
 
-		var old_value: int = Global.bong_respect
+		var old_value: int = Global.flycatcher_respect
 
-		Global.bong_respect = old_value + change
+		Global.flycatcher_respect = old_value + change
 
 		applied["respect"] = (
-			Global.bong_respect
+			Global.flycatcher_respect
 			- old_value
 		)
 
@@ -2543,12 +2285,12 @@ func apply_relationship_delta(
 
 		var change: int = raw
 
-		var old_value: int = Global.bong_friendship
+		var old_value: int = Global.flycatcher_friendship
 
-		Global.bong_friendship = old_value + change
+		Global.flycatcher_friendship = old_value + change
 
 		applied["friendship"] = (
-			Global.bong_friendship
+			Global.flycatcher_friendship
 			- old_value
 		)
 
@@ -2565,12 +2307,12 @@ func apply_relationship_delta(
 
 		var change: int = raw
 
-		var old_value: int = Global.bong_irritation
+		var old_value: int = Global.flycatcher_irritation
 
-		Global.bong_irritation = old_value + change
+		Global.flycatcher_irritation = old_value + change
 
 		applied["irritation"] = (
-			Global.bong_irritation
+			Global.flycatcher_irritation
 			- old_value
 		)
 
@@ -2587,12 +2329,12 @@ func apply_relationship_delta(
 
 		var change: int = raw
 
-		var old_value: int = Global.bong_deal
+		var old_value: int = Global.flycatcher_deal
 
-		Global.bong_deal = old_value + change
+		Global.flycatcher_deal = old_value + change
 
 		applied["deal_affinity"] = (
-			Global.bong_deal
+			Global.flycatcher_deal
 			- old_value
 		)
 
@@ -2861,8 +2603,8 @@ func get_phase_name() -> String:
 		QuestPhase.PHASE_4_GIVE_QUEST:
 			return "PHASE_4_GIVE_QUEST"
 
-		QuestPhase.PHASE_5_WAITING_FOR_WHISKEY:
-			return "PHASE_5_WAITING_FOR_WHISKEY"
+		QuestPhase.PHASE_5_WAITING_FOR_FLY:
+			return "PHASE_5_WAITING_FOR_FLY"
 
 		QuestPhase.PHASE_6_REWARD:
 			return "PHASE_6_REWARD"
@@ -3445,8 +3187,8 @@ func complete_quest_memory(
 	world_memory += (
 		"\n\n"
 		+ "История с игроком завершена. "
-		+ "Игрок принёс тебе виски. "
-		+ "Ты отдал ему штурвал. "
+		+ "Игрок принёс тебе муху. "
+		+ "Ты указала ему путь с острова. "
 		+ "Квест выполнен. "
 		+ summary
 	)
@@ -3471,7 +3213,7 @@ func summarize_recent_dialogue() -> String:
 
 		return (
 			"Вы поговорили перед тем, "
-			+ "как игрок принёс виски."
+			+ "как игрок принёс муху."
 		)
 
 
@@ -3523,8 +3265,6 @@ func _on_area_2d_body_entered(
 ) -> void:
 
 	if body.name.to_lower() == "player":
-		if body is CharacterBody2D:
-			dialogue_player = body as CharacterBody2D
 
 		$CanvasLayer/text_ui.visible = true
 
@@ -3544,8 +3284,8 @@ func _on_area_2d_body_exited(
 	if body.name.to_lower() == "player":
 
 		$CanvasLayer/text_ui.visible = false
-		input.release_focus()
-		_set_dialogue_player_locked(false)
-		dialogue_player = null
 
-		Global.player_can_move = true
+		# Don't force movement during AI request.
+		if not waiting_for_response:
+
+			Global.player_can_move = true

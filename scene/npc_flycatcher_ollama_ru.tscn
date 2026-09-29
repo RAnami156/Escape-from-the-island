@@ -1,0 +1,189 @@
+[gd_scene format=3 uid="uid://cqxvlolwkmx5k"]
+
+[ext_resource type="Script" uid="uid://d0k3cvh3yftw0" path="res://script/npc_flycatcher_ollama_ru.gd" id="1_p7tar"]
+[ext_resource type="PackedScene" uid="uid://bu1lv2bfsseun" path="res://scene/fly.tscn" id="2_bof67"]
+[ext_resource type="Texture2D" uid="uid://b2bd3cq3v5dnx" path="res://asets/flytrap-noun-Venus_flytrap-457ff51d_1-x3.webp" id="2_wa8mu"]
+[ext_resource type="Texture2D" uid="uid://cisomewmdw4op" path="res://asets/icon.svg" id="3_ttyes"]
+[ext_resource type="FontFile" uid="uid://bcmxb24dbljpw" path="res://asets/minecraft.ttf" id="4_rk7qn"]
+[ext_resource type="Texture2D" uid="uid://cn6xetuyew058" path="res://asets/leaf.png" id="5_wo7mn"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_c105b"]
+radius = 135.00371
+
+[sub_resource type="GDScript" id="GDScript_trtyr"]
+script/source = "extends Node2D
+"
+
+[sub_resource type="GDScript" id="GDScript_7h7ol"]
+script/source = "extends LineEdit
+
+var initial_width: float
+var center_x: float
+
+
+func _ready() -> void:
+	initial_width = size.x
+	center_x = position.x + size.x / 2.0
+
+	text_changed.connect(_on_text_changed)
+	_on_text_changed(text)
+
+
+func _on_text_changed(new_text: String) -> void:
+	var font: Font = get_theme_font(\"font\")
+	var font_size: int = get_theme_font_size(\"font_size\")
+
+	var text_width: float = font.get_string_size(
+		new_text,
+		HORIZONTAL_ALIGNMENT_LEFT,
+		-1,
+		font_size
+	).x
+
+	var new_width: float = max(initial_width, text_width + 30.0)
+
+	size.x = new_width
+	position.x = center_x - new_width / 2.0
+"
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_c105b"]
+animations = [{
+"frames": [],
+"loop": 1,
+"name": &"default",
+"speed": 4.0
+}]
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_x244a"]
+animations = [{
+"frames": [],
+"loop": 1,
+"name": &"Idle",
+"speed": 5.0
+}, {
+"frames": [],
+"loop": 1,
+"name": &"Talking",
+"speed": 5.0
+}, {
+"frames": [],
+"loop": 1,
+"name": &"Thinking",
+"speed": 6.0
+}]
+
+[node name="npc_flycatcher_ollama_ru" type="CharacterBody2D" unique_id=1644685617]
+collision_mask = 0
+script = ExtResource("1_p7tar")
+fly_scene = ExtResource("2_bof67")
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=1597038166]
+scale = Vector2(0.82142854, 0.82142854)
+texture = ExtResource("2_wa8mu")
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="." unique_id=1015547831]
+polygon = PackedVector2Array(34, 25, -4, 69, -45, 22, -37, -26, 31, -25)
+
+[node name="Area2D" type="Area2D" parent="." unique_id=1897364586]
+collision_layer = 0
+collision_mask = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D" unique_id=224326009]
+shape = SubResource("CircleShape2D_c105b")
+
+[node name="HTTPRequest" type="HTTPRequest" parent="." unique_id=827291519]
+
+[node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=1913535278]
+
+[node name="text_ui" type="Node2D" parent="CanvasLayer" unique_id=1979163601]
+position = Vector2(0.00012207031, 6.1035156e-05)
+scale = Vector2(0.99999994, 0.99999994)
+script = SubResource("GDScript_trtyr")
+
+[node name="Sprite2D" type="Sprite2D" parent="CanvasLayer/text_ui" unique_id=2085070655]
+modulate = Color(0, 0, 0, 1)
+position = Vector2(953.9998, 1033.5)
+scale = Vector2(16.874998, 1.3046874)
+texture = ExtResource("3_ttyes")
+
+[node name="button_next" type="Button" parent="CanvasLayer/text_ui" unique_id=1735556637]
+offset_left = 1867.9998
+offset_top = 987.0
+offset_right = 1903.0
+offset_bottom = 1058.0
+
+[node name="button_>back" type="Button" parent="CanvasLayer/text_ui" unique_id=1217722093]
+offset_left = 10.999879
+offset_top = 968.99994
+offset_right = 54.999878
+offset_bottom = 1068.0
+
+[node name="next" type="Label" parent="CanvasLayer/text_ui" unique_id=1198546168]
+offset_left = 1867.9999
+offset_top = 993.99994
+offset_right = 25241.0
+offset_bottom = 4744.0
+scale = Vector2(0.33, 0.33)
+theme_override_fonts/font = ExtResource("4_rk7qn")
+theme_override_font_sizes/font_size = 200
+text = ">"
+
+[node name="back" type="Label" parent="CanvasLayer/text_ui" unique_id=1545718421]
+offset_left = 10.999879
+offset_top = 991.99994
+offset_right = 23384.0
+offset_bottom = 4742.0
+scale = Vector2(0.33, 0.33)
+theme_override_fonts/font = ExtResource("4_rk7qn")
+theme_override_font_sizes/font_size = 200
+text = "<"
+
+[node name="LineEdit" type="LineEdit" parent="CanvasLayer/text_ui" unique_id=1975410061]
+offset_left = 834.0
+offset_top = 824.0
+offset_right = 1118.0
+offset_bottom = 909.0
+theme_override_fonts/font = ExtResource("4_rk7qn")
+theme_override_font_sizes/font_size = 22
+placeholder_text = "напиши сюда"
+alignment = 1
+script = SubResource("GDScript_7h7ol")
+
+[node name="text" type="Label" parent="CanvasLayer/text_ui" unique_id=1466429651]
+offset_left = 437.0
+offset_top = 961.0
+offset_right = 23810.0
+offset_bottom = 4711.0
+scale = Vector2(0.33, 0.33)
+theme_override_fonts/font = ExtResource("4_rk7qn")
+theme_override_font_sizes/font_size = 100
+text = "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been 
+the industry's standard dummy text ever since 1966, when designers at Letraset and James Mosley, the librarian at St Bride Printing Library in London,
+ took a 1914 Cicero translation and scrambled it to make dummy text for Letraset's Body Type sheets. It has survived not only many decades, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised thanks to these sheets and more recently with desktop publishing software like Aldus PageMaker and Microsoft Word including versions of Lorem Ipsum."
+
+[node name="CPUParticles2D" type="CPUParticles2D" parent="." unique_id=1074512742]
+visible = false
+position = Vector2(-24, -68)
+amount = 18
+texture = ExtResource("5_wo7mn")
+lifetime = 0.45
+speed_scale = 0.1
+emission_shape = 3
+emission_rect_extents = Vector2(80, 15)
+gravity = Vector2(200, 980)
+angular_velocity_min = -459.13
+angular_velocity_max = 514.78
+
+[node name="backround" type="AnimatedSprite2D" parent="." unique_id=1767605339]
+position = Vector2(-1, -4)
+sprite_frames = SubResource("SpriteFrames_c105b")
+autoplay = "default"
+
+[node name="monkey" type="AnimatedSprite2D" parent="." unique_id=448478908]
+sprite_frames = SubResource("SpriteFrames_x244a")
+animation = &"Idle"
+
+[connection signal="body_entered" from="Area2D" to="." method="_on_area_2d_body_entered"]
+[connection signal="body_exited" from="Area2D" to="." method="_on_area_2d_body_exited"]
+[connection signal="pressed" from="CanvasLayer/text_ui/button_next" to="." method="_on_button_next_pressed"]
+[connection signal="pressed" from="CanvasLayer/text_ui/button_>back" to="." method="_on_button_back_pressed"]

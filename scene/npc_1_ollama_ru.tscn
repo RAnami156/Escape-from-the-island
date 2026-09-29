@@ -261,7 +261,7 @@ animations = [{
 [node name="npc_1_ollama_ru" type="CharacterBody2D" unique_id=1644685617]
 collision_mask = 0
 script = ExtResource("1_ivsbi")
-characters_per_line = 62
+characters_per_line = 75
 whiskey_scene = ExtResource("2_7h7ol")
 
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=1597038166]
@@ -338,10 +338,10 @@ alignment = 1
 script = SubResource("GDScript_7h7ol")
 
 [node name="text" type="Label" parent="CanvasLayer/text_ui" unique_id=1466429651]
-offset_left = 437.0
-offset_top = 961.0
-offset_right = 23810.0
-offset_bottom = 4711.0
+offset_left = 115.99988
+offset_top = 965.99994
+offset_right = 23489.0
+offset_bottom = 4716.0
 scale = Vector2(0.33, 0.33)
 theme_override_fonts/font = ExtResource("3_k8we1")
 theme_override_font_sizes/font_size = 100

@@ -1545,10 +1545,10 @@ Exact format:
 {
   "reply": "NPC response",
   "delta": {
-    "respect": 0,
-    "friendship": 0,
-    "irritation": 0,
-    "deal_affinity": 0
+	"respect": 0,
+	"friendship": 0,
+	"irritation": 0,
+	"deal_affinity": 0
   }
 }
 

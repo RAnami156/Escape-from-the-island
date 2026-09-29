@@ -1,0 +1,24 @@
+[gd_scene format=3 uid="uid://bu1lv2bfsseun"]
+
+[ext_resource type="Script" uid="uid://dgbx7n1sxykgx" path="res://fly.gd" id="1_ry56p"]
+[ext_resource type="Texture2D" uid="uid://b61j1lftb7kyo" path="res://asets/3580f99ca4851bfa6a0d0594c656ba32.jpg" id="2_ry56p"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_c105b"]
+radius = 14.0
+
+[node name="fly" type="Node2D" unique_id=1144280868]
+scale = Vector2(0.5, 0.5)
+script = ExtResource("1_ry56p")
+
+[node name="Icon" type="Sprite2D" parent="." unique_id=1022618104]
+scale = Vector2(0.04444444, 0.04444444)
+texture = ExtResource("2_ry56p")
+
+[node name="Area2D" type="Area2D" parent="." unique_id=766996165]
+collision_layer = 0
+collision_mask = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D" unique_id=1346633304]
+shape = SubResource("CircleShape2D_c105b")
+
+[connection signal="body_entered" from="Area2D" to="." method="_on_area_2d_body_entered"]

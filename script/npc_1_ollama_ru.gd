@@ -1,10 +1,5 @@
 extends CharacterBody2D
 
-
-# ============================================================
-# NODES
-# ============================================================
-
 @onready var input: LineEdit = $CanvasLayer/text_ui/LineEdit
 @onready var text: Label = $CanvasLayer/text_ui/text
 @onready var http_request: HTTPRequest = $HTTPRequest
@@ -12,104 +7,175 @@ extends CharacterBody2D
 
 
 # ============================================================
-# OLLAMA
-# ============================================================
-
-const API_URL: String = "http://localhost:11434/api/chat"
-
-@export_category("AI")
-
-@export var model: String = "qwen3:8b"
-
-@export_range(0.0, 2.0, 0.05)
-var temperature: float = 0.20
-
-@export_range(32, 512, 1)
-var max_output_tokens: int = 256
-
-
-# ============================================================
-# NPC
+# NPC SETTINGS
 # ============================================================
 
 @export_category("NPC")
+@export var npc_name: String = "Токсичная Мухоловка"
 
-@export var npc_name: String = "Барон Бонг"
-
-@export_range(20, 500, 1)
-var max_reply_characters: int = 150
-
-@export_range(2, 30, 1)
-var max_history: int = 12
+@export_category("Fly")
+@export var fly_scene: PackedScene
 
 
 # ============================================================
-# TEXT SETTINGS
+# ITEM STATE
 # ============================================================
 
-@export_category("Text")
-
-@export_range(1, 200, 1)
-var characters_per_line: int = 43
-
-@export_range(0.001, 0.2, 0.001)
-var typing_speed: float = 0.03
+var fly: bool = false
 
 
 # ============================================================
-# NPC LORE
+# DIALOGUE STATE
 # ============================================================
 
-@export_multiline
+var is_waiting_for_response: bool = false
+var dialogue_history: Array = []
+var max_history: int = 20
+
+
+# ============================================================
+# RELATIONSHIP
+# ============================================================
+
+var relationship: Dictionary = {
+	"flycatcher_respect": -40,
+	"flycatcher_friendship": -30,
+	"flycatcher_irritation": 100,
+	"flycatcher_deal": -67
+}
+
+var relationship_names: Dictionary = {
+	"flycatcher_respect": "Уважение Мухоловки",
+	"flycatcher_friendship": "Дружба Мухоловки",
+	"flycatcher_irritation": "Раздражение Мухоловки",
+	"flycatcher_deal": "Расположение к сделке"
+}
+
+
+# ============================================================
+# LORE
+# ============================================================
+
 var npc_lore: String = """
-Барон Конг — орангутан, живущий на острове.
+Ты — Токсичная Мухоловка.
 
-Он давно находится на этом острове и хорошо знает его.
+Ты необычное хищное растение, которое живёт на острове.
+Ты ловишь и ешь мух и считаешь мух невероятно прекрасными существами.
 
-Конг видел последствия крушения самолёта.
+Ты очень самовлюблённая, токсичная, язвительная и высокомерная.
+Ты искренне считаешь себя очень крутой, опасной и особенной.
 
-Он уже понимает, что игрок пережил это крушение и с трудом добрался до него.
+Ты не считаешь себя обычным растением.
+Для тебя ты — элитная хищница, перед которой другие должны испытывать уважение.
 
-Конг видит, что игрок выглядит уставшим и пострадавшим после произошедшего.
+Ты любишь, когда игрок говорит, что ты крутая, опасная, красивая, особенная,
+необычная или великолепная.
 
-Конг не знает, откуда именно игрок пришёл до крушения, если игрок сам этого не рассказал.
+Особенно тебе нравится, когда игрок говорит, что любит мух.
 
-Он не знает будущего.
+Ты можешь быть дружелюбной, если игрок относится к тебе с уважением.
+Но если игрок отвечает скучно, холодно или безразлично, ты легко раздражаешься.
 
-Он знает только то, что видел, слышал или что ему рассказывали.
+Ты можешь язвить, подкалывать игрока и заставлять его доказывать,
+что он достоин разговаривать с тобой.
+
+Ты не обязана соглашаться с игроком.
+
+Ты не знаешь будущего.
+Ты не знаешь событий, которых не могла видеть, слышать или о которых тебе
+никто не рассказывал.
+
+Ты знаешь только то, что происходило рядом с тобой,
+что ты сама наблюдала или что тебе рассказал игрок/другие персонажи.
 """
 
 
-@export_multiline
+# ============================================================
+# BEHAVIOR
+# ============================================================
+
 var npc_behavior: String = """
-Речь должна ощущаться как обычный живой разговор с обычным мудрым человеком.
+ПРАВИЛА ПОВЕДЕНИЯ:
 
-Конг УЖЕ ЗНАЕТ, что игрок пережил крушение самолёта.
-Конг УЖЕ ЗНАЕТ, что игрок с трудом добрался до него.
-Никогда не спрашивай игрока, пришёл ли он с самолёта, откуда он пришёл или пережил ли он крушение, если эта информация уже известна из контекста.
+1. Ты всегда говоришь от лица Токсичной Мухоловки.
 
-Не повторяй очевидные для Конга факты без причины.
+2. Ты должна оставаться токсичной, самоуверенной и язвительной.
 
-Сочувствуй игроку исходя из того, как он выглядит и через что он прошёл.
+3. Ты считаешь себя очень крутой.
 
-Не говори игроку, что ему делать.
-Не предлагай лечение или действия, которые Конг не может выполнить.
+4. Если игрок прямо говорит, что ты крутая, прекрасная, опасная,
+   особенная, великолепная или другим способом искренне тебя хвалит —
+   реагируй положительно.
 
-СТАРАЙСЯ ВЫРАЖАТЬСЯ КРАТКО и заканчивай мысль на логичном моменте без троеточий.
+5. Если игрок прямо говорит, что любит мух —
+   реагируй особенно положительно.
 
-Одного предложения обычно достаточно.
+6. Если игрок не хвалит тебя, отвечает сухо, скучно или нейтрально,
+   это НЕ обязательно должно оставаться нейтральным.
 
-Не превращай обычный разговор в длинный монолог.
+7. Обычный вопрос без комплимента может тебя раздражать.
+   Ты можешь решить, что игрок недостаточно уважителен.
 
-Не пытайся постоянно шутить.
+8. Если игрок отвечает холодно, безразлично, скучно или пытается
+   перевести тему, можно уменьшать уважение и дружбу и увеличивать раздражение.
 
-Не говори как ассистент или чат-бот.
+9. Если игрок говорит, что ты обычная, слабая, бесполезная,
+   неинтересная или вообще не заслуживаешь уважения —
+   реагируй резко и негативно.
 
-Если вопрос простой — ответь просто.
+10. Если игрок говорит, что не любит мух —
+    реагируй негативно.
 
-Если игрок продолжает предыдущую тему — учитывай контекст.
+11. Если игрок прямо оскорбляет тебя —
+    отношение должно сильно ухудшаться.
 
-Если игрок меняет тему — следуй за ним.
+12. Не выдавай игроку скрытые значения relationship.
+
+13. Не говори игроку напрямую:
+    "я поставила тебе -3 дружбы" или что-то подобное.
+
+14. Изменения отношений должны зависеть от смысла ответа игрока,
+    а не просто от отдельных слов.
+
+15. Не нужно каждый раз менять все четыре параметра.
+    Меняй только те, которые действительно подходят ситуации.
+
+16. Максимальное изменение одного параметра за один ответ:
+    от -5 до +5.
+
+ПРИМЕРНЫЕ ИЗМЕНЕНИЯ:
+
+Сильная похвала:
+- flycatcher_respect: +3...+5
+- flycatcher_friendship: +2...+5
+- flycatcher_irritation: -2...-5
+- flycatcher_deal: +1...+4
+
+Игрок говорит, что любит мух:
+- flycatcher_respect: +2...+5
+- flycatcher_friendship: +2...+5
+- flycatcher_irritation: -2...-5
+- flycatcher_deal: +1...+4
+
+Обычный вопрос без похвалы:
+- flycatcher_respect: 0...-2
+- flycatcher_friendship: 0...-2
+- flycatcher_irritation: 0...+2
+
+Холодный/скучный ответ:
+- flycatcher_respect: -2...-3
+- flycatcher_friendship: -2...-3
+- flycatcher_irritation: +2...+4
+
+Прямое оскорбление:
+- flycatcher_respect: -4...-5
+- flycatcher_friendship: -4...-5
+- flycatcher_irritation: +4...+5
+
+Игрок говорит, что не любит мух:
+- flycatcher_respect: -2...-5
+- flycatcher_friendship: -2...-5
+- flycatcher_irritation: +2...+5
 """
 
 
@@ -117,111 +183,28 @@ var npc_behavior: String = """
 # WORLD MEMORY
 # ============================================================
 
-@export_category("World")
-
-@export_multiline
 var world_memory: String = """
-Мы на острове.
-Игрок упал на остров после крушения самолёта.
-Бонг слышал падение самолёта в центр острова.
-Бонг знает что самолет упал в центр острова.(НЕ в океан не в море а в центр острова на землю и разбился).
-Бонг видит игрока как молодого парня 20-30 лет в белой футболке со свег джинсами.
-Бонг дает большой респект моим свег широким джинсам(Это его личное мнение ему никто этого не внушал).
-Бонг видит что на мне порванная одежда и понимает что это скорее всего из-за того что я упал или где-то поранился.
-Бонг видит мои раны.
-Бонг не знает будущих событий.
+Место действия — остров.
+
+Игрок оказался на острове после авиакатастрофы и пытается выжить.
+
+Токсичная Мухоловка находится на острове и знает только то,
+что она могла наблюдать сама или услышать от других.
+
+Она любит мух.
+
+Она не знает будущего и не может достоверно знать события,
+которые ещё не произошли.
 """
 
 
 # ============================================================
-# RELATIONSHIP SETTINGS
+# OLLAMA SETTINGS
 # ============================================================
 
-@export_category("Relationship")
-
-@export_group("Начальные значения")
-
-@export_range(0, 100, 1)
-var respect_start: int = 30
-
-@export_range(0, 100, 1)
-var friendship_start: int = 35
-
-@export_range(0, 100, 1)
-var irritation_start: int = 10
-
-@export_range(0, 100, 1)
-var deal_affinity_start: int = 30
-
-
-@export_group("Максимальное изменение за реплику")
-
-@export_range(1, 100, 1)
-var respect_change_limit: int = 5
-
-@export_range(1, 100, 1)
-var friendship_change_limit: int = 5
-
-@export_range(1, 100, 1)
-var irritation_change_limit: int = 5
-
-@export_range(1, 100, 1)
-var deal_affinity_change_limit: int = 5
-
-
-# ============================================================
-# 4 СТАТИСТИКИ
-# ============================================================
-
-var relationship: Dictionary = {
-	"respect": 30,
-	"friendship": 35,
-	"irritation": 10,
-	"deal_affinity": 30
-}
-
-
-var relationship_names: Dictionary = {
-	"respect": "Уважение",
-	"friendship": "Дружба",
-	"irritation": "Раздражение",
-	"deal_affinity": "Расположение к сделке"
-}
-
-
-var last_relationship_delta: Dictionary = {}
-
-
-# ============================================================
-# INTERNAL STATE
-# ============================================================
-
-var pending_player_text: String = ""
-var waiting_for_response: bool = false
-
-# Память для Ollama.
-var conversation_history: Array = []
-
-
-# ============================================================
-# DIALOGUE DISPLAY HISTORY
-# ============================================================
-
-# Отдельная история для кнопок Назад / Вперёд.
-#
-# Каждый элемент:
-#
-# {
-#     "player": "Текст игрока",
-#     "npc": "Ответ Бонга"
-# }
-
-var dialogue_history: Array[Dictionary] = []
-
-# Текущая позиция в истории.
-#
-# -1 = истории нет.
-var dialogue_history_index: int = -1
+@export_category("AI")
+@export var ollama_url: String = "http://localhost:11434/api/chat"
+@export var model: String = "llama3.1"
 
 
 # ============================================================
@@ -229,108 +212,39 @@ var dialogue_history_index: int = -1
 # ============================================================
 
 func _ready() -> void:
+	# Получаем начальные значения из Global.
+	# Они должны быть объявлены в Global.gd.
 
-	relationship["respect"] = respect_start
-	relationship["friendship"] = friendship_start
-	relationship["irritation"] = irritation_start
-	relationship["deal_affinity"] = deal_affinity_start
+	relationship["flycatcher_respect"] = Global.flycatcher_respect
+	relationship["flycatcher_friendship"] = Global.flycatcher_friendship
+	relationship["flycatcher_irritation"] = Global.flycatcher_irritation
+	relationship["flycatcher_deal"] = Global.flycatcher_deal
 
-	$CanvasLayer/text_ui.visible = false
-
-	input.text = ""
-	text.text = ""
-
-	# Обычная анимация.
-	anim.play("Idle")
-
-	if not input.text_submitted.is_connected(_on_text_submitted):
+	if input:
 		input.text_submitted.connect(_on_text_submitted)
 
-	if not input.focus_entered.is_connected(_on_input_focus_entered):
-		input.focus_entered.connect(_on_input_focus_entered)
+	if http_request:
+		http_request.request_completed.connect(_on_http_request_completed)
 
-	if not input.focus_exited.is_connected(_on_input_focus_exited):
-		input.focus_exited.connect(_on_input_focus_exited)
-
-	if not http_request.request_completed.is_connected(_on_request_completed):
-		http_request.request_completed.connect(_on_request_completed)
-
-	print("[NPC] ", npc_name, " готов.")
-	print("[NPC] Model: ", model)
+	update_text("...")
 
 
 # ============================================================
-# PROCESS
+# INPUT
 # ============================================================
 
-func _process(_delta: float) -> void:
-
-	_update_player_movement_state()
-
-
-# ============================================================
-# PLAYER MOVEMENT
-# ============================================================
-
-func _update_player_movement_state() -> void:
-
-	var should_block_movement: bool = (
-		input.has_focus()
-		or waiting_for_response
-	)
-
-	Global.player_can_move = not should_block_movement
-
-
-func _on_input_focus_entered() -> void:
-
-	Global.player_can_move = false
-
-
-func _on_input_focus_exited() -> void:
-
-	if not waiting_for_response:
-		Global.player_can_move = true
-
-
-func _input(event: InputEvent) -> void:
-
-	if event is InputEventMouseButton:
-
-		var mouse_event: InputEventMouseButton = event
-
-		if mouse_event.button_index == MOUSE_BUTTON_LEFT:
-
-			if mouse_event.pressed:
-
-				if not input.get_global_rect().has_point(
-					mouse_event.position
-				):
-					input.release_focus()
-
-
-# ============================================================
-# PLAYER INPUT
-# ============================================================
-
-func _on_text_submitted(player_text: String) -> void:
-
-	player_text = player_text.strip_edges()
-
-	if player_text.is_empty():
+func _on_text_submitted(user_message: String) -> void:
+	if is_waiting_for_response:
 		return
 
-	if waiting_for_response:
+	user_message = user_message.strip_edges()
 
-		print("[NPC] Жду предыдущий ответ...")
+	if user_message.is_empty():
 		return
 
 	input.clear()
 
-	print("")
-	print("[PLAYER]: ", player_text)
-
-	send_message_to_ai(player_text)
+	send_message_to_ai(user_message)
 
 
 # ============================================================
@@ -338,86 +252,96 @@ func _on_text_submitted(player_text: String) -> void:
 # ============================================================
 
 func build_system_prompt() -> String:
+	var relationship_text := ""
 
-	return """
-You are {NPC_NAME}, a game NPC.
+	for key in relationship.keys():
+		var value = relationship[key]
+		var readable_name = relationship_names.get(key, key)
 
-Your character, personality, knowledge and behavior are defined below.
+		relationship_text += "%s: %s\n" % [
+			readable_name,
+			str(value)
+		]
 
-LORE:
-{NPC_LORE}
+	var prompt := """
+Ты — NPC в игре.
 
-BEHAVIOR:
-{NPC_BEHAVIOR}
+Твоё имя: %s
 
-WORLD MEMORY:
-{WORLD_MEMORY}
+=== LORE ===
+%s
 
-Respond naturally to the player's latest message.
+=== WORLD MEMORY ===
+%s
 
-Use the conversation history for context.
+=== BEHAVIOR ===
+%s
 
-Do not invent information that contradicts the lore or world memory.
+=== CURRENT RELATIONSHIP ===
+%s
 
-Your response must be in Russian.
+=== IMPORTANT ===
 
-Return ONLY valid JSON.
+Ты разговариваешь с игроком.
 
-The JSON must have exactly this structure:
+Отвечай естественно, как живой персонаж.
+
+Твоя реплика должна соответствовать характеру Токсичной Мухоловки.
+
+Помни:
+- ты токсичная;
+- ты самоуверенная;
+- ты считаешь себя очень крутой;
+- ты любишь мух;
+- ты хочешь, чтобы игрок уважал тебя;
+- ты особенно любишь, когда игрок говорит, что любит мух;
+- сухие и безразличные ответы могут тебя раздражать;
+- оскорбления должны вызывать сильную негативную реакцию.
+
+Очень важно:
+Если игрок прямо хвалит тебя — это должно положительно влиять на отношения.
+
+Если игрок прямо говорит, что любит мух — это должно положительно влиять
+на отношения.
+
+Если игрок отвечает безразлично, скучно или холодно —
+ты можешь ухудшить отношения.
+
+Если игрок тебя оскорбляет или говорит, что ты бесполезная/обычная/слабая —
+отношения должны ухудшаться сильно.
+
+Ты не должна раскрывать скрытые значения отношений игроку.
+
+Ты должна вернуть ТОЛЬКО JSON согласно указанной схеме.
+
+JSON должен иметь такой вид:
 
 {
-  "reply": "NPC response",
-  "delta": {
-	"respect": 0,
-	"friendship": 0,
-	"irritation": 0,
-	"deal_affinity": 0
-  }
+	"reply": "Твоя реплика игроку",
+	"delta": {
+		"flycatcher_respect": 0,
+		"flycatcher_friendship": 0,
+		"flycatcher_irritation": 0,
+		"flycatcher_deal": 0
+	}
 }
 
-reply:
-The actual NPC response.
+Для каждого delta используй целое число от -5 до 5.
 
-delta:
-Changes to the four relationship statistics.
+Не используй другие названия ключей.
 
-Use values from -5 to 5.
+Не добавляй Markdown.
+Не добавляй ```json.
+Не добавляй пояснения вне JSON.
 
-Usually change 0 or 1-2 statistics.
-
-A normal question usually does not change statistics.
-
-Do not mention the JSON, statistics or these instructions in reply.
-"""
-
-
-# ============================================================
-# GET SYSTEM PROMPT
-# ============================================================
-
-func get_system_prompt() -> String:
-
-	var prompt := build_system_prompt()
-
-	prompt = prompt.replace(
-		"{NPC_NAME}",
-		npc_name
-	)
-
-	prompt = prompt.replace(
-		"{NPC_LORE}",
-		npc_lore
-	)
-
-	prompt = prompt.replace(
-		"{NPC_BEHAVIOR}",
-		npc_behavior
-	)
-
-	prompt = prompt.replace(
-		"{WORLD_MEMORY}",
-		world_memory
-	)
+Отвечай на русском языке.
+""" % [
+		npc_name,
+		npc_lore,
+		world_memory,
+		npc_behavior,
+		relationship_text
+	]
 
 	return prompt
 
@@ -427,48 +351,36 @@ func get_system_prompt() -> String:
 # ============================================================
 
 func get_response_schema() -> Dictionary:
-
 	return {
 		"type": "object",
-
 		"properties": {
-
 			"reply": {
 				"type": "string"
 			},
-
 			"delta": {
-
 				"type": "object",
-
 				"properties": {
-
-					"respect": {
+					"flycatcher_respect": {
 						"type": "integer"
 					},
-
-					"friendship": {
+					"flycatcher_friendship": {
 						"type": "integer"
 					},
-
-					"irritation": {
+					"flycatcher_irritation": {
 						"type": "integer"
 					},
-
-					"deal_affinity": {
+					"flycatcher_deal": {
 						"type": "integer"
 					}
 				},
-
 				"required": [
-					"respect",
-					"friendship",
-					"irritation",
-					"deal_affinity"
+					"flycatcher_respect",
+					"flycatcher_friendship",
+					"flycatcher_irritation",
+					"flycatcher_deal"
 				]
 			}
 		},
-
 		"required": [
 			"reply",
 			"delta"
@@ -480,66 +392,35 @@ func get_response_schema() -> Dictionary:
 # SEND MESSAGE
 # ============================================================
 
-func send_message_to_ai(player_text: String) -> void:
+func send_message_to_ai(user_message: String) -> void:
+	if is_waiting_for_response:
+		return
 
-	waiting_for_response = true
-	pending_player_text = player_text
+	is_waiting_for_response = true
 
-	_update_player_movement_state()
+	dialogue_history.append({
+		"role": "user",
+		"content": user_message
+	})
 
-	# NPC думает.
-	anim.play("Thinking")
-
-	print("[OLLAMA] Sending...")
+	if dialogue_history.size() > max_history:
+		dialogue_history.pop_front()
 
 	var messages: Array = []
 
-	# SYSTEM
-
 	messages.append({
 		"role": "system",
-		"content": get_system_prompt()
+		"content": build_system_prompt()
 	})
 
-	# HISTORY
-
-	for message in conversation_history:
-
+	for message in dialogue_history:
 		messages.append(message)
 
-	# CURRENT PLAYER MESSAGE
-
-	messages.append({
-		"role": "user",
-		"content": player_text
-	})
-
-	# REQUEST
-
 	var request_body := {
-
 		"model": model,
-
 		"messages": messages,
-
 		"stream": false,
-
-		"think": false,
-
-		"format": get_response_schema(),
-
-		"options": {
-
-			"temperature": temperature,
-
-			"num_predict": max_output_tokens,
-
-			"top_p": 0.9,
-
-			"top_k": 40,
-
-			"repeat_penalty": 1.10
-		}
+		"format": get_response_schema()
 	}
 
 	var json_body := JSON.stringify(request_body)
@@ -549,672 +430,284 @@ func send_message_to_ai(player_text: String) -> void:
 	]
 
 	var error := http_request.request(
-		API_URL,
+		ollama_url,
 		headers,
 		HTTPClient.METHOD_POST,
 		json_body
 	)
 
 	if error != OK:
+		is_waiting_for_response = false
+		update_text("Мухоловка недовольно смотрит на тебя.")
 
-		waiting_for_response = false
-		pending_player_text = ""
-
-		anim.play("Idle")
-
-		_update_player_movement_state()
-
-		print(
-			"[OLLAMA ERROR] request(): ",
-			error
-		)
+		print("HTTP request error: ", error)
 
 
 # ============================================================
-# RESPONSE
+# HTTP RESPONSE
 # ============================================================
 
-func _on_request_completed(
+func _on_http_request_completed(
 	result: int,
 	response_code: int,
-	_headers: PackedStringArray,
+	headers: PackedStringArray,
 	body: PackedByteArray
 ) -> void:
 
-	waiting_for_response = false
+	is_waiting_for_response = false
 
+	if response_code < 200 or response_code >= 300:
+		update_text("Мухоловка раздражённо молчит.")
 
-	# --------------------------------------------------------
-	# HTTP REQUEST ERROR
-	# --------------------------------------------------------
-
-	if result != HTTPRequest.RESULT_SUCCESS:
-
-		anim.play("Idle")
-
-		print(
-			"[OLLAMA ERROR] HTTPRequest result: ",
-			result
-		)
-
-		pending_player_text = ""
-
-		_update_player_movement_state()
+		print("HTTP response code: ", response_code)
+		print("Response: ", body.get_string_from_utf8())
 
 		return
 
+	var response_text := body.get_string_from_utf8()
 
-	# --------------------------------------------------------
-	# HTTP ERROR
-	# --------------------------------------------------------
+	var outer_json = JSON.parse_string(response_text)
 
-	if response_code != 200:
+	if outer_json == null:
+		update_text("Мухоловка смотрит на тебя с недоверием.")
 
-		anim.play("Idle")
-
-		print(
-			"[OLLAMA ERROR] HTTP: ",
-			response_code
-		)
-
-		print(
-			body.get_string_from_utf8()
-		)
-
-		pending_player_text = ""
-
-		_update_player_movement_state()
+		print("Failed to parse outer JSON")
+		print(response_text)
 
 		return
 
+	if not outer_json is Dictionary:
+		update_text("Мухоловка ничего не поняла.")
 
-	# --------------------------------------------------------
-	# OUTER OLLAMA JSON
-	# --------------------------------------------------------
-
-	var raw_text := body.get_string_from_utf8()
-
-	var outer_json = JSON.parse_string(raw_text)
-
-
-	if outer_json == null or not outer_json is Dictionary:
-
-		anim.play("Idle")
-
-		print("[OLLAMA ERROR] Invalid outer JSON.")
-
-		pending_player_text = ""
-
-		_update_player_movement_state()
+		print("Outer response is not Dictionary")
 
 		return
-
 
 	if not outer_json.has("message"):
+		update_text("Мухоловка молчит.")
 
-		anim.play("Idle")
-
-		print("[OLLAMA ERROR] Missing message.")
-
-		pending_player_text = ""
-
-		_update_player_movement_state()
+		print("No message field in response")
 
 		return
 
+	var message_data = outer_json["message"]
 
-	var ollama_message: Dictionary = outer_json["message"]
+	if not message_data is Dictionary:
+		update_text("Мухоловка раздражённо щёлкает пастью.")
 
-
-	if not ollama_message.has("content"):
-
-		anim.play("Idle")
-
-		print("[OLLAMA ERROR] Missing content.")
-
-		pending_player_text = ""
-
-		_update_player_movement_state()
+		print("Message is not Dictionary")
 
 		return
 
+	if not message_data.has("content"):
+		update_text("Мухоловка не отвечает.")
 
-	var ai_content: String = str(
-		ollama_message["content"]
-	).strip_edges()
-
-
-	# --------------------------------------------------------
-	# NPC JSON
-	# --------------------------------------------------------
-
-	var response_json = JSON.parse_string(ai_content)
-
-
-	if response_json == null or not response_json is Dictionary:
-
-		anim.play("Idle")
-
-		print("[OLLAMA ERROR] Invalid NPC JSON.")
-		print("[OLLAMA CONTENT]: ", ai_content)
-
-		pending_player_text = ""
-
-		_update_player_movement_state()
+		print("No content field")
 
 		return
 
+	var ai_content: String = str(message_data["content"])
 
-	# --------------------------------------------------------
-	# REPLY
-	# --------------------------------------------------------
+	var ai_json = JSON.parse_string(ai_content)
 
-	var response_text: String = str(
-		response_json.get(
-			"reply",
-			""
-		)
-	).strip_edges()
+	if ai_json == null:
+		# Иногда модель может вернуть JSON в виде строки с лишними символами.
+		# Попробуем найти первый { и последний }.
 
+		var first_brace := ai_content.find("{")
+		var last_brace := ai_content.rfind("}")
 
-	if response_text.is_empty():
-
-		response_text = "Хм."
-
-
-	response_text = prepare_text(
-		response_text
-	)
-
-
-	# --------------------------------------------------------
-	# DELTA
-	# --------------------------------------------------------
-
-	var delta: Dictionary = {}
-
-	if response_json.has("delta"):
-
-		if response_json["delta"] is Dictionary:
-
-			delta = response_json["delta"]
-
-
-	# --------------------------------------------------------
-	# APPLY STATS
-	# --------------------------------------------------------
-
-	last_relationship_delta = apply_relationship_delta(
-		delta
-	)
-
-
-	# --------------------------------------------------------
-	# SAVE OLLAMA HISTORY
-	# --------------------------------------------------------
-
-	if not pending_player_text.is_empty():
-
-		conversation_history.append({
-			"role": "user",
-			"content": pending_player_text
-		})
-
-		conversation_history.append({
-			"role": "assistant",
-			"content": response_text
-		})
-
-
-	# --------------------------------------------------------
-	# LIMIT OLLAMA HISTORY
-	# --------------------------------------------------------
-
-	while conversation_history.size() > max_history:
-
-		conversation_history.pop_front()
-
-
-	# --------------------------------------------------------
-	# SAVE DISPLAY HISTORY
-	# --------------------------------------------------------
-
-	save_dialogue(
-		pending_player_text,
-		response_text
-	)
-
-
-	pending_player_text = ""
-
-
-	# --------------------------------------------------------
-	# DISPLAY
-	# --------------------------------------------------------
-
-	await type_text(response_text)
-
-
-	# --------------------------------------------------------
-	# DEBUG
-	# --------------------------------------------------------
-
-	print("")
-	print("========== NPC ==========")
-	print(response_text)
-	print("")
-	print("------ RELATIONSHIP ------")
-
-	for key in relationship.keys():
-
-		var change_text := ""
-
-		if last_relationship_delta.has(key):
-
-			var change: int = int(
-				last_relationship_delta[key]
+		if first_brace >= 0 and last_brace > first_brace:
+			var extracted := ai_content.substr(
+				first_brace,
+				last_brace - first_brace + 1
 			)
 
-			if change > 0:
+			ai_json = JSON.parse_string(extracted)
 
-				change_text = " (+" + str(change) + ")"
+	if ai_json == null:
+		update_text(ai_content)
 
-			elif change < 0:
+		dialogue_history.append({
+			"role": "assistant",
+			"content": ai_content
+		})
 
-				change_text = " (" + str(change) + ")"
-
-
-		print(
-			relationship_names[key],
-			": ",
-			relationship[key],
-			change_text
-		)
-
-	print("==========================")
-	print("")
-
-
-	_update_player_movement_state()
-
-
-# ============================================================
-# SAVE DIALOGUE
-# ============================================================
-
-func save_dialogue(
-	player_message: String,
-	npc_message: String
-) -> void:
-
-	if player_message.is_empty():
 		return
 
+	if not ai_json is Dictionary:
+		update_text("Мухоловка смотрит на тебя с подозрением.")
+		return
+
+	var reply: String = str(
+		ai_json.get(
+			"reply",
+			"Мухоловка молчит."
+		)
+	)
+
+	var delta = ai_json.get("delta", {})
+
+	update_text(reply)
 
 	dialogue_history.append({
-		"player": player_message,
-		"npc": npc_message
+		"role": "assistant",
+		"content": reply
 	})
 
+	if dialogue_history.size() > max_history:
+		dialogue_history.pop_front()
 
-	# После нового сообщения всегда
-	# переходим на самую последнюю страницу.
-
-	dialogue_history_index = (
-		dialogue_history.size() - 1
-	)
-
-
-	print(
-		"[DIALOGUE] Сохранена реплика. Всего: ",
-		dialogue_history.size()
-	)
+	apply_relationship_delta(delta)
 
 
 # ============================================================
-# SHOW DIALOGUE HISTORY
+# RELATIONSHIP DELTA
 # ============================================================
 
-func show_dialogue_history() -> void:
-
-	if dialogue_history.is_empty():
-
-		text.text = ""
-
+func apply_relationship_delta(delta) -> void:
+	if not delta is Dictionary:
 		return
 
-
-	dialogue_history_index = clampi(
-		dialogue_history_index,
-		0,
-		dialogue_history.size() - 1
-	)
-
-
-	var dialogue: Dictionary = dialogue_history[
-		dialogue_history_index
+	var keys := [
+		"flycatcher_respect",
+		"flycatcher_friendship",
+		"flycatcher_irritation",
+		"flycatcher_deal"
 	]
 
+	for key in keys:
+		if not delta.has(key):
+			continue
 
-	var npc_message: String = str(
-		dialogue.get(
-			"npc",
-			""
+		var change = delta[key]
+
+		if not (change is int or change is float):
+			continue
+
+		var numeric_change := int(change)
+
+		# Безопасное ограничение изменения за одну реплику.
+		numeric_change = clamp(
+			numeric_change,
+			-5,
+			5
 		)
-	)
 
-
-	# Показываем только реплику Бонга.
-	text.text = npc_message
-
-
-	print("")
-	print("========== DIALOGUE HISTORY ==========")
-
-	print(
-		"Страница: ",
-		dialogue_history_index + 1,
-		"/",
-		dialogue_history.size()
-	)
-
-	print(
-		"[PLAYER]: ",
-		str(
-			dialogue.get(
-				"player",
-				""
-			)
+		var current_value: int = int(
+			relationship.get(key, 0)
 		)
+
+		var new_value: int = current_value + numeric_change
+
+		# Значения могут быть как отрицательными,
+		# так и положительными.
+		new_value = clamp(
+			new_value,
+			-100,
+			100
+		)
+
+		relationship[key] = new_value
+
+	# ========================================================
+	# СИНХРОНИЗАЦИЯ С GLOBAL
+	# ========================================================
+
+	Global.flycatcher_respect = int(
+		relationship["flycatcher_respect"]
 	)
 
-	print(
-		"[NPC]: ",
-		npc_message
+	Global.flycatcher_friendship = int(
+		relationship["flycatcher_friendship"]
 	)
 
-	print("======================================")
-	print("")
+	Global.flycatcher_irritation = int(
+		relationship["flycatcher_irritation"]
+	)
+
+	Global.flycatcher_deal = int(
+		relationship["flycatcher_deal"]
+	)
+
+
+# ============================================================
+# TEXT
+# ============================================================
+
+func update_text(new_text: String) -> void:
+	if text:
+		text.text = new_text
 
 
 # ============================================================
 # TYPING TEXT
 # ============================================================
 
-func type_text(value: String) -> void:
-
-	# Пока текст печатается — Talking.
-	anim.play("Talking")
+func type_text(new_text: String, speed: float = 0.02) -> void:
+	if not text:
+		return
 
 	text.text = ""
 
-	for i in range(value.length()):
-
-		text.text += value[i]
-
-		await get_tree().create_timer(
-			typing_speed
-		).timeout
-
-	# После окончания печати — Idle.
-	anim.play("Idle")
+	for character in new_text:
+		text.text += character
+		await get_tree().create_timer(speed).timeout
 
 
 # ============================================================
-# APPLY RELATIONSHIP DELTA
+# PUBLIC FUNCTIONS
 # ============================================================
 
-func apply_relationship_delta(
-	delta: Dictionary
-) -> Dictionary:
-
-	var applied_delta: Dictionary = {}
-
-
-	for key in relationship.keys():
-
-		if not delta.has(key):
-			continue
-
-
-		var change: int = int(
-			delta[key]
-		)
-
-
-		var change_limit: int = 5
-
-		match key:
-
-			"respect":
-				change_limit = respect_change_limit
-
-			"friendship":
-				change_limit = friendship_change_limit
-
-			"irritation":
-				change_limit = irritation_change_limit
-
-			"deal_affinity":
-				change_limit = deal_affinity_change_limit
-
-
-		change = clampi(
-			change,
-			-change_limit,
-			change_limit
-		)
-
-
-		if change == 0:
-			continue
-
-
-		var old_value: int = int(
-			relationship[key]
-		)
-
-
-		relationship[key] = clampi(
-			old_value + change,
-			0,
-			100
-		)
-
-
-		var actual_change: int = (
-			int(relationship[key])
-			- old_value
-		)
-
-
-		if actual_change != 0:
-
-			applied_delta[key] = actual_change
-
-
-	return applied_delta
-
-
-# ============================================================
-# TEXT PREPARATION
-#
-# Максимум 150 символов.
-#
-# Количество символов в строке задаётся
-# через characters_per_line в Inspector.
-# ============================================================
-
-func prepare_text(value: String) -> String:
-
-	value = value.replace(
-		"\r\n",
-		"\n"
-	)
-
-	value = value.replace(
-		"\r",
-		"\n"
-	)
-
-	value = value.strip_edges()
-
-
-	# Убираем markdown.
-
-	value = value.replace(
-		"**",
-		""
-	)
-
-	value = value.replace(
-		"```",
-		""
+func get_relationship_value(key: String) -> int:
+	return int(
+		relationship.get(key, 0)
 	)
 
 
-	# Убираем существующие переносы.
-
-	value = value.replace(
-		"\n",
-		" "
-	)
-
-
-	while value.contains("  "):
-
-		value = value.replace(
-			"  ",
-			" "
-		)
-
-
-	# МАКСИМАЛЬНАЯ ДЛИНА
-
-	if value.length() > max_reply_characters:
-
-		value = value.substr(
-			0,
-			max_reply_characters
-		)
-
-
-		var last_space := value.rfind(" ")
-
-
-		if last_space > 20:
-
-			value = value.substr(
-				0,
-				last_space
-			)
-
-
-		value = value.strip_edges()
-
-		value += "…"
-
-
-	# ПЕРЕНОС ПО КОЛИЧЕСТВУ СИМВОЛОВ.
-
-	var words := value.split(" ")
-
-	var result := ""
-	var current_line := ""
-
-
-	for word in words:
-
-		if current_line.is_empty():
-
-			current_line = word
-
-		elif (
-			current_line.length()
-			+ 1
-			+ word.length()
-			<= characters_per_line
-		):
-
-			current_line += " " + word
-
-		else:
-
-			if not result.is_empty():
-
-				result += "\n"
-
-			result += current_line
-
-			current_line = word
-
-
-	# Последняя строка.
-
-	if not current_line.is_empty():
-
-		if not result.is_empty():
-
-			result += "\n"
-
-		result += current_line
-
-
-	return result
-
-
-# ============================================================
-# HISTORY BUTTONS
-# ============================================================
-
-func _on_button_back_pressed() -> void:
-
-	if dialogue_history.is_empty():
+func set_relationship_value(key: String, value: int) -> void:
+	if not relationship.has(key):
 		return
 
+	relationship[key] = clamp(
+		value,
+		-100,
+		100
+	)
 
-	# Уже на самой первой реплике.
-	if dialogue_history_index <= 0:
+	_sync_global_relationship()
+
+
+func add_relationship_value(key: String, value: int) -> void:
+	if not relationship.has(key):
 		return
 
+	var current_value := int(
+		relationship[key]
+	)
 
-	dialogue_history_index -= 1
+	relationship[key] = clamp(
+		current_value + value,
+		-100,
+		100
+	)
 
-	show_dialogue_history()
-
-
-func _on_button_next_pressed() -> void:
-
-	if dialogue_history.is_empty():
-		return
-
-
-	# Уже на самой последней реплике.
-	if (
-		dialogue_history_index
-		>= dialogue_history.size() - 1
-	):
-		return
+	_sync_global_relationship()
 
 
-	dialogue_history_index += 1
+func _sync_global_relationship() -> void:
+	Global.flycatcher_respect = int(
+		relationship["flycatcher_respect"]
+	)
 
-	show_dialogue_history()
+	Global.flycatcher_friendship = int(
+		relationship["flycatcher_friendship"]
+	)
 
+	Global.flycatcher_irritation = int(
+		relationship["flycatcher_irritation"]
+	)
 
-# ============================================================
-# AREA
-# ============================================================
-
-func _on_area_2d_body_entered(body: Node2D) -> void:
-
-	if body.name == "player":
-
-		$CanvasLayer/text_ui.visible = true
-
-
-func _on_area_2d_body_exited(body: Node2D) -> void:
-
-	if body.name == "player":
-
-		$CanvasLayer/text_ui.visible = false
+	Global.flycatcher_deal = int(
+		relationship["flycatcher_deal"]
+	)
