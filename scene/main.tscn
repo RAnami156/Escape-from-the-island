@@ -21,6 +21,9 @@ position = Vector2(601, 298)
 [node name="npc_flycatcher_ollama_ru" parent="." unique_id=2140429607 instance=ExtResource("4_0ha60")]
 position = Vector2(368, 280)
 
+[node name="npc_panda_ollama_ru" parent="." unique_id=1575230363 instance=ExtResource("5_0ha60")]
+position = Vector2(758, 283)
+
 [node name="player" parent="." unique_id=1884075297 instance=ExtResource("2_v0l8b")]
 position = Vector2(604, 355)
 
@@ -35,6 +38,3 @@ max_zoom = 7.0
 
 [node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="StaticBody2D" unique_id=193883884]
 polygon = PackedVector2Array(862, 179, 873, 415, 265, 420, 243, 204, 842, 186, 436, 170, 126, 178, 54, 308, 91, 445, 282, 468, 451, 474, 623, 465, 950, 496, 947, 342, 932, 160, 880, 173)
-
-[node name="npc_1_ollama_ru2" parent="." unique_id=776375917 instance=ExtResource("5_0ha60")]
-position = Vector2(780, 299)

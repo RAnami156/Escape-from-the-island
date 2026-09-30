@@ -75,7 +75,7 @@ animations = [{
 "speed": 6.0
 }]
 
-[node name="npc_1_ollama_ru" type="CharacterBody2D" unique_id=1644685617]
+[node name="npc_panda_ollama_ru" type="CharacterBody2D" unique_id=1644685617]
 collision_mask = 0
 script = ExtResource("1_ha6mg")
 book_scene = ExtResource("2_653kr")

@@ -1,6 +1,7 @@
 [gd_scene format=3 uid="uid://cqxvlolwkmx5k"]
 
 [ext_resource type="Script" uid="uid://d0k3cvh3yftw0" path="res://script/npc_flycatcher_ollama_ru.gd" id="1_p7tar"]
+[ext_resource type="PackedScene" uid="uid://bu1lv2bfsseun" path="res://scene/fly.tscn" id="2_bof67"]
 [ext_resource type="Texture2D" uid="uid://b2bd3cq3v5dnx" path="res://asets/flytrap-noun-Venus_flytrap-457ff51d_1-x3.webp" id="2_wa8mu"]
 [ext_resource type="Texture2D" uid="uid://cisomewmdw4op" path="res://asets/icon.svg" id="3_ttyes"]
 [ext_resource type="FontFile" uid="uid://bcmxb24dbljpw" path="res://asets/minecraft.ttf" id="4_rk7qn"]
@@ -74,6 +75,8 @@ animations = [{
 [node name="npc_flycatcher_ollama_ru" type="CharacterBody2D" unique_id=1644685617]
 collision_mask = 0
 script = ExtResource("1_p7tar")
+characters_per_line = 75
+fly_scene = ExtResource("2_bof67")
 
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=1597038166]
 scale = Vector2(0.82142854, 0.82142854)
@@ -148,10 +151,10 @@ alignment = 1
 script = SubResource("GDScript_7h7ol")
 
 [node name="text" type="Label" parent="CanvasLayer/text_ui" unique_id=1466429651]
-offset_left = 437.0
-offset_top = 961.0
-offset_right = 23810.0
-offset_bottom = 4711.0
+offset_left = 84.99988
+offset_top = 968.99994
+offset_right = 23458.0
+offset_bottom = 4719.0
 scale = Vector2(0.33, 0.33)
 theme_override_fonts/font = ExtResource("4_rk7qn")
 theme_override_font_sizes/font_size = 100
