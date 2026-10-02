@@ -1,0 +1,93 @@
+[gd_scene format=3 uid="uid://d3nn5jqj56hot"]
+
+[ext_resource type="Script" uid="uid://ca1flw8it3qlv" path="res://script/ship.gd" id="1_gnaqg"]
+[ext_resource type="Texture2D" uid="uid://b3m7ure7qfvmn" path="res://asets/Изображение ChatGPT 30 сент. 2026 г., 11_24_51.png" id="1_t11qm"]
+[ext_resource type="FontFile" uid="uid://dxa4u7yhh3vnh" path="res://asets/1 Minecraft-Regular.otf" id="3_bf7x5"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_x244a"]
+size = Vector2(269, 92)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_c105b"]
+size = Vector2(32, 32)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_4u7eh"]
+size = Vector2(20, 54)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_7sfin"]
+size = Vector2(178, 20)
+
+[node name="ship" type="Node2D" unique_id=1362152927]
+script = ExtResource("1_gnaqg")
+
+[node name="Area2D" type="Area2D" parent="." unique_id=683486434]
+collision_layer = 0
+collision_mask = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D" unique_id=1845699529]
+position = Vector2(-32.5, 24)
+shape = SubResource("RectangleShape2D_x244a")
+
+[node name="ИзображениеChatGpt30Сент_2026Г_,112451" type="Sprite2D" parent="Area2D" unique_id=1026652310]
+position = Vector2(-1, 30)
+scale = Vector2(0.25199363, 0.25199363)
+texture = ExtResource("1_t11qm")
+
+[node name="helm" type="Area2D" parent="." unique_id=1225412792]
+collision_layer = 0
+collision_mask = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="helm" unique_id=1168668519]
+position = Vector2(-121, 35)
+shape = SubResource("RectangleShape2D_c105b")
+
+[node name="sail" type="Area2D" parent="." unique_id=365176542]
+collision_layer = 0
+collision_mask = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="sail" unique_id=51648711]
+position = Vector2(-13, 28)
+shape = SubResource("RectangleShape2D_4u7eh")
+
+[node name="planks" type="Area2D" parent="." unique_id=585883741]
+position = Vector2(-19, 17)
+collision_layer = 0
+collision_mask = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="planks" unique_id=868876622]
+position = Vector2(-6, 56)
+shape = SubResource("RectangleShape2D_7sfin")
+
+[node name="helm_text" type="Label" parent="." unique_id=1358587160]
+offset_left = -139.0
+offset_top = 23.0
+offset_right = -39.0
+offset_bottom = 46.0
+scale = Vector2(0.3, 0.3)
+theme_override_fonts/font = ExtResource("3_bf7x5")
+text = "helm"
+
+[node name="sail_text" type="Label" parent="." unique_id=197864007]
+offset_left = -22.0
+offset_top = 26.0
+offset_right = 78.0
+offset_bottom = 49.0
+scale = Vector2(0.3, 0.3)
+theme_override_fonts/font = ExtResource("3_bf7x5")
+text = "sail"
+
+[node name="planks_text" type="Label" parent="." unique_id=1642239067]
+offset_left = -32.0
+offset_top = 64.0
+offset_right = 68.0
+offset_bottom = 87.0
+scale = Vector2(0.4, 0.4)
+theme_override_fonts/font = ExtResource("3_bf7x5")
+text = "planks"
+
+[connection signal="body_entered" from="Area2D" to="." method="_on_area_2d_body_entered"]
+[connection signal="body_entered" from="helm" to="." method="_on_helm_body_entered"]
+[connection signal="body_exited" from="helm" to="." method="_on_helm_body_exited"]
+[connection signal="body_entered" from="sail" to="." method="_on_sail_body_entered"]
+[connection signal="body_exited" from="sail" to="." method="_on_sail_body_exited"]
+[connection signal="body_entered" from="planks" to="." method="_on_planks_body_entered"]
+[connection signal="body_exited" from="planks" to="." method="_on_planks_body_exited"]

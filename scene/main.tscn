@@ -1,10 +1,13 @@
 [gd_scene format=3 uid="uid://sps826g22ajn"]
 
+[ext_resource type="Texture2D" uid="uid://cejrgk4fdetc7" path="res://asets/Screenshot 2026-09-30 at 11-11-47 морская воды сверху - Поиск в Google.png" id="1_p1hux"]
+[ext_resource type="Texture2D" uid="uid://dvxjaycdde5js" path="res://asets/Screenshot 2026-09-30 at 11-12-14 песок - Поиск в Google.png" id="2_of57s"]
 [ext_resource type="PackedScene" uid="uid://don1xstqrlpce" path="res://scene/player.tscn" id="2_v0l8b"]
 [ext_resource type="PackedScene" uid="uid://baw8ke07buvuh" path="res://scene/npc_1_ollama_ru.tscn" id="2_wp4xf"]
 [ext_resource type="PackedScene" uid="uid://cqxvlolwkmx5k" path="res://scene/npc_flycatcher_ollama_ru.tscn" id="4_0ha60"]
 [ext_resource type="Script" uid="uid://6op62hcsrbhc" path="res://script/camera_2d.gd" id="4_brvut"]
 [ext_resource type="PackedScene" uid="uid://cy2id8te67mnd" path="res://scene/npc_panda_ollama_ru.tscn" id="5_0ha60"]
+[ext_resource type="PackedScene" uid="uid://d3nn5jqj56hot" path="res://scene/ship.tscn" id="8_of57s"]
 
 [sub_resource type="CompressedTexture2D" id="CompressedTexture2D_brvut"]
 load_path = "res://.godot/imported/istockphoto-182361617-612x612.jpg-86186417d43c4ca53810f993abedc662.ctex"
@@ -12,8 +15,19 @@ load_path = "res://.godot/imported/istockphoto-182361617-612x612.jpg-86186417d43
 [node name="main" type="Node2D" unique_id=1160497426]
 
 [node name="Istockphoto182361617612x612" type="Sprite2D" parent="." unique_id=1747862034]
-position = Vector2(571, 311)
+position = Vector2(661, 311)
+scale = Vector2(1.2941177, 1)
 texture = SubResource("CompressedTexture2D_brvut")
+
+[node name="Screenshot20260930At111214ПесокПоискВGoogle" type="Sprite2D" parent="." unique_id=870693022]
+position = Vector2(642.75, 522.25)
+scale = Vector2(0.925625, 0.114375)
+texture = ExtResource("2_of57s")
+
+[node name="Screenshot20260930At111147МорскаяВодыСверхуПоискВGoogle" type="Sprite2D" parent="." unique_id=848010411]
+modulate = Color(1, 1, 1, 0.6039216)
+position = Vector2(558, 783)
+texture = ExtResource("1_p1hux")
 
 [node name="npc_1_ollama_ru" parent="." unique_id=1644685617 instance=ExtResource("2_wp4xf")]
 position = Vector2(601, 298)
@@ -23,6 +37,9 @@ position = Vector2(368, 280)
 
 [node name="npc_panda_ollama_ru" parent="." unique_id=1575230363 instance=ExtResource("5_0ha60")]
 position = Vector2(758, 283)
+
+[node name="ship" parent="." unique_id=1362152927 instance=ExtResource("8_of57s")]
+position = Vector2(636, 504)
 
 [node name="player" parent="." unique_id=1884075297 instance=ExtResource("2_v0l8b")]
 position = Vector2(604, 355)
@@ -37,4 +54,4 @@ max_zoom = 7.0
 [node name="StaticBody2D" type="StaticBody2D" parent="." unique_id=1554261429]
 
 [node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="StaticBody2D" unique_id=193883884]
-polygon = PackedVector2Array(862, 179, 873, 415, 265, 420, 243, 204, 842, 186, 436, 170, 126, 178, 54, 308, 91, 445, 282, 468, 451, 474, 623, 465, 950, 496, 947, 342, 932, 160, 880, 173)
+polygon = PackedVector2Array(862, 179, 891, 596, 275, 589, 243, 204, 842, 186, 436, 170, 126, 178, 54, 308, 91, 445, 225, 710, 463, 712, 667, 715, 957, 677, 947, 342, 932, 160, 880, 173)

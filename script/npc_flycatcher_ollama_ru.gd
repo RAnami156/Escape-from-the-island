@@ -240,6 +240,8 @@ var quest_reward_given: bool = false
 
 func _ready() -> void:
 
+	$CanvasLayer/relationship.visible = false
+		
 	randomize()
 	phase_3_question = PHASE_3_QUESTIONS[randi_range(0, PHASE_3_QUESTIONS.size() - 1)]
 
@@ -286,7 +288,11 @@ func _ready() -> void:
 # ============================================================
 
 func _process(_delta: float) -> void:
-
+	$CanvasLayer/relationship/respect_text.text = "уважение: " + str(Global.flycatcher_respect)
+	$CanvasLayer/relationship/frindship_text.text = "дружба: " + str(Global.flycatcher_friendship)
+	$CanvasLayer/relationship/irritation_text.text = "раздражение: " + str(Global.flycatcher_irritation)
+	$CanvasLayer/relationship/deal_text.text = "сделка: " + str(Global.flycatcher_deal)
+	
 	_update_player_movement_state()
 
 	_update_input_state()
@@ -3280,7 +3286,7 @@ func summarize_recent_dialogue() -> String:
 func _on_area_2d_body_entered(
 	body: Node2D
 ) -> void:
-
+	
 	if body.name.to_lower() == "player":
 
 		$CanvasLayer/text_ui.visible = true
@@ -3288,6 +3294,8 @@ func _on_area_2d_body_entered(
 		_update_input_state()
 
 		_update_player_movement_state()
+	
+	$CanvasLayer/relationship.visible = true
 
 
 # ============================================================
@@ -3306,3 +3314,5 @@ func _on_area_2d_body_exited(
 		if not waiting_for_response:
 
 			Global.player_can_move = true
+	
+		$CanvasLayer/relationship.visible = false

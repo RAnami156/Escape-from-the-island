@@ -349,6 +349,36 @@ text = "Lorem Ipsum is simply dummy text of the printing and typesetting industr
 the industry's standard dummy text ever since 1966, when designers at Letraset and James Mosley, the librarian at St Bride Printing Library in London,
  took a 1914 Cicero translation and scrambled it to make dummy text for Letraset's Body Type sheets. It has survived not only many decades, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised thanks to these sheets and more recently with desktop publishing software like Aldus PageMaker and Microsoft Word including versions of Lorem Ipsum."
 
+[node name="relationship" type="Node2D" parent="CanvasLayer" unique_id=886946545]
+position = Vector2(1594.0001, 18)
+scale = Vector2(2.03, 2.03)
+
+[node name="respect_text" type="Label" parent="CanvasLayer/relationship" unique_id=1351973188]
+offset_right = 40.0
+offset_bottom = 23.0
+text = "уважение: "
+
+[node name="frindship_text" type="Label" parent="CanvasLayer/relationship" unique_id=180137240]
+offset_left = -2.0
+offset_top = 22.0
+offset_right = 63.0
+offset_bottom = 45.0
+text = "дружба:"
+
+[node name="irritation_text" type="Label" parent="CanvasLayer/relationship" unique_id=628448976]
+offset_left = -3.0
+offset_top = 39.0
+offset_right = 115.0
+offset_bottom = 62.0
+text = "раздражение: "
+
+[node name="deal_text" type="Label" parent="CanvasLayer/relationship" unique_id=2002867507]
+offset_left = -4.0
+offset_top = 57.0
+offset_right = 60.0
+offset_bottom = 80.0
+text = "сделка: "
+
 [node name="CPUParticles2D" type="CPUParticles2D" parent="." unique_id=1074512742]
 position = Vector2(-24, -68)
 amount = 18

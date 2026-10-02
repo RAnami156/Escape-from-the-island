@@ -1,0 +1,39 @@
+[gd_scene format=3 uid="uid://b6mo8e7dvjqn0"]
+
+[ext_resource type="Script" uid="uid://ddrpwja8xf1jn" path="res://script/menu.gd" id="1_8hxod"]
+[ext_resource type="FontFile" uid="uid://dxa4u7yhh3vnh" path="res://asets/1 Minecraft-Regular.otf" id="1_e5g8k"]
+
+[node name="menu" type="Node2D" unique_id=846329223]
+script = ExtResource("1_8hxod")
+
+[node name="exit" type="Button" parent="." unique_id=1325983146]
+offset_left = 288.0
+offset_top = 734.0
+offset_right = 1094.0
+offset_bottom = 920.0
+theme_override_fonts/font = ExtResource("1_e5g8k")
+theme_override_font_sizes/font_size = 80
+text = "EXIT"
+
+[node name="play" type="Button" parent="." unique_id=1226888545]
+offset_left = 232.0
+offset_top = 194.0
+offset_right = 1590.0
+offset_bottom = 472.0
+theme_override_fonts/font = ExtResource("1_e5g8k")
+theme_override_font_sizes/font_size = 100
+text = "PLAY"
+
+[node name="OptionButton" type="OptionButton" parent="." unique_id=1400017649]
+offset_left = 1384.0
+offset_top = 592.0
+offset_right = 1580.0
+offset_bottom = 692.0
+item_count = 2
+popup/item_0/text = "ru"
+popup/item_0/id = 0
+popup/item_1/text = "cz"
+popup/item_1/id = 1
+
+[connection signal="pressed" from="exit" to="." method="_on_exit_pressed"]
+[connection signal="pressed" from="play" to="." method="_on_play_pressed"]

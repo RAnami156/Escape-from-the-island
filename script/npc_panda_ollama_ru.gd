@@ -140,6 +140,9 @@ var nodes_ready: bool = false
 
 
 func _ready() -> void:
+	
+	$CanvasLayer/relationship.visible = false
+	
 	if input == null or text == null or panel == null or http_request == null or dialogue_area == null:
 		push_error("[PANDA] Проверь пути Nodes: LineEdit, Label, панель, HTTPRequest и Area2D.")
 		set_process(false)
@@ -173,6 +176,11 @@ func _ready() -> void:
 
 
 func _process(_delta: float) -> void:
+	$CanvasLayer/relationship/respect_text.text = "уважение: " + str(Global.panda_respect)
+	$CanvasLayer/relationship/frindship_text.text = "дружба: " + str(Global.panda_friendship)
+	$CanvasLayer/relationship/irritation_text.text = "раздражение: " + str(Global.panda_irritation)
+	$CanvasLayer/relationship/deal_text.text = "сделка: " + str(Global.panda_deal)
+	
 	_update_input_state()
 	_update_player_movement_state()
 
@@ -272,6 +280,7 @@ func _on_area_2d_body_entered(body: Node2D) -> void:
 	panel.show()
 	_update_input_state()
 	_update_player_movement_state()
+	$CanvasLayer/relationship.visible = true
 
 
 func _on_area_2d_body_exited(body: Node2D) -> void:
@@ -281,7 +290,7 @@ func _on_area_2d_body_exited(body: Node2D) -> void:
 	input.release_focus()
 	_set_player_locked(false)
 	dialogue_player = null
-
+	$CanvasLayer/relationship.visible = false
 
 func _on_text_submitted(player_text: String) -> void:
 	if not nodes_ready or not panel.is_visible_in_tree() or not input.editable:

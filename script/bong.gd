@@ -400,6 +400,8 @@ var dialogue_player: CharacterBody2D = null
 # ============================================================
 
 func _ready() -> void:
+	
+	$CanvasLayer/relationship.visible = false
 
 	$CanvasLayer/text_ui.visible = false
 
@@ -449,7 +451,12 @@ func _ready() -> void:
 # ============================================================
 
 func _process(_delta: float) -> void:
-
+	
+	#relationship
+	$CanvasLayer/relationship/respect_text.text = "уважение: " + str(Global.bong_respect)
+	$CanvasLayer/relationship/frindship_text.text = "дружба: " + str(Global.bong_friendship)
+	$CanvasLayer/relationship/irritation_text.text = "раздражение: " + str(Global.bong_irritation)
+	$CanvasLayer/relationship/deal_text.text = "сделка: " + str(Global.bong_deal)
 	_update_player_movement_state()
 
 	_update_input_state()
@@ -1946,6 +1953,7 @@ func _on_request_completed(
 
 
 		quest_reward_given = true
+		Global.helm = true
 
 
 		# ----------------------------------------------------
@@ -1978,6 +1986,7 @@ func _on_request_completed(
 			reply = build_reward_response()
 
 			quest_reward_given = true
+			Global.helm = true
 
 			Global.whiskey = false
 
@@ -3531,6 +3540,8 @@ func _on_area_2d_body_entered(
 		_update_input_state()
 
 		_update_player_movement_state()
+		
+		$CanvasLayer/relationship.visible = true
 
 
 # ============================================================
@@ -3549,3 +3560,5 @@ func _on_area_2d_body_exited(
 		dialogue_player = null
 
 		Global.player_can_move = true
+	
+		$CanvasLayer/relationship.visible = false
