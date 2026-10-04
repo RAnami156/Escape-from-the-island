@@ -29,14 +29,14 @@ modulate = Color(1, 1, 1, 0.6039216)
 position = Vector2(558, 783)
 texture = ExtResource("1_p1hux")
 
-[node name="npc_1_ollama_ru" parent="." unique_id=1644685617 instance=ExtResource("2_wp4xf")]
-position = Vector2(601, 298)
+[node name="bong" parent="." unique_id=1644685617 instance=ExtResource("2_wp4xf")]
+position = Vector2(559, 270)
 
-[node name="npc_flycatcher_ollama_ru" parent="." unique_id=2140429607 instance=ExtResource("4_0ha60")]
-position = Vector2(368, 280)
+[node name="flycather" parent="." unique_id=1394519417 instance=ExtResource("4_0ha60")]
+position = Vector2(349, 277)
 
-[node name="npc_panda_ollama_ru" parent="." unique_id=1575230363 instance=ExtResource("5_0ha60")]
-position = Vector2(758, 283)
+[node name="panda" parent="." unique_id=89727642 instance=ExtResource("5_0ha60")]
+position = Vector2(732, 257)
 
 [node name="ship" parent="." unique_id=1362152927 instance=ExtResource("8_of57s")]
 position = Vector2(636, 504)

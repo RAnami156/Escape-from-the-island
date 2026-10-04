@@ -6,7 +6,7 @@
 [sub_resource type="CircleShape2D" id="CircleShape2D_c105b"]
 radius = 14.0
 
-[node name="fly2" type="Node2D" unique_id=1144280868]
+[node name="fly" type="Node2D" unique_id=1144280868]
 scale = Vector2(0.5, 0.5)
 script = ExtResource("1_ry56p")
 
