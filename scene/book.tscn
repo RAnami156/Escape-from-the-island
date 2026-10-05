@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://dttm5ntxvikgo"]
 
 [ext_resource type="Script" uid="uid://c858vt0rhji4v" path="res://script/book.gd" id="1_rnjoa"]
-[ext_resource type="Texture2D" uid="uid://cgw2meaa5jqxg" path="res://asets/49eaa0c72ee58819f1beadaa29435475.jpg" id="2_rnjoa"]
+[ext_resource type="Texture2D" uid="uid://b3xurvj3bfj4s" path="res://asets/Book.png" id="2_rnjoa"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_c105b"]
 radius = 14.0
@@ -10,16 +10,15 @@ radius = 14.0
 scale = Vector2(0.5, 0.5)
 script = ExtResource("1_rnjoa")
 
-[node name="Icon" type="Sprite2D" parent="." unique_id=1022618104]
-position = Vector2(-3.6621097e-07, 3.6621094e-07)
-scale = Vector2(0.016000003, 0.016)
-texture = ExtResource("2_rnjoa")
-
 [node name="Area2D" type="Area2D" parent="." unique_id=766996165]
 collision_layer = 0
 collision_mask = 2
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D" unique_id=1346633304]
 shape = SubResource("CircleShape2D_c105b")
+
+[node name="Book" type="Sprite2D" parent="." unique_id=202434411]
+scale = Vector2(1.75, 1.75)
+texture = ExtResource("2_rnjoa")
 
 [connection signal="body_entered" from="Area2D" to="." method="_on_area_2d_body_entered"]

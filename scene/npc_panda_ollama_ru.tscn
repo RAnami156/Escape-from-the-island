@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" uid="uid://js256m74vc65" path="res://script/NPC.cz/npc_panda_ollama_CZ.gd" id="1_653kr"]
 [ext_resource type="PackedScene" uid="uid://dttm5ntxvikgo" path="res://scene/book.tscn" id="2_fie2b"]
-[ext_resource type="Texture2D" uid="uid://dyt5sn6rncaju" path="res://asets/6344da39807836b9f08231ac42ceecb8.jpg" id="3_653kr"]
+[ext_resource type="Texture2D" uid="uid://caqwxi6gapfw8" path="res://asets/Panda.png" id="3_fie2b"]
 [ext_resource type="Texture2D" uid="uid://cisomewmdw4op" path="res://asets/icon.svg" id="3_l0evu"]
 [ext_resource type="FontFile" uid="uid://bcmxb24dbljpw" path="res://asets/minecraft.ttf" id="4_8bfbl"]
 [ext_resource type="Texture2D" uid="uid://cn6xetuyew058" path="res://asets/leaf.png" id="5_rxj6u"]
@@ -81,8 +81,8 @@ script = ExtResource("1_653kr")
 book_scene = ExtResource("2_fie2b")
 
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=1597038166]
-scale = Vector2(0.21875, 0.21875)
-texture = ExtResource("3_653kr")
+scale = Vector2(1.2916666, 1.2916666)
+texture = ExtResource("3_fie2b")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=381386820]
 position = Vector2(0, -3)
