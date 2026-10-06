@@ -2,6 +2,7 @@ extends CharacterBody2D
 
 
 @export var speed: float = 100.0
+@export var sprint_multiplier: float = 2.0
 
 @onready var animated_sprite: AnimatedSprite2D = $AnimatedSprite2D
 
@@ -47,7 +48,11 @@ func _physics_process(_delta: float) -> void:
 
 	if input_vector != Vector2.ZERO:
 
-		velocity = input_vector.normalized() * speed
+		var current_speed := speed
+		if Input.is_key_pressed(KEY_SHIFT):
+			current_speed *= sprint_multiplier
+
+		velocity = input_vector.normalized() * current_speed
 
 		update_animation(
 			input_vector,
