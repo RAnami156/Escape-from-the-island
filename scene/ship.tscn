@@ -2,7 +2,65 @@
 
 [ext_resource type="Script" uid="uid://db74xsmjtjjfh" path="res://script/NPC.cz/ship_cz.gd" id="1_bf7x5"]
 [ext_resource type="Texture2D" uid="uid://b3m7ure7qfvmn" path="res://asets/Изображение ChatGPT 30 сент. 2026 г., 11_24_51.png" id="1_t11qm"]
+[ext_resource type="Texture2D" uid="uid://dimul3fjf4dy" path="res://asets/Sprite-0001-Sheet (1).png" id="2_fbih1"]
 [ext_resource type="FontFile" uid="uid://dxa4u7yhh3vnh" path="res://asets/1 Minecraft-Regular.otf" id="3_bf7x5"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_l7n8u"]
+atlas = ExtResource("2_fbih1")
+region = Rect2(0, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_dn8y5"]
+atlas = ExtResource("2_fbih1")
+region = Rect2(64, 0, 64, 64)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_c105b"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_l7n8u")
+}],
+"loop": 1,
+"name": &"default",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_dn8y5")
+}],
+"loop": 1,
+"name": &"fixed",
+"speed": 5.0
+}]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_j3ojk"]
+atlas = ExtResource("2_fbih1")
+region = Rect2(192, 0, 64, 64)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_x244a"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_j3ojk")
+}],
+"loop": 1,
+"name": &"default",
+"speed": 5.0
+}]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_imrw8"]
+atlas = ExtResource("2_fbih1")
+region = Rect2(128, 0, 64, 64)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_4u7eh"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_imrw8")
+}],
+"loop": 1,
+"name": &"default",
+"speed": 5.0
+}]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_x244a"]
 size = Vector2(269, 92)
@@ -19,20 +77,41 @@ size = Vector2(178, 20)
 [node name="ship" type="Node2D" unique_id=1362152927]
 script = ExtResource("1_bf7x5")
 
+[node name="planks_anim" type="AnimatedSprite2D" parent="." unique_id=1819545829]
+position = Vector2(-23.000006, 24)
+scale = Vector2(4.125, 4.125)
+sprite_frames = SubResource("SpriteFrames_c105b")
+animation = &"fixed"
+autoplay = "default"
+
+[node name="sail_anim" type="AnimatedSprite2D" parent="." unique_id=682109177]
+z_index = 1
+position = Vector2(-29, 7.999998)
+scale = Vector2(3.28125, 3.2812498)
+sprite_frames = SubResource("SpriteFrames_x244a")
+autoplay = "default"
+
+[node name="helm_anim" type="AnimatedSprite2D" parent="." unique_id=1683608239]
+position = Vector2(-60, 22)
+scale = Vector2(3.09375, 3.09375)
+sprite_frames = SubResource("SpriteFrames_4u7eh")
+
 [node name="Area2D" type="Area2D" parent="." unique_id=683486434]
 collision_layer = 0
 collision_mask = 2
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D" unique_id=1845699529]
-position = Vector2(-32.5, 24)
+position = Vector2(-31, 87)
 shape = SubResource("RectangleShape2D_x244a")
 
 [node name="ИзображениеChatGpt30Сент_2026Г_,112451" type="Sprite2D" parent="Area2D" unique_id=1026652310]
+visible = false
 position = Vector2(-1, 30)
 scale = Vector2(0.25199363, 0.25199363)
 texture = ExtResource("1_t11qm")
 
 [node name="helm" type="Area2D" parent="." unique_id=1225412792]
+position = Vector2(3, -13)
 collision_layer = 0
 collision_mask = 2
 
@@ -40,7 +119,17 @@ collision_mask = 2
 position = Vector2(-121, 35)
 shape = SubResource("RectangleShape2D_c105b")
 
+[node name="helm_text" type="Label" parent="helm" unique_id=1358587160]
+offset_left = -142.0
+offset_top = 36.0
+offset_right = -42.0
+offset_bottom = 59.0
+scale = Vector2(0.3, 0.3)
+theme_override_fonts/font = ExtResource("3_bf7x5")
+text = "helm"
+
 [node name="sail" type="Area2D" parent="." unique_id=365176542]
+position = Vector2(-5, -12)
 collision_layer = 0
 collision_mask = 2
 
@@ -48,8 +137,17 @@ collision_mask = 2
 position = Vector2(-13, 28)
 shape = SubResource("RectangleShape2D_4u7eh")
 
+[node name="sail_text" type="Label" parent="sail" unique_id=197864007]
+offset_left = -17.0
+offset_top = 38.0
+offset_right = 83.0
+offset_bottom = 61.0
+scale = Vector2(0.3, 0.3)
+theme_override_fonts/font = ExtResource("3_bf7x5")
+text = "sail"
+
 [node name="planks" type="Area2D" parent="." unique_id=585883741]
-position = Vector2(-19, 17)
+position = Vector2(-30, 2)
 collision_layer = 0
 collision_mask = 2
 
@@ -57,29 +155,11 @@ collision_mask = 2
 position = Vector2(-6, 56)
 shape = SubResource("RectangleShape2D_7sfin")
 
-[node name="helm_text" type="Label" parent="." unique_id=1358587160]
-offset_left = -139.0
-offset_top = 23.0
-offset_right = -39.0
-offset_bottom = 46.0
-scale = Vector2(0.3, 0.3)
-theme_override_fonts/font = ExtResource("3_bf7x5")
-text = "helm"
-
-[node name="sail_text" type="Label" parent="." unique_id=197864007]
-offset_left = -22.0
-offset_top = 26.0
-offset_right = 78.0
-offset_bottom = 49.0
-scale = Vector2(0.3, 0.3)
-theme_override_fonts/font = ExtResource("3_bf7x5")
-text = "sail"
-
-[node name="planks_text" type="Label" parent="." unique_id=1642239067]
-offset_left = -32.0
-offset_top = 64.0
-offset_right = 68.0
-offset_bottom = 87.0
+[node name="planks_text" type="Label" parent="planks" unique_id=1642239067]
+offset_left = -13.0
+offset_top = 47.0
+offset_right = 87.0
+offset_bottom = 70.0
 scale = Vector2(0.4, 0.4)
 theme_override_fonts/font = ExtResource("3_bf7x5")
 text = "planks"

@@ -9,7 +9,7 @@ var bong_irritation: int = 10
 var bong_deal: int = 30
 
 var whiskey: bool = false
-var helm: bool = false
+var helm: bool = true
 
 #flycatcher
 
@@ -19,7 +19,7 @@ var flycatcher_irritation: int = 100
 var flycatcher_deal: int = -67
 
 var fly: bool = false
-var parus: bool = false
+var parus: bool = true
 
 #pandа 
 
@@ -29,4 +29,4 @@ var panda_irritation: int = 30
 var panda_deal: int = 0
 
 var book: bool = false
-var bamboo_boards: bool = false
+var bamboo_boards: bool = true
