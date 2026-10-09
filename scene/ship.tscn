@@ -3,7 +3,7 @@
 [ext_resource type="Script" uid="uid://db74xsmjtjjfh" path="res://script/NPC.cz/ship_cz.gd" id="1_bf7x5"]
 [ext_resource type="Texture2D" uid="uid://b3m7ure7qfvmn" path="res://asets/Изображение ChatGPT 30 сент. 2026 г., 11_24_51.png" id="1_t11qm"]
 [ext_resource type="Texture2D" uid="uid://dimul3fjf4dy" path="res://asets/Sprite-0001-Sheet (1).png" id="2_fbih1"]
-[ext_resource type="FontFile" uid="uid://dxa4u7yhh3vnh" path="res://asets/1 Minecraft-Regular.otf" id="3_bf7x5"]
+[ext_resource type="FontFile" uid="uid://cngqnpge8crta" path="res://asets/r-classic_8.ttf" id="4_fbih1"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_l7n8u"]
 atlas = ExtResource("2_fbih1")
@@ -125,7 +125,7 @@ offset_top = 36.0
 offset_right = -42.0
 offset_bottom = 59.0
 scale = Vector2(0.3, 0.3)
-theme_override_fonts/font = ExtResource("3_bf7x5")
+theme_override_fonts/font = ExtResource("4_fbih1")
 text = "helm"
 
 [node name="sail" type="Area2D" parent="." unique_id=365176542]
@@ -143,7 +143,7 @@ offset_top = 38.0
 offset_right = 83.0
 offset_bottom = 61.0
 scale = Vector2(0.3, 0.3)
-theme_override_fonts/font = ExtResource("3_bf7x5")
+theme_override_fonts/font = ExtResource("4_fbih1")
 text = "sail"
 
 [node name="planks" type="Area2D" parent="." unique_id=585883741]
@@ -161,7 +161,7 @@ offset_top = 47.0
 offset_right = 87.0
 offset_bottom = 70.0
 scale = Vector2(0.4, 0.4)
-theme_override_fonts/font = ExtResource("3_bf7x5")
+theme_override_fonts/font = ExtResource("4_fbih1")
 text = "planks"
 
 [connection signal="body_entered" from="Area2D" to="." method="_on_area_2d_body_entered"]
