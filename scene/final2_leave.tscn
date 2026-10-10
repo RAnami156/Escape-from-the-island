@@ -1,0 +1,314 @@
+[gd_scene format=3 uid="uid://b1uktiomc6lsj"]
+
+[ext_resource type="Texture2D" uid="uid://cf27h58y7irs4" path="res://asets/final.png" id="1_8n8ji"]
+[ext_resource type="Texture2D" uid="uid://uvqk0ibtdrbo" path="res://asets/Изображение ChatGPT 9 окт. 2026 г., 15_54_28.png" id="2_g0ltl"]
+[ext_resource type="Texture2D" uid="uid://c0wmi64a4k1wl" path="res://asets/Изображение ChatGPT 9 окт. 2026 г., 15_54_16.png" id="3_wrh0o"]
+[ext_resource type="Texture2D" uid="uid://b1wucxim46ic7" path="res://asets/Изображение ChatGPT 9 окт. 2026 г., 15_54_32.png" id="4_ii2dt"]
+
+[sub_resource type="Animation" id="Animation_elspl"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("ИзображениеChatGpt9Окт_2026Г_,155428:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(1140, 710)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("ИзображениеChatGpt9Окт_2026Г_,155428:scale")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(0.86339957, 0.86339957)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("ИзображениеChatGpt9Окт_2026Г_,155428:visible")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("ИзображениеChatGpt9Окт_2026Г_,155432:position")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(1064, 593)]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("ИзображениеChatGpt9Окт_2026Г_,155432:scale")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(0.61762357, 0.61762357)]
+}
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("ИзображениеChatGpt9Окт_2026Г_,155432:visible")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/6/type = "value"
+tracks/6/imported = false
+tracks/6/enabled = true
+tracks/6/path = NodePath("ИзображениеChatGpt9Окт_2026Г_,155416:position")
+tracks/6/interp = 1
+tracks/6/loop_wrap = true
+tracks/6/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(1092, 608)]
+}
+tracks/7/type = "value"
+tracks/7/imported = false
+tracks/7/enabled = true
+tracks/7/path = NodePath("ИзображениеChatGpt9Окт_2026Г_,155416:scale")
+tracks/7/interp = 1
+tracks/7/loop_wrap = true
+tracks/7/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(0.65291065, 0.65291065)]
+}
+tracks/8/type = "value"
+tracks/8/imported = false
+tracks/8/enabled = true
+tracks/8/path = NodePath("ИзображениеChatGpt9Окт_2026Г_,155416:visible")
+tracks/8/interp = 1
+tracks/8/loop_wrap = true
+tracks/8/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/9/type = "value"
+tracks/9/imported = false
+tracks/9/enabled = true
+tracks/9/path = NodePath("ИзображениеChatGpt9Окт_2026Г_,155432:rotation")
+tracks/9/interp = 1
+tracks/9/loop_wrap = true
+tracks/9/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [0.670651]
+}
+
+[sub_resource type="Animation" id="Animation_5pl47"]
+resource_name = "new_animation"
+length = 8.0
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("ИзображениеChatGpt9Окт_2026Г_,155428:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 8),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector2(1140, 710), Vector2(1116, 565)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("ИзображениеChatGpt9Окт_2026Г_,155428:scale")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 8),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector2(0.86339957, 0.86339957), Vector2(0.09077981, 0.09077981)]
+}
+
+[sub_resource type="Animation" id="Animation_od41v"]
+resource_name = "new_animation_2"
+length = 6.0333333
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("ИзображениеChatGpt9Окт_2026Г_,155428:scale")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 3.0333333),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector2(0.86339957, 0.86339957), Vector2(0.6484656, 0.6484656)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("ИзображениеChatGpt9Окт_2026Г_,155428:position")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 3.0333333),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector2(1140, 710), Vector2(1101.0001, 614.00006)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("ИзображениеChatGpt9Окт_2026Г_,155428:visible")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 3.0333333),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [true, false]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("ИзображениеChatGpt9Окт_2026Г_,155416:position")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(3.0333333),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(1092, 608)]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("ИзображениеChatGpt9Окт_2026Г_,155416:scale")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(3.0333333),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(0.65291065, 0.65291065)]
+}
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("ИзображениеChatGpt9Окт_2026Г_,155416:visible")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0, 3.0333333, 3.33),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 1,
+"values": [false, true, false]
+}
+tracks/6/type = "value"
+tracks/6/imported = false
+tracks/6/enabled = true
+tracks/6/path = NodePath("ИзображениеChatGpt9Окт_2026Г_,155432:position")
+tracks/6/interp = 1
+tracks/6/loop_wrap = true
+tracks/6/keys = {
+"times": PackedFloat32Array(3.33, 6.03),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector2(1067, 584), Vector2(1186, 641.00006)]
+}
+tracks/7/type = "value"
+tracks/7/imported = false
+tracks/7/enabled = true
+tracks/7/path = NodePath("ИзображениеChatGpt9Окт_2026Г_,155432:scale")
+tracks/7/interp = 1
+tracks/7/loop_wrap = true
+tracks/7/keys = {
+"times": PackedFloat32Array(3.33, 6.03),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector2(0.61403507, 0.61403507), Vector2(0.61403507, 0.61403507)]
+}
+tracks/8/type = "value"
+tracks/8/imported = false
+tracks/8/enabled = true
+tracks/8/path = NodePath("ИзображениеChatGpt9Окт_2026Г_,155432:visible")
+tracks/8/interp = 1
+tracks/8/loop_wrap = true
+tracks/8/keys = {
+"times": PackedFloat32Array(0, 3.33),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [false, true]
+}
+tracks/9/type = "value"
+tracks/9/imported = false
+tracks/9/enabled = true
+tracks/9/path = NodePath("ИзображениеChatGpt9Окт_2026Г_,155432:rotation")
+tracks/9/interp = 1
+tracks/9/loop_wrap = true
+tracks/9/keys = {
+"times": PackedFloat32Array(3.34, 5),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [0.0, 0.670651]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_ektmo"]
+_data = {
+&"RESET": SubResource("Animation_elspl"),
+&"new_animation": SubResource("Animation_5pl47"),
+&"new_animation_2": SubResource("Animation_od41v")
+}
+
+[node name="FinalLeave" type="Node2D" unique_id=2006303992]
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=1494661948]
+libraries/ = SubResource("AnimationLibrary_ektmo")
+
+[node name="Final" type="Sprite2D" parent="." unique_id=2043616643]
+position = Vector2(1140, 563.5)
+scale = Vector2(4.4492188, 4.4492188)
+texture = ExtResource("1_8n8ji")
+
+[node name="ИзображениеChatGpt9Окт_2026Г_,155428" type="Sprite2D" parent="." unique_id=1526010906]
+position = Vector2(1140, 710)
+scale = Vector2(0.86339957, 0.86339957)
+texture = ExtResource("2_g0ltl")
+
+[node name="ИзображениеChatGpt9Окт_2026Г_,155416" type="Sprite2D" parent="." unique_id=1598102778]
+position = Vector2(1092, 608)
+scale = Vector2(0.65291065, 0.65291065)
+texture = ExtResource("3_wrh0o")
+
+[node name="ИзображениеChatGpt9Окт_2026Г_,155432" type="Sprite2D" parent="." unique_id=870352192]
+position = Vector2(1064, 593)
+rotation = 0.670651
+scale = Vector2(0.61762357, 0.61762357)
+texture = ExtResource("4_ii2dt")
