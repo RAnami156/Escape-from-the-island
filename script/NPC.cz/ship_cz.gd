@@ -1,9 +1,9 @@
 extends Node2D
 
+const GOOD_FRIENDSHIP: int = 30
 
-# ============================================================
-# VARIABLES
-# ============================================================
+const FINAL_GOOD: String = "res://scene/final_leave.tscn"
+const FINAL_BAD: String = "res://scene/final2_leave.tscn"
 
 var helm: bool = false
 var sail: bool = false
@@ -13,52 +13,58 @@ var helm_repaired: bool = false
 var sail_repaired: bool = false
 var planks_repaired: bool = false
 
-
-# ============================================================
-# NODES
-# ============================================================
+var ship_ready: bool = false
+var leaving: bool = false
 
 @onready var helm_text: Label = $helm/helm_text
 @onready var sail_text: Label = $sail/sail_text
 @onready var planks_text: Label = $planks/planks_text
+@onready var final_text: Label = $final_text
 
 @onready var helm_anim: AnimatedSprite2D = $helm_anim
 @onready var sail_anim: AnimatedSprite2D = $sail_anim
 @onready var planks_anim: AnimatedSprite2D = $planks_anim
 
+@onready var ship_area: Area2D = $Area2D
 
-# ============================================================
-# READY
-# ============================================================
 
 func _ready() -> void:
-	# Руль и парус изначально не установлены
 	helm_anim.hide()
 	sail_anim.hide()
-
-	# Корпус изначально сломан
 	planks_anim.play("default")
 
+	final_text.text = "Chcete odplout?\nE — Ano"
+	final_text.hide()
+
 	update_prompts()
 
-
-# ============================================================
-# PROCESS
-# ============================================================
 
 func _process(_delta: float) -> void:
-	if Input.is_action_just_pressed("E"):
-		try_repair()
+	if leaving:
+		return
+
+	if Global.player_can_move and Input.is_action_just_pressed("E"):
+		if ship_ready:
+			if is_player_near_ship():
+				leave_island()
+		else:
+			try_repair()
 
 	update_prompts()
 
 
-# ============================================================
-# REPAIR
-# ============================================================
+func is_player_near_ship() -> bool:
+	if helm or sail or planks:
+		return true
+
+	for body in ship_area.get_overlapping_bodies():
+		if body.name == "player":
+			return true
+
+	return false
+
 
 func try_repair() -> void:
-
 	# РУЛЬ
 	if helm and not helm_repaired:
 		if Global.helm:
@@ -66,13 +72,12 @@ func try_repair() -> void:
 			Global.helm = false
 
 			helm_anim.show()
+			helm_anim.play("default")
 
 			print("Kormidelní kolo nainstalováno")
-
 			check_ship()
 
 		return
-
 
 	# ПАРУС
 	if sail and not sail_repaired:
@@ -81,13 +86,12 @@ func try_repair() -> void:
 			Global.parus = false
 
 			sail_anim.show()
+			sail_anim.play("default")
 
 			print("Plachta nainstalována")
-
 			check_ship()
 
 		return
-
 
 	# ДОСКИ
 	if planks and not planks_repaired:
@@ -98,81 +102,77 @@ func try_repair() -> void:
 			planks_anim.play("fixed")
 
 			print("Trup opraven")
-
 			check_ship()
 
 		return
 
 
-# ============================================================
-# TEXT
-# ============================================================
-
 func update_prompts() -> void:
+	helm_text.visible = helm and not helm_repaired
+	sail_text.visible = sail and not sail_repaired
+	planks_text.visible = planks and not planks_repaired
 
-	# РУЛЬ
-	if helm and not helm_repaired:
-		helm_text.show()
-
-		if Global.helm:
-			helm_text.text = "E — nainstalovat kormidelní kolo"
-		else:
-			helm_text.text = "Je potřeba kormidelní kolo"
+	if Global.helm:
+		helm_text.text = "E — nainstalovat kormidelní kolo"
 	else:
-		helm_text.hide()
+		helm_text.text = "Je potřeba kormidelní kolo"
 
-
-	# ПАРУС
-	if sail and not sail_repaired:
-		sail_text.show()
-
-		if Global.parus:
-			sail_text.text = "E — nainstalovat plachtu"
-		else:
-			sail_text.text = "Je potřeba plachta"
+	if Global.parus:
+		sail_text.text = "E — nainstalovat plachtu"
 	else:
-		sail_text.hide()
+		sail_text.text = "Je potřeba plachta"
 
-
-	# ДОСКИ
-	if planks and not planks_repaired:
-		planks_text.show()
-
-		if Global.bamboo_boards:
-			planks_text.text = "E — opravit trup"
-		else:
-			planks_text.text = "Jsou potřeba prkna"
+	if Global.bamboo_boards:
+		planks_text.text = "E — opravit trup"
 	else:
-		planks_text.hide()
+		planks_text.text = "Jsou potřeba prkna"
 
+	final_text.visible = (
+		ship_ready
+		and is_player_near_ship()
+		and not leaving
+	)
 
-# ============================================================
-# CHECK SHIP
-# ============================================================
 
 func check_ship() -> void:
 	if helm_repaired and sail_repaired and planks_repaired:
-		print("================================")
+		ship_ready = true
 		print("LOĎ JE KOMPLETNĚ OPRAVENA!")
-		print("================================")
+
+	update_prompts()
 
 
-# ============================================================
-# MAIN AREA
-# ============================================================
+func has_good_relationships() -> bool:
+	return (
+		Global.bong_friendship >= GOOD_FRIENDSHIP
+		and Global.panda_friendship >= GOOD_FRIENDSHIP
+	)
+
+
+func leave_island() -> void:
+	if leaving or not ship_ready:
+		return
+
+	leaving = true
+	final_text.hide()
+
+	var final_scene: String = FINAL_BAD
+
+	if has_good_relationships():
+		final_scene = FINAL_GOOD
+
+	var error: Error = get_tree().change_scene_to_file(final_scene)
+
+	if error != OK:
+		leaving = false
+		push_error("Nepodařilo se otevřít scénu: " + final_scene)
+		update_prompts()
+
 
 func _on_area_2d_body_entered(body: Node2D) -> void:
 	if body.name == "player":
-		print("----- INVENTORY -----")
-		print("kormidelní kolo: " + str(Global.helm))
-		print("plachta: " + str(Global.parus))
-		print("bambusová prkna: " + str(Global.bamboo_boards))
-		print("---------------------")
+		update_prompts()
 
-
-# ============================================================
-# HELM
-# ============================================================
 
 func _on_helm_body_entered(body: Node2D) -> void:
 	if body.name == "player":
@@ -186,10 +186,6 @@ func _on_helm_body_exited(body: Node2D) -> void:
 		update_prompts()
 
 
-# ============================================================
-# SAIL
-# ============================================================
-
 func _on_sail_body_entered(body: Node2D) -> void:
 	if body.name == "player":
 		sail = true
@@ -201,10 +197,6 @@ func _on_sail_body_exited(body: Node2D) -> void:
 		sail = false
 		update_prompts()
 
-
-# ============================================================
-# PLANKS
-# ============================================================
 
 func _on_planks_body_entered(body: Node2D) -> void:
 	if body.name == "player":

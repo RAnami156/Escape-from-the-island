@@ -1,6 +1,7 @@
 [gd_scene format=3 uid="uid://b1bm8o1qh3q2x"]
 
 [ext_resource type="Texture2D" uid="uid://cjwrrln1qsc4u" path="res://asets/start.png" id="1_gbpcu"]
+[ext_resource type="Script" uid="uid://cctiye8pynbmt" path="res://script/start.gd" id="1_xmel7"]
 [ext_resource type="Texture2D" uid="uid://b4prn5eco7mi5" path="res://asets/pixellab-Airplane-for-a-cut-scene--side-1791530251417.png" id="2_xmel7"]
 
 [sub_resource type="Animation" id="Animation_bhewb"]
@@ -161,6 +162,7 @@ _data = {
 }
 
 [node name="Start" type="Node2D" unique_id=1375026598]
+script = ExtResource("1_xmel7")
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=1338120163]
 libraries/ = SubResource("AnimationLibrary_srnb1")

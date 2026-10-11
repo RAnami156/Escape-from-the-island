@@ -2,22 +2,25 @@
 
 [ext_resource type="Script" uid="uid://db74xsmjtjjfh" path="res://script/NPC.cz/ship_cz.gd" id="1_bf7x5"]
 [ext_resource type="Texture2D" uid="uid://b3m7ure7qfvmn" path="res://asets/Изображение ChatGPT 30 сент. 2026 г., 11_24_51.png" id="1_t11qm"]
-[ext_resource type="Texture2D" uid="uid://dimul3fjf4dy" path="res://asets/Sprite-0001-Sheet (1).png" id="2_fbih1"]
+[ext_resource type="Texture2D" uid="uid://bejw2d8omv55h" path="res://asets/boat(Vrstva 1) _0001.png" id="2_j3ojk"]
+[ext_resource type="Texture2D" uid="uid://cwp7vqu0p2jaf" path="res://asets/boat(Vrstva 2) _0001.png" id="3_imrw8"]
 [ext_resource type="FontFile" uid="uid://cngqnpge8crta" path="res://asets/r-classic_8.ttf" id="4_fbih1"]
+[ext_resource type="Texture2D" uid="uid://c4n5k1tplsng0" path="res://asets/boat(Vrstva 4) _0001.png" id="4_luj81"]
+[ext_resource type="Texture2D" uid="uid://l5mpxh7i7m6b" path="res://asets/boat(Vrstva 3) _0001.png" id="5_d5n2l"]
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_l7n8u"]
-atlas = ExtResource("2_fbih1")
+[sub_resource type="AtlasTexture" id="AtlasTexture_jm20t"]
+atlas = ExtResource("2_j3ojk")
 region = Rect2(0, 0, 64, 64)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_dn8y5"]
-atlas = ExtResource("2_fbih1")
-region = Rect2(64, 0, 64, 64)
+[sub_resource type="AtlasTexture" id="AtlasTexture_367kx"]
+atlas = ExtResource("3_imrw8")
+region = Rect2(0, 0, 64, 64)
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_c105b"]
 animations = [{
 "frames": [{
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_l7n8u")
+"texture": SubResource("AtlasTexture_jm20t")
 }],
 "loop": 1,
 "name": &"default",
@@ -25,37 +28,37 @@ animations = [{
 }, {
 "frames": [{
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_dn8y5")
+"texture": SubResource("AtlasTexture_367kx")
 }],
 "loop": 1,
 "name": &"fixed",
 "speed": 5.0
 }]
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_j3ojk"]
-atlas = ExtResource("2_fbih1")
-region = Rect2(192, 0, 64, 64)
+[sub_resource type="AtlasTexture" id="AtlasTexture_mi0n1"]
+atlas = ExtResource("4_luj81")
+region = Rect2(0, 0, 64, 64)
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_x244a"]
 animations = [{
 "frames": [{
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_j3ojk")
+"texture": SubResource("AtlasTexture_mi0n1")
 }],
 "loop": 1,
 "name": &"default",
 "speed": 5.0
 }]
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_imrw8"]
-atlas = ExtResource("2_fbih1")
-region = Rect2(128, 0, 64, 64)
+[sub_resource type="AtlasTexture" id="AtlasTexture_8f8vr"]
+atlas = ExtResource("5_d5n2l")
+region = Rect2(0, 0, 64, 64)
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_4u7eh"]
 animations = [{
 "frames": [{
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_imrw8")
+"texture": SubResource("AtlasTexture_8f8vr")
 }],
 "loop": 1,
 "name": &"default",
@@ -81,7 +84,6 @@ script = ExtResource("1_bf7x5")
 position = Vector2(-23.000006, 24)
 scale = Vector2(4.125, 4.125)
 sprite_frames = SubResource("SpriteFrames_c105b")
-animation = &"fixed"
 autoplay = "default"
 
 [node name="sail_anim" type="AnimatedSprite2D" parent="." unique_id=682109177]
@@ -163,6 +165,15 @@ offset_bottom = 70.0
 scale = Vector2(0.4, 0.4)
 theme_override_fonts/font = ExtResource("4_fbih1")
 text = "planks"
+
+[node name="final_text" type="Label" parent="." unique_id=236871488]
+z_index = 1
+offset_left = -80.0
+offset_top = -53.0
+offset_right = 3.0
+offset_bottom = -30.0
+theme_override_fonts/font = ExtResource("4_fbih1")
+text = "67 ребята"
 
 [connection signal="body_entered" from="Area2D" to="." method="_on_area_2d_body_entered"]
 [connection signal="body_entered" from="helm" to="." method="_on_helm_body_entered"]

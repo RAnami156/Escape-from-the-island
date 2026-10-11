@@ -1,6 +1,7 @@
 [gd_scene format=3 uid="uid://b1uktiomc6lsj"]
 
 [ext_resource type="Texture2D" uid="uid://cf27h58y7irs4" path="res://asets/final.png" id="1_8n8ji"]
+[ext_resource type="Script" uid="uid://ddp7nkgndgqil" path="res://script/final_cutscene.gd" id="1_g0ltl"]
 [ext_resource type="Texture2D" uid="uid://uvqk0ibtdrbo" path="res://asets/Изображение ChatGPT 9 окт. 2026 г., 15_54_28.png" id="2_g0ltl"]
 [ext_resource type="Texture2D" uid="uid://c0wmi64a4k1wl" path="res://asets/Изображение ChatGPT 9 окт. 2026 г., 15_54_16.png" id="3_wrh0o"]
 [ext_resource type="Texture2D" uid="uid://b1wucxim46ic7" path="res://asets/Изображение ChatGPT 9 окт. 2026 г., 15_54_32.png" id="4_ii2dt"]
@@ -288,6 +289,7 @@ _data = {
 }
 
 [node name="FinalLeave" type="Node2D" unique_id=2006303992]
+script = ExtResource("1_g0ltl")
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=1494661948]
 libraries/ = SubResource("AnimationLibrary_ektmo")
