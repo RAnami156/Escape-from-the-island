@@ -985,6 +985,7 @@ load_path = "res://.godot/imported/water.png-86a2f2d48b2146be0a3e368e2d254be2.ct
 radius = 17.58789
 
 [node name="main" type="Node2D" unique_id=1160497426]
+position = Vector2(38, -77)
 metadata/_edit_horizontal_guides_ = [2780.0]
 
 [node name="Istockphoto182361617612x612" type="Sprite2D" parent="." unique_id=1747862034]
@@ -1044,7 +1045,7 @@ position = Vector2(5616, 5757)
 
 [node name="player" parent="." unique_id=1884075297 instance=ExtResource("2_v0l8b")]
 z_index = 50
-position = Vector2(5562, 5771)
+position = Vector2(7184, 2157)
 
 [node name="Camera2D" type="Camera2D" parent="player" unique_id=945813532]
 position = Vector2(-2, -59)
@@ -1081,10 +1082,10 @@ layer_4/tile_data = PackedInt32Array(6226114, 458753, 7, 6029511, 458753, 7, 675
 
 [node name="TextureRect" type="TextureRect" parent="TileMap" unique_id=1633089459]
 texture_repeat = 2
-offset_left = 472.7694
-offset_top = -433.64087
-offset_right = 10067.09
-offset_bottom = 7360.1543
+offset_left = 468.77136
+offset_top = -437.55667
+offset_right = 10063.092
+offset_bottom = 7356.2383
 texture = SubResource("CompressedTexture2D_tv8i1")
 expand_mode = 1
 stretch_mode = 1
