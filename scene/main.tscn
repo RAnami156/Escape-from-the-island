@@ -1006,6 +1006,9 @@ texture = ExtResource("1_p1hux")
 [node name="bong" parent="." unique_id=1644685617 instance=ExtResource("2_wp4xf")]
 z_index = 6
 position = Vector2(3248, 3258)
+whiskey_spawn_bamboo_forest = Vector2(4150, 2450)
+whiskey_spawn_west_beach_baobab = Vector2(2930, 3850)
+whiskey_spawn_plane_wreck = Vector2(7210, 2050)
 
 [node name="TileMap_for_bong" parent="bong" unique_id=1447866751 instance=ExtResource("4_v2gmf")]
 position = Vector2(-3407, -3154)
@@ -1021,6 +1024,9 @@ texture = ExtResource("14_hybxs")
 [node name="flycather" parent="." unique_id=1394519417 instance=ExtResource("4_0ha60")]
 z_index = 5
 position = Vector2(5088, 4890)
+fly_spawn_swamp_forest = Vector2(4900, 4700)
+fly_spawn_east_crash_beach = Vector2(7300, 2300)
+fly_spawn_west_coast = Vector2(4180, 4650)
 
 [node name="PointLight2D" type="PointLight2D" parent="flycather" unique_id=718991273]
 position = Vector2(1, -1)
@@ -1032,6 +1038,8 @@ texture = ExtResource("14_hybxs")
 [node name="panda" parent="." unique_id=89727642 instance=ExtResource("5_0ha60")]
 z_index = 5
 position = Vector2(6002, 1490)
+book_spawn_temple = Vector2(4500, 1750)
+book_spawn_plane_beach = Vector2(7350, 2100)
 
 [node name="PointLight2D" type="PointLight2D" parent="panda" unique_id=2104994529]
 position = Vector2(9, -8)
@@ -1045,14 +1053,14 @@ position = Vector2(5616, 5757)
 
 [node name="player" parent="." unique_id=1884075297 instance=ExtResource("2_v0l8b")]
 z_index = 50
-position = Vector2(7184, 2157)
+position = Vector2(5098, 5015)
 
 [node name="Camera2D" type="Camera2D" parent="player" unique_id=945813532]
 position = Vector2(-2, -59)
 zoom = Vector2(5, 5)
 position_smoothing_enabled = true
 script = ExtResource("4_brvut")
-max_zoom = 7.0
+max_zoom = 1.0
 
 [node name="StaticBody2D" type="StaticBody2D" parent="." unique_id=1554261429]
 

@@ -1,79 +1,58 @@
 extends Camera2D
 
-# =========================
-# НАСТРОЙКИ ЗУМА
-# =========================
+const MIN_ZOOM: float = 2.0
+const MAX_ZOOM: float = 5.0
 
-@export var min_zoom: float = 0.15
-@export var max_zoom: float = 5.0
-
-# Скорость колесика мыши
 @export var mouse_zoom_speed: float = 0.08
-
-# Чувствительность Trackpad
-# Чем меньше значение — тем больше нужно двигать пальцами
 @export var trackpad_sensitivity: float = 0.25
-
-# Плавность зума
 @export var zoom_smoothness: float = 4.0
 
-
-var target_zoom: Vector2 = Vector2.ONE
+var target_zoom: float = MAX_ZOOM
 
 
 func _ready() -> void:
-	target_zoom = zoom
+	target_zoom = clampf(zoom.x, MIN_ZOOM, MAX_ZOOM)
+	zoom = Vector2.ONE * target_zoom
 
 
 func _process(delta: float) -> void:
-	# Плавное приближение к целевому зуму
-	var smooth_amount: float = 1.0 - exp(-zoom_smoothness * delta)
+	var weight: float = 1.0 - exp(
+		-maxf(zoom_smoothness, 0.01) * delta
+	)
 
-	zoom = zoom.lerp(
-		target_zoom,
-		smooth_amount
+	var current_zoom: float = clampf(
+		zoom.x, MIN_ZOOM, MAX_ZOOM
+	)
+
+	zoom = Vector2.ONE * lerpf(
+		current_zoom, target_zoom, weight
 	)
 
 
 func _unhandled_input(event: InputEvent) -> void:
-
-	# =========================
-	# КОЛЕСО МЫШИ
-	# =========================
-
 	if event is InputEventMouseButton:
+		if not event.pressed:
+			return
 
-		if event.button_index == MOUSE_BUTTON_WHEEL_UP:
-			change_zoom(mouse_zoom_speed)
+		match event.button_index:
+			MOUSE_BUTTON_WHEEL_UP:
+				change_zoom(mouse_zoom_speed)
+				get_viewport().set_input_as_handled()
 
-		elif event.button_index == MOUSE_BUTTON_WHEEL_DOWN:
-			change_zoom(-mouse_zoom_speed)
-
-
-	# =========================
-	# MAC TRACKPAD
-	# ДВА ПАЛЬЦА
-	# =========================
+			MOUSE_BUTTON_WHEEL_DOWN:
+				change_zoom(-mouse_zoom_speed)
+				get_viewport().set_input_as_handled()
 
 	elif event is InputEventMagnifyGesture:
-
-		var amount: float = (event.factor - 1.0) * trackpad_sensitivity
-
-		change_zoom(amount)
+		change_zoom(
+			(event.factor - 1.0) * trackpad_sensitivity
+		)
+		get_viewport().set_input_as_handled()
 
 
 func change_zoom(amount: float) -> void:
-
-	var new_zoom_value: float = target_zoom.x + amount
-
-	# Ограничение зума
-	new_zoom_value = clamp(
-		new_zoom_value,
-		min_zoom,
-		max_zoom
-	)
-
-	target_zoom = Vector2(
-		new_zoom_value,
-		new_zoom_value
+	target_zoom = clampf(
+		target_zoom + amount,
+		MIN_ZOOM,
+		MAX_ZOOM
 	)
