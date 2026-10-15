@@ -247,7 +247,7 @@ animations = [{
 [node name="flycather" type="CharacterBody2D" unique_id=1644685617]
 collision_mask = 0
 script = ExtResource("1_bof67")
-characters_per_line = 75
+characters_per_line = 126
 fly_scene = ExtResource("2_wa8mu")
 
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=1597038166]

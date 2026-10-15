@@ -1053,14 +1053,13 @@ position = Vector2(5616, 5757)
 
 [node name="player" parent="." unique_id=1884075297 instance=ExtResource("2_v0l8b")]
 z_index = 50
-position = Vector2(5098, 5015)
+position = Vector2(5995, 1595)
 
 [node name="Camera2D" type="Camera2D" parent="player" unique_id=945813532]
-position = Vector2(-2, -59)
+position = Vector2(-1, -27)
 zoom = Vector2(5, 5)
 position_smoothing_enabled = true
 script = ExtResource("4_brvut")
-max_zoom = 1.0
 
 [node name="StaticBody2D" type="StaticBody2D" parent="." unique_id=1554261429]
 
@@ -1205,7 +1204,7 @@ texture = ExtResource("11_wscrc")
 
 [node name="Mountains(2)3" type="Sprite2D" parent="structures" unique_id=327084301]
 z_index = 4
-position = Vector2(6538, 4255.7676)
+position = Vector2(6532, 4222)
 texture = ExtResource("11_wscrc")
 
 [node name="Mountains(1)4" type="Sprite2D" parent="structures" unique_id=936298120]
@@ -1249,3 +1248,9 @@ texture = ExtResource("11_wscrc")
 z_index = 2
 position = Vector2(4543, 3347)
 texture = ExtResource("19_0vlqb")
+
+[node name="StaticBody2D2" type="StaticBody2D" parent="." unique_id=1058407214]
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="StaticBody2D2" unique_id=1324782808]
+position = Vector2(1, -6)
+polygon = PackedVector2Array(3057, 1813, 3131, 1726, 3195, 1695, 3369, 1581, 3468, 1551, 3907, 1388, 4184, 1293, 4672, 1231, 4714, 1234, 4734, 1209, 6072, 1209, 6581, 1432, 6909, 1731, 6998, 1907, 7002, 1976, 7039, 1989, 7093, 1990, 7155, 1938, 7226, 1865, 7473, 1863, 7506, 1907, 7549, 1937, 7555, 1968, 7559, 2322, 7557, 2531, 7526, 2537, 7523, 2671, 7473, 2696, 7449, 2752, 7390, 2959, 7272, 3218, 7273, 3905, 7175, 3901, 7142, 3934, 7138, 4250, 7058, 4327, 6618, 4328, 6688, 4201, 6818, 4140, 6880, 4115, 6835, 3963, 6715, 4024, 6560, 4099, 6443, 4217, 6292, 4357, 5660, 4449, 5779, 4585, 5791, 4666, 6116, 5018, 6563, 5378, 6649, 5548, 6570, 5645, 6505, 5550, 6432, 5553, 5780, 5657, 5760, 5757, 5784, 5795, 5742, 5809, 5700, 5809, 5482, 5802, 5410, 5815, 5413, 5900, 4998, 5903, 4997, 5810, 4775, 5801, 4278, 5657, 3906, 5399, 3538, 5012, 3404, 4685, 3365, 4305, 3303, 4306, 3297, 4264, 2884, 4089, 2756, 3841, 2753, 3421, 2801, 3338, 2854, 3306, 2894, 3150, 2940, 3038, 2975, 2878, 3043, 2663, 3126, 2519, 3218, 2346, 3326, 2121, 3356, 2001, 3310, 1901, 3186, 1856, 3106, 1824, 3060, 1830, 3043, 1837, 3232, 2032, 2981, 2406, 2773, 2996, 2507, 3572, 2796, 4869, 3927, 5756, 5931, 6085, 6374, 6001, 6898, 5832, 7191, 5469, 6911, 5274, 6392, 4777, 6250, 4608, 6756, 4520, 7417, 4502, 7488, 3729, 7568, 3148, 7865, 2403, 7634, 1587, 6995, 1132, 5699, 1008, 3238, 1354, 2914, 1549, 2996, 1778)
