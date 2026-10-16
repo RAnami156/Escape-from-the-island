@@ -62,7 +62,7 @@ tracks/1/keys = {
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_8ri5r"]
 _data = {
 &"RESET": SubResource("Animation_elspl"),
-&"new_animation": SubResource("Animation_5pl47")
+&"leave": SubResource("Animation_5pl47")
 }
 
 [node name="FinalLeave" type="Node2D" unique_id=2006303992]

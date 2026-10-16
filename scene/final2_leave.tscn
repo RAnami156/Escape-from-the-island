@@ -129,34 +129,6 @@ tracks/9/keys = {
 "values": [0.670651]
 }
 
-[sub_resource type="Animation" id="Animation_5pl47"]
-resource_name = "new_animation"
-length = 8.0
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("ИзображениеChatGpt9Окт_2026Г_,155428:position")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0, 8),
-"transitions": PackedFloat32Array(1, 1),
-"update": 0,
-"values": [Vector2(1140, 710), Vector2(1116, 565)]
-}
-tracks/1/type = "value"
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/path = NodePath("ИзображениеChatGpt9Окт_2026Г_,155428:scale")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/keys = {
-"times": PackedFloat32Array(0, 8),
-"transitions": PackedFloat32Array(1, 1),
-"update": 0,
-"values": [Vector2(0.86339957, 0.86339957), Vector2(0.09077981, 0.09077981)]
-}
-
 [sub_resource type="Animation" id="Animation_od41v"]
 resource_name = "new_animation_2"
 length = 6.0333333
@@ -281,11 +253,39 @@ tracks/9/keys = {
 "values": [0.0, 0.670651]
 }
 
+[sub_resource type="Animation" id="Animation_5pl47"]
+resource_name = "new_animation"
+length = 8.0
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("ИзображениеChatGpt9Окт_2026Г_,155428:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 8),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector2(1140, 710), Vector2(1116, 565)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("ИзображениеChatGpt9Окт_2026Г_,155428:scale")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 8),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector2(0.86339957, 0.86339957), Vector2(0.09077981, 0.09077981)]
+}
+
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_ektmo"]
 _data = {
 &"RESET": SubResource("Animation_elspl"),
-&"new_animation": SubResource("Animation_5pl47"),
-&"new_animation_2": SubResource("Animation_od41v")
+&"leave2": SubResource("Animation_od41v"),
+&"new_animation": SubResource("Animation_5pl47")
 }
 
 [node name="FinalLeave" type="Node2D" unique_id=2006303992]

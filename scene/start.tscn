@@ -3,6 +3,9 @@
 [ext_resource type="Texture2D" uid="uid://cjwrrln1qsc4u" path="res://asets/start.png" id="1_gbpcu"]
 [ext_resource type="Script" uid="uid://cctiye8pynbmt" path="res://script/start.gd" id="1_xmel7"]
 [ext_resource type="Texture2D" uid="uid://b4prn5eco7mi5" path="res://asets/pixellab-Airplane-for-a-cut-scene--side-1791530251417.png" id="2_xmel7"]
+[ext_resource type="Texture2D" uid="uid://diyf6vqg8jkci" path="res://asets/smoke_0001.png" id="3_bnuxd"]
+[ext_resource type="Texture2D" uid="uid://dgd5kdy76n0qt" path="res://asets/smoke_0002.png" id="4_srnb1"]
+[ext_resource type="Texture2D" uid="uid://jag0jslehj76" path="res://asets/smoke_0003.png" id="5_7xr4q"]
 
 [sub_resource type="Animation" id="Animation_bhewb"]
 length = 0.001
@@ -78,10 +81,34 @@ tracks/5/keys = {
 "update": 0,
 "values": [Color(1, 1, 1, 1)]
 }
+tracks/6/type = "value"
+tracks/6/imported = false
+tracks/6/enabled = true
+tracks/6/path = NodePath("AnimatedSprite2D:position")
+tracks/6/interp = 1
+tracks/6/loop_wrap = true
+tracks/6/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(2025, 191)]
+}
+tracks/7/type = "value"
+tracks/7/imported = false
+tracks/7/enabled = true
+tracks/7/path = NodePath("AnimatedSprite2D:modulate")
+tracks/7/interp = 1
+tracks/7/loop_wrap = true
+tracks/7/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 1)]
+}
 
 [sub_resource type="Animation" id="Animation_bnuxd"]
 resource_name = "new_animation"
-length = 8.466666
+length = 3.0
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
@@ -89,7 +116,7 @@ tracks/0/path = NodePath("PixellabAirplaneForACutSceneSide1791530251417:position
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
-"times": PackedFloat32Array(0, 7.99),
+"times": PackedFloat32Array(0, 2.498333),
 "transitions": PackedFloat32Array(1, 1),
 "update": 0,
 "values": [Vector2(2050, 179), Vector2(400, 496)]
@@ -101,7 +128,7 @@ tracks/1/path = NodePath("PixellabAirplaneForACutSceneSide1791530251417:rotation
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
-"times": PackedFloat32Array(0, 7.99),
+"times": PackedFloat32Array(0, 2.498333),
 "transitions": PackedFloat32Array(1, 1),
 "update": 0,
 "values": [0.0, 0.0]
@@ -113,7 +140,7 @@ tracks/2/path = NodePath("PixellabAirplaneForACutSceneSide1791530251417:scale")
 tracks/2/interp = 1
 tracks/2/loop_wrap = true
 tracks/2/keys = {
-"times": PackedFloat32Array(0, 7.99),
+"times": PackedFloat32Array(0, 2.498333),
 "transitions": PackedFloat32Array(1, 1),
 "update": 0,
 "values": [Vector2(1, 1), Vector2(1, 1)]
@@ -125,7 +152,7 @@ tracks/3/path = NodePath("PixellabAirplaneForACutSceneSide1791530251417:visible"
 tracks/3/interp = 1
 tracks/3/loop_wrap = true
 tracks/3/keys = {
-"times": PackedFloat32Array(0, 8),
+"times": PackedFloat32Array(0, 2.5083332),
 "transitions": PackedFloat32Array(1, 1),
 "update": 1,
 "values": [true, false]
@@ -137,7 +164,7 @@ tracks/4/path = NodePath("Start:modulate")
 tracks/4/interp = 1
 tracks/4/loop_wrap = true
 tracks/4/keys = {
-"times": PackedFloat32Array(7.4, 8),
+"times": PackedFloat32Array(1.9083333, 2.5),
 "transitions": PackedFloat32Array(1, 1),
 "update": 0,
 "values": [Color(1, 1, 1, 1), Color(0, 0, 0, 1)]
@@ -149,7 +176,31 @@ tracks/5/path = NodePath("PixellabAirplaneForACutSceneSide1791530251417:modulate
 tracks/5/interp = 1
 tracks/5/loop_wrap = true
 tracks/5/keys = {
-"times": PackedFloat32Array(7.4, 7.99),
+"times": PackedFloat32Array(1.9083333, 2.498333),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 1), Color(0, 0, 0, 1)]
+}
+tracks/6/type = "value"
+tracks/6/imported = false
+tracks/6/enabled = true
+tracks/6/path = NodePath("AnimatedSprite2D:position")
+tracks/6/interp = 1
+tracks/6/loop_wrap = true
+tracks/6/keys = {
+"times": PackedFloat32Array(0, 2.5),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector2(2025, 191), Vector2(380.99997, 506.00003)]
+}
+tracks/7/type = "value"
+tracks/7/imported = false
+tracks/7/enabled = true
+tracks/7/path = NodePath("AnimatedSprite2D:modulate")
+tracks/7/interp = 1
+tracks/7/loop_wrap = true
+tracks/7/keys = {
+"times": PackedFloat32Array(1.9000001, 2.5),
 "transitions": PackedFloat32Array(1, 1),
 "update": 0,
 "values": [Color(1, 1, 1, 1), Color(0, 0, 0, 1)]
@@ -158,8 +209,25 @@ tracks/5/keys = {
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_srnb1"]
 _data = {
 &"RESET": SubResource("Animation_bhewb"),
-&"new_animation": SubResource("Animation_bnuxd")
+&"start": SubResource("Animation_bnuxd")
 }
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_ujs4p"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("3_bnuxd")
+}, {
+"duration": 1.0,
+"texture": ExtResource("4_srnb1")
+}, {
+"duration": 1.0,
+"texture": ExtResource("5_7xr4q")
+}],
+"loop": 1,
+"name": &"default",
+"speed": 5.0
+}]
 
 [node name="Start" type="Node2D" unique_id=1375026598]
 script = ExtResource("1_xmel7")
@@ -176,3 +244,9 @@ texture = ExtResource("1_gbpcu")
 [node name="PixellabAirplaneForACutSceneSide1791530251417" type="Sprite2D" parent="." unique_id=920737782]
 position = Vector2(2050, 179)
 texture = ExtResource("2_xmel7")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=115789779]
+position = Vector2(2025, 191)
+scale = Vector2(1.679688, 1.59375)
+sprite_frames = SubResource("SpriteFrames_ujs4p")
+frame_progress = 0.38601354
