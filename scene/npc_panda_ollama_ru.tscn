@@ -119,10 +119,10 @@ animations = [{
 }]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_c105b"]
-size = Vector2(92, 128)
+size = Vector2(67, 102)
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_c105b"]
-radius = 64.28063
+radius = 66.007576
 
 [sub_resource type="GDScript" id="GDScript_trtyr"]
 script/source = "extends Node2D
@@ -203,7 +203,7 @@ scale = Vector2(1.2916666, 1.2916666)
 texture = ExtResource("3_fie2b")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=381386820]
-position = Vector2(0, -3)
+position = Vector2(-0.5, 13)
 shape = SubResource("RectangleShape2D_c105b")
 
 [node name="Area2D" type="Area2D" parent="." unique_id=1897364586]
@@ -211,7 +211,7 @@ collision_layer = 0
 collision_mask = 2
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D" unique_id=224326009]
-position = Vector2(0, -2)
+position = Vector2(-1, 21)
 shape = SubResource("CircleShape2D_c105b")
 
 [node name="HTTPRequest" type="HTTPRequest" parent="." unique_id=827291519]

@@ -9,10 +9,10 @@
 [ext_resource type="Texture2D" uid="uid://dmheejmj7v25v" path="res://asets/plant-Sheet.png" id="6_wa8mu"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_x244a"]
-radius = 18.027756
+radius = 56.718605
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_c105b"]
-radius = 64.28063
+radius = 67.0
 
 [sub_resource type="GDScript" id="GDScript_trtyr"]
 script/source = "extends Node2D
@@ -256,6 +256,7 @@ scale = Vector2(0.21875, 0.21875)
 texture = ExtResource("2_p7tar")
 
 [node name="CollisionShape" type="CollisionShape2D" parent="." unique_id=265874397]
+position = Vector2(-2, -7)
 shape = SubResource("CircleShape2D_x244a")
 
 [node name="Area2D" type="Area2D" parent="." unique_id=1897364586]
@@ -375,6 +376,7 @@ sprite_frames = SubResource("SpriteFrames_c105b")
 autoplay = "default"
 
 [node name="monkey" type="AnimatedSprite2D" parent="." unique_id=448478908]
+position = Vector2(-1, -1)
 sprite_frames = SubResource("SpriteFrames_x244a")
 animation = &"Thinking"
 frame_progress = 0.42144775
