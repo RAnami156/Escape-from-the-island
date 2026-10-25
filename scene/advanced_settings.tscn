@@ -1,0 +1,74 @@
+[gd_scene format=3 uid="uid://bokrk1sir407r"]
+
+[ext_resource type="Script" uid="uid://cmbhpnlum6hdu" path="res://scene/advanced_settings.gd" id="1_x1s76"]
+[ext_resource type="FontFile" uid="uid://dxa4u7yhh3vnh" path="res://asets/1 Minecraft-Regular.otf" id="2_sb6yy"]
+
+[node name="advanced_settings" type="CanvasLayer" unique_id=1963392657]
+process_mode = 3
+layer = 10
+visible = false
+script = ExtResource("1_x1s76")
+
+[node name="Label" type="Label" parent="." unique_id=1562306602]
+offset_left = 197.0
+offset_top = 155.0
+offset_right = 280.0
+offset_bottom = 178.0
+theme_override_fonts/font = ExtResource("2_sb6yy")
+text = "teleport to:"
+
+[node name="tp_bong" type="Button" parent="." unique_id=1716911269]
+offset_left = 129.0
+offset_top = 227.0
+offset_right = 431.0
+offset_bottom = 307.0
+theme_override_fonts/font = ExtResource("2_sb6yy")
+text = "Bong"
+
+[node name="tp_panda" type="Button" parent="." unique_id=118097248]
+offset_left = 126.0
+offset_top = 356.0
+offset_right = 428.0
+offset_bottom = 436.0
+theme_override_fonts/font = ExtResource("2_sb6yy")
+text = "Panda"
+
+[node name="tp_flycatcher" type="Button" parent="." unique_id=1104816632]
+offset_left = 123.0
+offset_top = 483.0
+offset_right = 425.0
+offset_bottom = 563.0
+theme_override_fonts/font = ExtResource("2_sb6yy")
+text = "Flycatcher"
+
+[node name="tp_ship" type="Button" parent="." unique_id=709881770]
+offset_left = 121.0
+offset_top = 619.0
+offset_right = 423.0
+offset_bottom = 699.0
+theme_override_fonts/font = ExtResource("2_sb6yy")
+text = "ship
+"
+
+[node name="tp_baobab" type="Button" parent="." unique_id=25592361]
+offset_left = 117.0
+offset_top = 745.0
+offset_right = 419.0
+offset_bottom = 825.0
+theme_override_fonts/font = ExtResource("2_sb6yy")
+text = "baobab"
+
+[node name="Label2" type="Label" parent="." unique_id=1568442597]
+offset_left = 455.0
+offset_top = 15.0
+offset_right = 1395.0
+offset_bottom = 152.0
+theme_override_fonts/font = ExtResource("2_sb6yy")
+theme_override_font_sizes/font_size = 100
+text = "advanced_settings"
+
+[connection signal="pressed" from="tp_bong" to="." method="_on_tp_bong_pressed"]
+[connection signal="pressed" from="tp_panda" to="." method="_on_tp_panda_pressed"]
+[connection signal="pressed" from="tp_flycatcher" to="." method="_on_tp_flycatcher_pressed"]
+[connection signal="pressed" from="tp_ship" to="." method="_on_tp_ship_pressed"]
+[connection signal="pressed" from="tp_baobab" to="." method="_on_tp_baobab_pressed"]

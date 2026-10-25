@@ -30,7 +30,7 @@ var waiting_for_response: bool = false
 
 var npc_name: String = "Baron Kong"
 var max_reply_characters: int = 220
-const CHARS_PER_LINE: int = 46
+const CHARS_PER_LINE: int = 126
 
 var conversation_history: Array = []
 var max_history: int = 12

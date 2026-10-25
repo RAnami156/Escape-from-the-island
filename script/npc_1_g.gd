@@ -83,7 +83,7 @@ var max_reply_characters: int = 140
 var max_lines: int = 3
 
 @export_range(20, 80, 1)
-var chars_per_line: int = 51
+var chars_per_line: int = 126
 
 @export_range(0.01, 0.1, 0.005)
 var type_delay: float = 0.035

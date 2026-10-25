@@ -57,8 +57,8 @@ position = Vector2(966, 538)
 texture = ExtResource("2_bo06a")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=1964517535]
-position = Vector2(982, 550.49994)
-scale = Vector2(0.99895835, 0.9842594)
+position = Vector2(960, 538.25006)
+scale = Vector2(0.99895835, 1.0078704)
 sprite_frames = SubResource("SpriteFrames_c105b")
 autoplay = "default"
 
@@ -93,3 +93,4 @@ popup/item_1/id = 1
 
 [connection signal="pressed" from="exit" to="." method="_on_exit_pressed"]
 [connection signal="pressed" from="play" to="." method="_on_play_pressed"]
+[connection signal="item_selected" from="OptionButton" to="." method="_on_option_button_item_selected"]

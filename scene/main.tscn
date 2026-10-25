@@ -19,7 +19,11 @@
 [ext_resource type="Texture2D" uid="uid://dw8h0ov6hnimw" path="res://asets/water_sand.png" id="14_smf0o"]
 [ext_resource type="Texture2D" uid="uid://rc3vuofaefmc" path="res://asets/mud.png" id="15_tv8i1"]
 [ext_resource type="Texture2D" uid="uid://coau48wxlq24o" path="res://asets/menu/loop_v1/beach.png" id="16_gjnwh"]
+[ext_resource type="Texture2D" uid="uid://vcawvtneyk7q" path="res://asets/Baobab100%ByRavan.png" id="17_fdqew"]
 [ext_resource type="Texture2D" uid="uid://cs1ac3pm6s0rl" path="res://asets/exec-e5961270-6e49-42ea-a409-b605c1b902b6.png" id="19_0vlqb"]
+[ext_resource type="PackedScene" uid="uid://bokrk1sir407r" path="res://scene/advanced_settings.tscn" id="20_advanced_settings"]
+[ext_resource type="Script" path="res://script/main.gd" id="21_main"]
+[ext_resource type="Script" path="res://script/quest_route.gd" id="22_quest_route"]
 
 [sub_resource type="CompressedTexture2D" id="CompressedTexture2D_brvut"]
 
@@ -1098,6 +1102,7 @@ load_path = "res://.godot/imported/water.png-86a2f2d48b2146be0a3e368e2d254be2.ct
 radius = 17.58789
 
 [node name="main" type="Node2D" unique_id=1160497426]
+script = ExtResource("21_main")
 y_sort_enabled = true
 position = Vector2(38, -77)
 metadata/_edit_horizontal_guides_ = [2780.0]
@@ -1218,15 +1223,27 @@ layer_4/tile_data = PackedInt32Array(6226114, 458753, 7, 6029511, 458753, 7, 675
 
 [node name="TextureRect" type="TextureRect" parent="TileMap" unique_id=1633089459]
 texture_repeat = 2
-offset_left = 468.77136
-offset_top = -437.55667
-offset_right = 10063.092
-offset_bottom = 7356.2383
+offset_left = 362.82303
+offset_top = -276.04242
+offset_right = 9957.144
+offset_bottom = 7517.7524
 texture = SubResource("CompressedTexture2D_tv8i1")
 expand_mode = 1
 stretch_mode = 1
 
 [node name="structures" type="Node2D" parent="." unique_id=1837438347]
+
+[node name="Baobab100_byRavan" type="Sprite2D" parent="structures" unique_id=1041934492]
+z_index = 2
+y_sort_enabled = true
+position = Vector2(3048.9998, 3897)
+scale = Vector2(1.0004878, 1.021582)
+texture = ExtResource("17_fdqew")
+
+[node name="StaticBody2D" type="StaticBody2D" parent="structures/Baobab100_byRavan" unique_id=2096012889]
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="structures/Baobab100_byRavan/StaticBody2D" unique_id=2121985049]
+polygon = PackedVector2Array(25.987549, 10.767578, 30.985107, 29.36621, 38.9812, 28.387207, 46.977295, 27.408447, 49.97583, 33.28174, 53.973877, 38.176025, 60.97046, 35.239502, 64.968506, 38.176025, 66.96753, 44.049316, 67.96704, 53.838135, 70.965576, 61.668945, 76.96265, 69.5, 85.95825, 81.24658, 85.95825, 85.16211, 76.96265, 86.14087, 75.963135, 96.90845, 53.973877, 97.88745, 36.982178, 99.845215, 0.99975586, 98.86621, -17.990967, 99.845215, -28.985596, 101.80298, -36.98169, 96.90845, -41.979248, 92.01416, -52.973877, 92.99292, -68.966064, 97.88745, -82.95923, 97.88745, -81.95972, 92.01416, -75.96265, 90.0564, -69.965576, 87.11987, -85.95776, 82.22534, -82.95923, 73.41553, -71.9646, 61.668945, -63.968506, 55.7959, -74.963135, 52.85913, -71.9646, 46.00708, -66.96704, 42.091553, -61.969482, 43.070313, -56.971924, 43.070313, -49.97534, 39.15503, -50.974854, 34.260498, -52.973877, 32.302734, -40.979736, 28.387207, -32.983643, 29.36621, -28.985596, 19.577393, -27.986084, 10.767578)
 
 [node name="ExecDd02c218Bec745d392EaBe1141136940" type="Sprite2D" parent="structures" unique_id=540621790]
 z_index = 2
@@ -1377,6 +1394,11 @@ texture = ExtResource("11_wscrc")
 z_index = 2
 position = Vector2(4543, 3347)
 texture = ExtResource("19_0vlqb")
+
+[node name="advanced_settings" parent="." instance=ExtResource("20_advanced_settings")]
+
+[node name="QuestRoute" type="Node2D" parent="."]
+script = ExtResource("22_quest_route")
 
 [node name="StaticBody2D2" type="StaticBody2D" parent="." unique_id=1058407214]
 

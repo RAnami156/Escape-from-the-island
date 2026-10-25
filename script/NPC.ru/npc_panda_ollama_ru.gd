@@ -32,7 +32,7 @@ signal bamboo_boards_received
 @export var npc_name: String = "Панда"
 # Фиксированные пределы: сохранённые значения инспектора их не переопределяют.
 const MAX_REPLY_CHARACTERS: int = 240
-const CHARACTERS_PER_LINE: int = 75
+const CHARACTERS_PER_LINE: int = 126
 const ESCAPE_QUESTION: String = "А ты хочешь выбраться с острова?"
 @export_range(0.001, 0.2, 0.001) var typing_speed: float = 0.03
 @export var debug_dialogue: bool = true

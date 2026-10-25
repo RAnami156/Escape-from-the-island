@@ -21,7 +21,7 @@ const API_URL: String = "http://localhost:11434/api/chat"
 
 # Display
 @export_category("Text")
-@export_range(1, 200, 1) var characters_per_line: int = 43
+@export_range(1, 200, 1) var characters_per_line: int = 126
 @export_range(0.001, 0.2, 0.001) var typing_speed: float = 0.03
 
 @export_category("NPC Lore")
