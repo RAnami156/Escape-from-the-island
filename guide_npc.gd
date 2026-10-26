@@ -1,8 +1,10 @@
 extends CharacterBody2D
 
 signal reply_finished(reply: String, metrics: Dictionary)
+signal observation_spoken(zone: String, reply: String)
 
 const GuideClient = preload("res://script/guide_ollama_client.gd")
+const AreaContext = preload("res://script/guide_area_context.gd")
 const MAX_HISTORY_MESSAGES: int = 10
 const MAX_INPUT_CHARACTERS: int = 280
 const REFLECTION_SCHEMA: Dictionary = {
@@ -28,8 +30,10 @@ enum Phase { INTRODUCTION, GETTING_ACQUAINTED }
 @export_range(32, 192, 8) var max_response_tokens: int = 128
 @export var auto_introduction: bool = true
 
-@export_category("Memory")
-@export var memory_path: String = "user://guide_michael_memory.json"
+@export_category("Area observations")
+@export var area_comment_cooldown: float = 2.0
+@export var area_revisit_cooldown: float = 45.0
+@export var area_settle_time: float = 0.05
 
 @onready var sprite: AnimatedSprite2D = $AnimatedSprite2D
 @onready var bubble: Label = $Label
@@ -59,15 +63,23 @@ var _stream_text: String = ""
 var _bubble_time_left: float = 0.0
 var _owns_movement_lock: bool = false
 var _movement_before_focus: bool = true
-var _save_warning_shown: bool = false
-var _dialogue_language: String = "ru"
-var _histories: Dictionary = {"ru": [], "cz": []}
 var _pending_name_disclosure: bool = false
+var _inside_zones: Array[String] = []
+var _queued_zone: String = ""
+var _zone_delay_left: float = 0.0
+var _comment_gap_left: float = 0.0
+var _zone_cooldowns: Dictionary = {}
+var _last_observation: String = ""
+var _last_observation_zone: String = ""
+var _show_observation_in_chat: bool = false
+var _last_zone_lines: Dictionary = {}
+var _bubble_origin: Vector2 = Vector2.ZERO
 
 
 func _ready() -> void:
-	_dialogue_language = "cz" if _is_czech() else "ru"
-	_load_memory()
+	add_to_group("guide_companion")
+	_bubble_origin = bubble.position
+	reset_dialogue()
 	_client = GuideClient.new()
 	add_child(_client)
 	_client.token_received.connect(_on_token_received)
@@ -104,6 +116,108 @@ func _process(delta: float) -> void:
 		_bubble_time_left -= delta
 		if _bubble_time_left <= 0.0:
 			bubble.hide()
+	_tick_observations(delta)
+
+
+func enter_observation_zone(zone: String) -> void:
+	if not AreaContext.ZONES.has(zone) or _inside_zones.has(zone):
+		return
+	_inside_zones.append(zone)
+	if float(_zone_cooldowns.get(zone, 0.0)) <= 0.0:
+		_queued_zone = zone
+		_zone_delay_left = area_settle_time
+
+
+func exit_observation_zone(zone: String) -> void:
+	_inside_zones.erase(zone)
+	if _last_observation_zone == zone:
+		_last_observation = ""
+		_last_observation_zone = ""
+		_show_observation_in_chat = false
+		_refresh_transcript()
+	if _queued_zone == zone:
+		_queued_zone = ""
+		for index: int in range(_inside_zones.size() - 1, -1, -1):
+			var candidate: String = _inside_zones[index]
+			if float(_zone_cooldowns.get(candidate, 0.0)) <= 0.0:
+				_queued_zone = candidate
+				_zone_delay_left = area_settle_time
+				break
+
+
+func _tick_observations(delta: float) -> void:
+	_comment_gap_left = maxf(_comment_gap_left - delta, 0.0)
+	_zone_delay_left = maxf(_zone_delay_left - delta, 0.0)
+	for zone: String in _zone_cooldowns:
+		_zone_cooldowns[zone] = maxf(float(_zone_cooldowns[zone]) - delta, 0.0)
+	var focused := get_viewport().gui_get_focus_owner()
+	if _queued_zone.is_empty() or _client.busy or retry_button.visible or _comment_gap_left > 0.0 or _zone_delay_left > 0.0:
+		return
+	if auto_introduction and not _has_met_player:
+		return
+	if not is_instance_valid(Global.player) or not Global.player_can_move:
+		return
+	if global_position.distance_to(Global.player.global_position) > 280.0:
+		return
+	if focused is LineEdit or focused is TextEdit:
+		return
+	var zone := _queued_zone
+	_queued_zone = ""
+	if _inside_zones.has(zone):
+		_say_observation(zone)
+
+
+func _ship_is_repaired() -> bool:
+	var scene := get_tree().current_scene
+	var ship := scene.get_node_or_null("ship") if scene != null else null
+	return ship != null and ship.get("ship_ready") == true
+
+
+func _area_facts(zone: String) -> String:
+	return AreaContext.facts(zone, _is_czech(), _ship_is_repaired())
+
+
+func _area_lines(zone: String) -> Array:
+	return AreaContext.lines(zone, _is_czech(), _ship_is_repaired())
+
+
+func _say_observation(zone: String) -> void:
+	var choices := _area_lines(zone)
+	if choices.is_empty():
+		return
+	var previous: String = str(_last_zone_lines.get(zone, ""))
+	# First arrival uses the clearest introduction; subsequent arrivals vary.
+	var reply: String = str(choices[0])
+	if not previous.is_empty():
+		choices.erase(previous)
+		if choices.is_empty():
+			return
+		reply = str(choices.pick_random())
+	_last_zone_lines[zone] = reply
+	_last_observation = reply
+	_last_observation_zone = zone
+	_show_observation_in_chat = true
+	last_metrics = {"response_ms": 0, "source": "local_observation"}
+	_zone_cooldowns[zone] = area_revisit_cooldown
+	_comment_gap_left = area_comment_cooldown
+	_show_bubble(reply, true)
+	_bubble_time_left = 10.0
+	_refresh_transcript()
+	observation_spoken.emit(zone, reply)
+
+
+func _nearby_area_context() -> String:
+	if _inside_zones.is_empty():
+		return ""
+	var facts: PackedStringArray = []
+	for zone: String in _inside_zones:
+		facts.append(_area_facts(zone))
+	var heading := "\nPRÁVĚ VIDÍŠ: " if _is_czech() else "\nСЕЙЧАС ВИДИШЬ: "
+	var note := " To jsou současná pozorování, ne vzpomínky před havárií. Můžeš o nich mluvit, ale nic dalšího si nevymýšlej." if _is_czech() else " Это текущие наблюдения, а не воспоминания до крушения. Можешь обсуждать их, не придумывая дополнительных фактов."
+	note += " Nevymýšlej stáří stromu, minulost lodi ani konkrétní součástky potřebné k opravě. U poškozené lodi je přirozené zmínit opravu jako možnou cestu k odplutí. Nespojuj okolí se svým úrazem." if _is_czech() else " Не выдумывай возраст дерева, прошлое корабля и конкретные детали для ремонта. Для разбитого корабля естественно предположить ремонт как способ уплыть. Не связывай окружение со своей травмой."
+	if not _last_observation.is_empty():
+		note += (" Tvá poslední poznámka: " if _is_czech() else " Твоя последняя реплика об окружении: ") + _last_observation
+	return heading + " ".join(facts) + note
 
 
 func _physics_process(delta: float) -> void:
@@ -198,6 +312,7 @@ func send_message(value: String) -> void:
 	value = value.strip_edges().left(MAX_INPUT_CHARACTERS)
 	if value.is_empty() or _client.busy:
 		return
+	_show_observation_in_chat = false
 	_pending_name_disclosure = _remember_player_name(value)
 	input.clear()
 	_start_request(value, false)
@@ -217,7 +332,7 @@ func _start_request(value: String, introduction: bool) -> void:
 
 
 func build_request(value: String, introduction: bool) -> Dictionary:
-	var messages: Array[Dictionary] = [{"role": "system", "content": _system_prompt() + _question_grounding(value)}]
+	var messages: Array[Dictionary] = [{"role": "system", "content": _system_prompt() + _question_grounding(value) + _nearby_area_context()}]
 	messages.append_array(conversation_history)
 	if not introduction and _has_met_player:
 		var dialogue_note := "Вы уже познакомились. Самолёт и своё представление больше не повторяй. На вопросы об имени отвечай доброжелательно, без замечаний о повторах."
@@ -236,11 +351,18 @@ func build_request(value: String, introduction: bool) -> Dictionary:
 		messages.append({"role": "user", "content": instruction})
 	else:
 		messages.append({"role": "user", "content": value})
+	var format := REFLECTION_SCHEMA.duplicate(true)
+	if _inside_zones.has("baobab") and AreaContext.mentions_zone(value, ["baobab"]):
+		var normalized := value.to_lower()
+		for phrase: String in ["сколько лет", "возраст", "стар", "star", "stáří", "věk"]:
+			if normalized.contains(phrase):
+				format["properties"]["reply"]["enum"] = AreaContext.age_answers(_is_czech())
+				break
 	return {
 		"model": model, "messages": messages, "stream": true, "think": false,
 		# A tiny, explicit response plan precedes the spoken reply in the same
 		# generation. This bounds preparation without an open-ended thinking pass.
-		"format": REFLECTION_SCHEMA,
+		"format": format,
 		"keep_alive": "15m",
 		"options": {"num_ctx": 2048, "num_predict": max_response_tokens + 32,
 			"temperature": 0.6, "top_p": 0.9, "repeat_penalty": 1.05},
@@ -280,6 +402,11 @@ Vrať JSON, nejprve intent, potom reply. intent: stručný cíl odpovědi ve 3�
 
 
 func _known_fact_note(value: String) -> String:
+	if AreaContext.mentions_zone(value, _inside_zones):
+		var facts: PackedStringArray = []
+		for zone: String in _inside_zones:
+			facts.append(_area_facts(zone))
+		return (" O předmětu hráčova dotazu znáš pouze: " if _is_czech() else " О предмете вопроса игрока известно только: ") + " ".join(facts) + (" Neodhaduj neznámé údaje ani je nespojuj se svým úrazem." if _is_czech() else " Не угадывай неизвестные данные и не связывай их со своей травмой.")
 	var normalized := value.to_lower().replace("ё", "е")
 	for phrase: String in ["как меня зовут", "мое имя", "jak se jmenuju", "mé jméno", "moje jméno"]:
 		if normalized.contains(phrase) and not player_name.is_empty():
@@ -294,6 +421,8 @@ func _known_fact_note(value: String) -> String:
 
 
 func _question_grounding(value: String) -> String:
+	if AreaContext.mentions_zone(value, _inside_zones):
+		return ""
 	var normalized := value.to_lower().replace("ё", "е")
 	for mark: String in [".", ",", "!", "?", ";", ":", "(", ")", "—", "-", "\n", "\t", '"']:
 		normalized = normalized.replace(mark, " ")
@@ -338,7 +467,7 @@ func _on_reply_completed(reply: String, metrics: Dictionary) -> void:
 	_refresh_transcript()
 	_show_bubble(reply)
 	_bubble_time_left = 12.0
-	_save_memory()
+	_comment_gap_left = maxf(_comment_gap_left, 0.35)
 	reply_finished.emit(reply, metrics)
 
 
@@ -368,6 +497,8 @@ func _refresh_transcript() -> void:
 	for message: Dictionary in conversation_history:
 		var speaker: String = title.text if message.role == "assistant" else ("Ty" if _is_czech() else "Ты")
 		lines.append(speaker + ": " + str(message.content))
+	if _show_observation_in_chat and not _last_observation.is_empty():
+		lines.append(title.text + ": " + _last_observation)
 	if _client != null and _client.busy:
 		if not _pending_introduction:
 			lines.append(("Ty: " if _is_czech() else "Ты: ") + _pending_user_text)
@@ -376,9 +507,18 @@ func _refresh_transcript() -> void:
 	transcript.text = "\n\n".join(lines)
 
 
-func _show_bubble(value: String) -> void:
+func _show_bubble(value: String, complete: bool = false) -> void:
 	bubble.text = value
+	bubble.max_lines_visible = -1 if complete else 3
+	bubble.position = _bubble_origin
 	bubble.show()
+	if complete:
+		_position_observation_bubble.call_deferred()
+
+
+func _position_observation_bubble() -> void:
+	if bubble.max_lines_visible == -1:
+		bubble.position.y = minf(_bubble_origin.y, -20.0 - bubble.get_minimum_size().y * absf(bubble.scale.y))
 
 
 func _remember_player_name(value: String) -> bool:
@@ -396,56 +536,46 @@ func _remember_player_name(value: String) -> bool:
 			candidate = cleaned
 	if not candidate.is_empty():
 		player_name = candidate.left(32)
-		_save_memory()
 		return true
 	return false
 
 
-func _load_memory() -> void:
-	if memory_path.is_empty() or not FileAccess.file_exists(memory_path):
-		return
-	var data: Variant = JSON.parse_string(FileAccess.get_file_as_string(memory_path))
-	if not data is Dictionary:
-		return
-	var version := int(data.get("version", 0))
-	if not version in [1, 2]:
-		return
-	player_name = str(data.get("player_name", "")).left(32)
-	_has_met_player = bool(data.get("has_met_player", false))
-	if version == 1:
-		# The original save had one history and Russian introduction instructions.
-		_histories["ru"] = _validated_history(data.get("history", []))
-	else:
-		var histories: Variant = data.get("history_by_language", {})
-		if histories is Dictionary:
-			for language: String in ["ru", "cz"]:
-				_histories[language] = _validated_history(histories.get(language, []))
-	conversation_history = _validated_history(_histories[_dialogue_language])
-
-
-func _validated_history(history: Variant) -> Array[Dictionary]:
-	var result: Array[Dictionary] = []
-	if history is Array:
-		for message: Variant in history:
-			if message is Dictionary and message.get("role", "") in ["user", "assistant"] and message.get("content") is String:
-				result.append({"role": message.role, "content": message.content.left(600)})
-	while result.size() > MAX_HISTORY_MESSAGES:
-		result.pop_front()
-	return result
-
-
-func _save_memory() -> void:
-	if memory_path.is_empty():
-		return
-	var file := FileAccess.open(memory_path, FileAccess.WRITE)
-	if file == null:
-		if not _save_warning_shown:
-			push_warning("[Michael] Could not save companion memory: " + memory_path)
-			_save_warning_shown = true
-		return
-	_histories[_dialogue_language] = conversation_history.duplicate(true)
-	file.store_string(JSON.stringify({"version": 2, "player_name": player_name,
-		"has_met_player": _has_met_player, "history_by_language": _histories}))
+func reset_dialogue() -> void:
+	# Each new Main instance is a new acquaintance. Old user:// saves are ignored.
+	if is_instance_valid(_client):
+		_client.cancel()
+	_on_input_focus_exited()
+	current_phase = Phase.INTRODUCTION
+	player_name = ""
+	conversation_history.clear()
+	_has_met_player = false
+	_introduction_started = false
+	_pending_user_text = ""
+	_pending_introduction = false
+	_pending_name_disclosure = false
+	_stream_text = ""
+	last_metrics.clear()
+	_bubble_time_left = 0.0
+	_inside_zones.clear()
+	_queued_zone = ""
+	_zone_delay_left = 0.0
+	_comment_gap_left = 0.0
+	_zone_cooldowns.clear()
+	_last_zone_lines.clear()
+	_last_observation = ""
+	_last_observation_zone = ""
+	_show_observation_in_chat = false
+	input.clear()
+	input.release_focus()
+	input.editable = true
+	send_button.disabled = false
+	retry_button.hide()
+	chat_panel.hide()
+	talk_button.show()
+	bubble.text = ""
+	bubble.hide()
+	_set_ready_status()
+	_refresh_transcript()
 
 
 func _is_czech() -> bool:

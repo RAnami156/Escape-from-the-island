@@ -184,7 +184,7 @@ corner_radius_bottom_left = 4
 
 [node name="guide_npc" type="CharacterBody2D" unique_id=1844774340]
 z_index = 3
-collision_layer = 0
+collision_layer = 8
 script = ExtResource("1_n27ub")
 
 [node name="Label" type="Label" parent="." unique_id=1122033102]

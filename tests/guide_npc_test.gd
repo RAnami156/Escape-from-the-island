@@ -38,7 +38,6 @@ func _run() -> void:
 	scene.add_child(player)
 	var guide: CharacterBody2D = GuideScene.instantiate()
 	guide.auto_introduction = false
-	guide.memory_path = ""
 	guide.position = Vector2(-80, 0)
 	scene.add_child(guide)
 	await _frames(2)
@@ -56,16 +55,11 @@ func _run() -> void:
 	guide.player_name = ""
 	guide._remember_player_name("Рома")
 	_check(guide.player_name == "Рома", "A bare answer to the name question must work")
-	guide.memory_path = "res://tests/_guide_memory_test.json"
-	guide._save_memory()
 	var remembered: CharacterBody2D = GuideScene.instantiate()
 	remembered.auto_introduction = false
-	remembered.memory_path = guide.memory_path
 	scene.add_child(remembered)
-	_check(remembered.player_name == "Рома", "Name must survive scene recreation")
+	_check(remembered.player_name.is_empty() and remembered.conversation_history.is_empty() and not remembered._has_met_player, "A new game must start with no previous name, history or acquaintance")
 	remembered.queue_free()
-	DirAccess.remove_absolute(guide.memory_path)
-	guide.memory_path = ""
 	var payload: Dictionary = guide.build_request("Как меня зовут?", false)
 	_check(payload.stream and not payload.think and payload.format.properties.has("intent"), "Bounded preparation and streaming must share one request")
 	_check(payload.messages[0].content.contains("Рома"), "Name fact must remain outside the sliding conversation window")
@@ -74,17 +68,14 @@ func _run() -> void:
 	_check(guide._question_grounding("Я скучаю по моей семье").is_empty(), "Player family must not be mistaken for Michael's missing memories")
 	_check(guide._question_grounding("Ты знаешь, моя семья меня ждёт").is_empty(), "Addressing Michael must not turn player backstory into amnesia")
 	_check(not guide._question_grounding("Расскажи про твою семью").is_empty(), "Michael must not invent his own family")
-	# Both locales share the player's name, while keeping their dialogue histories separate.
+	# New games start fresh in either locale; the current game still remembers names.
 	guide.conversation_history.clear()
 	guide.conversation_history.append({"role": "assistant", "content": "Рад, что мы вместе."})
-	guide.memory_path = "res://tests/_guide_memory_test.json"
-	guide._save_memory()
 	global.language = "cz"
 	var czech: CharacterBody2D = GuideScene.instantiate()
 	czech.auto_introduction = false
-	czech.memory_path = guide.memory_path
 	scene.add_child(czech)
-	_check(czech.player_name == "Рома" and czech.conversation_history.is_empty(), "Czech dialogue must retain the name without Russian replies")
+	_check(czech.player_name.is_empty() and czech.conversation_history.is_empty(), "A Czech new game must not restore another game's name or history")
 	_check(czech.title.text == "Michael" and czech.send_button.text == "Odeslat" and czech.close_button.text == "Zavřít", "Czech interface must be localized")
 	_check(czech._question_grounding("Stýská se mi po rodině").is_empty(), "Czech player family must remain a conversation topic")
 	_check(not czech._question_grounding("Máš děti?").is_empty(), "Czech family questions must respect Michael's unknown past")
@@ -93,28 +84,22 @@ func _run() -> void:
 	czech._remember_player_name("Jmenuju se Řehoř")
 	_check(czech.player_name == "Řehoř", "Czech names with diacritics must be remembered")
 	czech.conversation_history.append({"role": "assistant", "content": "Jsem rád, že jsme spolu."})
-	czech._save_memory()
 	czech.queue_free()
 	global.language = "ru"
 	var russian: CharacterBody2D = GuideScene.instantiate()
 	russian.auto_introduction = false
-	russian.memory_path = guide.memory_path
 	scene.add_child(russian)
-	_check(russian.player_name == "Řehoř" and russian.conversation_history[0].content == "Рад, что мы вместе.", "Switching back must restore Russian history and keep the shared name")
+	_check(russian.player_name.is_empty() and russian.conversation_history.is_empty(), "Returning to Russian through a new game must start a fresh dialogue")
 	russian.queue_free()
-	var legacy_file := FileAccess.open(guide.memory_path, FileAccess.WRITE)
-	legacy_file.store_string(JSON.stringify({"version": 1, "player_name": "Иван", "has_met_player": true, "history": [{"role": "assistant", "content": "Помню тебя, Иван."}]}))
-	legacy_file.close()
-	var legacy: CharacterBody2D = GuideScene.instantiate()
-	legacy.auto_introduction = false
-	legacy.memory_path = guide.memory_path
-	scene.add_child(legacy)
-	_check(legacy.player_name == "Иван" and legacy.conversation_history[0].content == "Помню тебя, Иван.", "Previous memory format must migrate without losing the name or Russian history")
-	legacy._save_memory()
-	_check(int(JSON.parse_string(FileAccess.get_file_as_string(guide.memory_path)).version) == 2, "Migrated memory must save in the bilingual format")
-	legacy.queue_free()
-	DirAccess.remove_absolute(guide.memory_path)
-	guide.memory_path = ""
+	guide._has_met_player = true
+	guide._introduction_started = true
+	guide.player_name = "Лена"
+	guide.conversation_history.append({"role": "assistant", "content": "Привет, Лена, ты в порядке?"})
+	guide.reset_dialogue()
+	_check(guide.player_name.is_empty() and guide.conversation_history.is_empty() and not guide._has_met_player and not guide._introduction_started, "Explicit restart must clear all acquaintance state")
+	var new_intro: Dictionary = guide.build_request("", true)
+	_check(not new_intro.messages[0].content.contains("Рома") and new_intro.messages[-1].content.contains("Первая встреча"), "Restart must generate a first meeting instead of a welcome using an old name")
+	_check(not JSON.stringify(new_intro).contains("Лена") and guide.transcript.text.is_empty(), "Old Lena greetings must not leak into UI or a new Ollama request")
 	guide.open_chat()
 	_check(not global.player_can_move and guide.input.has_focus(), "Typing must lock player movement")
 	guide.close_chat()

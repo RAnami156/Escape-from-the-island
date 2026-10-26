@@ -14,6 +14,7 @@
 [ext_resource type="Texture2D" uid="uid://48sceml3qr4e" path="res://asets/mountains (1).png" id="10_k65ib"]
 [ext_resource type="PackedScene" uid="uid://cvjg052hfeys3" path="res://scene/guide_npc.tscn" id="10_p8adh"]
 [ext_resource type="Texture2D" uid="uid://bjfv5hygyy68" path="res://asets/exec-dd02c218-bec7-45d3-92ea-be1141136940.png" id="11_mswub"]
+[ext_resource type="Script" uid="uid://cxhtensrhd1p" path="res://script/for_npc.gd" id="11_oldxj"]
 [ext_resource type="Texture2D" uid="uid://dxgsc1n7rlxnq" path="res://asets/mountains (2).png" id="11_wscrc"]
 [ext_resource type="Texture2D" uid="uid://cchkb7nysd225" path="res://asets/water.png" id="13_jcbur"]
 [ext_resource type="Texture2D" uid="uid://w5y5if28xo0y" path="res://asets/circle.png" id="14_hybxs"]
@@ -27,6 +28,9 @@
 [ext_resource type="Script" uid="uid://brh5f4fbtltvi" path="res://script/quest_route.gd" id="22_quest_route"]
 
 [sub_resource type="CompressedTexture2D" id="CompressedTexture2D_brvut"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_g4v7s"]
+radius = 203.12065
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_mswub"]
 texture = ExtResource("9_wscrc")
@@ -1164,7 +1168,7 @@ book_spawn_plane_beach = Vector2(7350, 2100)
 [node name="PointLight2D" type="PointLight2D" parent="panda" unique_id=2104994529]
 position = Vector2(9, -8)
 scale = Vector2(1.042499, 0.9349395)
-energy = 1.17
+energy = 0.67
 texture = ExtResource("14_hybxs")
 
 [node name="ship" parent="." unique_id=1362152927 instance=ExtResource("8_of57s")]
@@ -1172,9 +1176,56 @@ z_index = 2
 position = Vector2(5616, 5757)
 
 [node name="guide_npc" parent="." unique_id=1844774340 instance=ExtResource("10_p8adh")]
-z_index = 1
 position = Vector2(7259.0005, 2170)
 scale = Vector2(1.0004878, 1.021582)
+
+[node name="for_npc" type="Node2D" parent="." unique_id=84787802]
+z_index = 2
+position = Vector2(-1638, 557)
+script = ExtResource("11_oldxj")
+
+[node name="bong" type="Area2D" parent="for_npc" unique_id=1083403922]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="for_npc/bong" unique_id=114405644]
+position = Vector2(4890, 2705)
+shape = SubResource("CircleShape2D_g4v7s")
+
+[node name="flycatcher" type="Area2D" parent="for_npc" unique_id=1785775504]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="for_npc/flycatcher" unique_id=1623497282]
+position = Vector2(6723, 4318)
+shape = SubResource("CircleShape2D_g4v7s")
+
+[node name="panda" type="Area2D" parent="for_npc" unique_id=650802961]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="for_npc/panda" unique_id=1316334401]
+position = Vector2(7641, 949)
+shape = SubResource("CircleShape2D_g4v7s")
+
+[node name="baobab" type="Area2D" parent="for_npc" unique_id=1265831326]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="for_npc/baobab" unique_id=792188717]
+position = Vector2(4695, 3377)
+shape = SubResource("CircleShape2D_g4v7s")
+
+[node name="beach" type="Area2D" parent="for_npc" unique_id=1588804564]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="for_npc/beach" unique_id=1148715774]
+position = Vector2(9011, 2138)
+shape = SubResource("CircleShape2D_g4v7s")
+
+[node name="paths" type="Area2D" parent="for_npc" unique_id=565871226]
+position = Vector2(-508, 86)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="for_npc/paths" unique_id=1137290404]
+position = Vector2(8970, 2210)
+shape = SubResource("CircleShape2D_g4v7s")
+
+[node name="ship" type="Area2D" parent="for_npc" unique_id=413866605]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="for_npc/ship" unique_id=1280260860]
+position = Vector2(7235, 5228)
+shape = SubResource("CircleShape2D_g4v7s")
 
 [node name="player" parent="." unique_id=1884075297 instance=ExtResource("2_v0l8b")]
 z_index = 4
@@ -1227,9 +1278,9 @@ layer_4/tile_data = PackedInt32Array(6226114, 458753, 7, 6029511, 458753, 7, 675
 [node name="TextureRect" type="TextureRect" parent="TileMap" unique_id=1633089459]
 texture_repeat = 2
 offset_left = 362.82303
-offset_top = -276.04242
+offset_top = -296.59882
 offset_right = 9957.144
-offset_bottom = 7517.7524
+offset_bottom = 7497.1963
 texture = SubResource("CompressedTexture2D_tv8i1")
 expand_mode = 1
 stretch_mode = 1
@@ -1408,3 +1459,18 @@ script = ExtResource("22_quest_route")
 [node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="StaticBody2D2" unique_id=1324782808]
 position = Vector2(1, -6)
 polygon = PackedVector2Array(3057, 1813, 3131, 1726, 3195, 1695, 3369, 1581, 3468, 1551, 3907, 1388, 4184, 1293, 4672, 1231, 4714, 1234, 4734, 1209, 6072, 1209, 6581, 1432, 6909, 1731, 6998, 1907, 7002, 1976, 7039, 1989, 7093, 1990, 7155, 1938, 7226, 1865, 7473, 1863, 7506, 1907, 7549, 1937, 7555, 1968, 7559, 2322, 7557, 2531, 7526, 2537, 7523, 2671, 7473, 2696, 7449, 2752, 7390, 2959, 7272, 3218, 7273, 3905, 7175, 3901, 7142, 3934, 7138, 4250, 7058, 4327, 6618, 4328, 6688, 4201, 6818, 4140, 6880, 4115, 6898, 4086, 6881, 4033, 6835, 3963, 6771, 3949, 6748, 3993, 6741, 4020, 6710, 3983, 6659, 4035, 6632, 4081, 6590, 4047, 6551, 4077, 6560, 4099, 6483, 4128, 6422, 4188, 6443, 4217, 6287, 4318, 6292, 4357, 6166, 4339, 6128, 4364, 6045, 4437, 5973, 4417, 5827, 4390, 5726, 4384, 5660, 4449, 5779, 4585, 5791, 4666, 6116, 5018, 6563, 5378, 6649, 5548, 6570, 5645, 6505, 5550, 6432, 5553, 5780, 5657, 5760, 5757, 5784, 5795, 5742, 5809, 5700, 5809, 5482, 5802, 5410, 5815, 5413, 5900, 4998, 5903, 4997, 5810, 4775, 5801, 4278, 5657, 3906, 5399, 3538, 5012, 3404, 4685, 3365, 4305, 3303, 4306, 3297, 4264, 2884, 4089, 2756, 3841, 2753, 3421, 2801, 3338, 2854, 3306, 2894, 3150, 2940, 3038, 2975, 2878, 3043, 2663, 3126, 2519, 3218, 2346, 3326, 2121, 3356, 2001, 3310, 1901, 3186, 1856, 3106, 1824, 3060, 1830, 3043, 1837, 3232, 2032, 2981, 2406, 2773, 2996, 2507, 3572, 2796, 4869, 3927, 5756, 5931, 6085, 6374, 6001, 6898, 5832, 7191, 5469, 6911, 5274, 6392, 4777, 6250, 4608, 6756, 4520, 7417, 4502, 7488, 3729, 7568, 3148, 7865, 2403, 7634, 1587, 6995, 1132, 5699, 1008, 3238, 1354, 2914, 1549, 2996, 1778)
+
+[connection signal="body_entered" from="for_npc/bong" to="for_npc" method="_on_bong_body_entered"]
+[connection signal="body_exited" from="for_npc/bong" to="for_npc" method="_on_bong_body_exited"]
+[connection signal="body_entered" from="for_npc/flycatcher" to="for_npc" method="_on_flycatcher_body_entered"]
+[connection signal="body_exited" from="for_npc/flycatcher" to="for_npc" method="_on_flycatcher_body_exited"]
+[connection signal="body_entered" from="for_npc/panda" to="for_npc" method="_on_panda_body_entered"]
+[connection signal="body_exited" from="for_npc/panda" to="for_npc" method="_on_panda_body_exited"]
+[connection signal="body_entered" from="for_npc/baobab" to="for_npc" method="_on_baobab_body_entered"]
+[connection signal="body_exited" from="for_npc/baobab" to="for_npc" method="_on_baobab_body_exited"]
+[connection signal="body_entered" from="for_npc/beach" to="for_npc" method="_on_beach_body_entered"]
+[connection signal="body_exited" from="for_npc/beach" to="for_npc" method="_on_beach_body_exited"]
+[connection signal="body_entered" from="for_npc/paths" to="for_npc" method="_on_paths_body_entered"]
+[connection signal="body_exited" from="for_npc/paths" to="for_npc" method="_on_paths_body_exited"]
+[connection signal="body_entered" from="for_npc/ship" to="for_npc" method="_on_ship_body_entered"]
+[connection signal="body_exited" from="for_npc/ship" to="for_npc" method="_on_ship_body_exited"]

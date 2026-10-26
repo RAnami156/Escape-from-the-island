@@ -58,7 +58,6 @@ func _run() -> void:
 		_check(global.language == language, "Menu must select Michael's dialogue language")
 		var main: Node = load("res://scene/main.tscn").instantiate()
 		var guide: Node = main.get_node("guide_npc")
-		guide.memory_path = ""
 		guide.reply_finished.connect(_on_reply)
 		current_scene.queue_free()
 		root.add_child(main)
