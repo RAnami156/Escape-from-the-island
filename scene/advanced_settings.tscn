@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://bokrk1sir407r"]
 
-[ext_resource type="Script" uid="uid://cmbhpnlum6hdu" path="res://scene/advanced_settings.gd" id="1_x1s76"]
+[ext_resource type="Script" uid="uid://cmbhpnlum6hdu" path="res://script/advanced_settings.gd" id="1_x1s76"]
 [ext_resource type="FontFile" uid="uid://dxa4u7yhh3vnh" path="res://asets/1 Minecraft-Regular.otf" id="2_sb6yy"]
 
 [node name="advanced_settings" type="CanvasLayer" unique_id=1963392657]
