@@ -56,6 +56,23 @@ func _process(_delta: float) -> void:
 	var input: LineEdit = $text_ui/LineEdit
 	if not cz and PLACEHOLDERS_RU.has(input.placeholder_text):
 		input.placeholder_text = PLACEHOLDERS_RU[input.placeholder_text]
+	_update_response_time(cz)
+
+
+func _update_response_time(czech: bool) -> void:
+	var label := $text_ui/ResponseTime as Label
+	var timing: Dictionary = get_parent().get_meta("response_timing", {})
+	if timing.is_empty():
+		label.text = "Odpověď: —" if czech else "Ответ: —"
+		return
+	var running: bool = timing.state == "running"
+	var elapsed: int = Time.get_ticks_msec() - int(timing.started_ms) if running else int(timing.elapsed_ms)
+	var caption := "Generování" if czech else "Генерация"
+	if not running:
+		caption = ("Chyba" if czech else "Ошибка") if timing.state == "error" else ("Odpověď" if czech else "Ответ")
+	var seconds := ("%.2f" % (maxi(0, elapsed) / 1000.0)).replace(".", ",")
+	label.text = "%s: %s %s" % [caption, seconds, "s" if czech else "с"]
+	label.modulate.a = 1.0 if running else 0.72
 
 
 func _localize() -> void:

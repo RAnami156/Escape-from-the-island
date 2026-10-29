@@ -1,5 +1,7 @@
 extends CharacterBody2D
 
+const FastDialogue = preload("res://script/npc_fast_dialogue.gd")
+
 # Панда: знакомство → побег → один шуточный вопрос → книга → доски.
 # Global.gd: panda_respect, panda_friendship, panda_irritation,
 # panda_deal, book, bamboo_boards, player_can_move.
@@ -23,7 +25,7 @@ signal bamboo_boards_received
 
 @export_category("AI")
 @export var model: String = "qwen3:8b"
-@export var api_url: String = "http://localhost:11434/api/chat"
+@export var api_url: String = "http://127.0.0.1:11434/api/chat"
 @export_range(0.0, 2.0, 0.05) var temperature: float = 0.65
 @export_range(128, 2048, 1) var max_output_tokens: int = 512
 @export_range(2, 40, 1) var max_history: int = 20
@@ -348,15 +350,7 @@ func send_message_to_ai(player_text: String) -> void:
 	_update_input_state()
 	_update_player_movement_state()
 	_play_animation("Thinking")
-	var messages: Array[Dictionary] = [{"role": "system", "content": get_system_prompt()}]
-	for message: Dictionary in conversation_history:
-		messages.append(message)
-	messages.append({"role": "user", "content": player_text})
-	var request_body: Dictionary = {
-		"model": model, "messages": messages, "stream": false, "think": false,
-		"format": get_response_schema(),
-		"options": {"temperature": temperature, "num_predict": max_output_tokens, "top_p": 0.92}
-	}
+	var request_body: Dictionary = FastDialogue.build_request(self, player_text)
 	if debug_dialogue:
 		print("[ПАНДА • ОЖИДАНИЕ] ", get_path(), " | ", _phase_label(request_phase))
 	var error: Error = http_request.request(api_url, ["Content-Type: application/json"], HTTPClient.METHOD_POST, JSON.stringify(request_body))
@@ -465,6 +459,9 @@ func get_response_schema() -> Dictionary:
 
 
 func _on_request_completed(result: int, response_code: int, _headers: PackedStringArray, body: PackedByteArray) -> void:
+	if FastDialogue.maybe_repair_reply(self, result, response_code, body):
+		return
+	body = FastDialogue.expand_response(self, body)
 	if not waiting_for_response:
 		return
 	if result != HTTPRequest.RESULT_SUCCESS or response_code != 200:
@@ -783,16 +780,11 @@ func _print_dialogue(player_text: String, reply: String, funny: bool) -> void:
 
 func type_text(value: String) -> void:
 	_play_animation("Talking")
-	text.text = value
-	text.visible_characters = 0
-	for index: int in range(value.length()):
-		text.visible_characters = index + 1
-		await get_tree().create_timer(typing_speed).timeout
-	text.visible_characters = -1
+	await FastDialogue.reveal(text, value, typing_speed)
 	_play_animation("Idle")
 
-
 func _handle_request_error(message: String) -> void:
+	FastDialogue.stop_response_timer(self, false)
 	push_warning("[PANDA / OLLAMA] " + message)
 	waiting_for_response = false
 	# Сохраняем ввод для повторной отправки; фазу и отношения не продвигаем.

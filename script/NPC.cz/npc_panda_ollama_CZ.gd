@@ -1,5 +1,7 @@
 extends CharacterBody2D
 
+const FastDialogue = preload("res://script/npc_fast_dialogue.gd")
+
 # Панда:
 # знакомство → вопрос о побеге → шуточный вопрос → книга → доски.
 #
@@ -77,7 +79,7 @@ var anim: AnimatedSprite2D = null
 @export_category("Umělá inteligence")
 
 @export var model: String = "qwen3:8b"
-@export var api_url: String = "http://localhost:11434/api/chat"
+@export var api_url: String = "http://127.0.0.1:11434/api/chat"
 
 @export_range(0.0, 2.0, 0.05)
 var temperature: float = 0.65
@@ -921,33 +923,7 @@ func send_message_to_ai(player_text: String) -> void:
 	# Запускает Thinking на рабочем AnimatedSprite2D.
 	_update_animation_state()
 
-	var messages: Array[Dictionary] = [
-		{
-			"role": "system",
-			"content": get_system_prompt()
-		}
-	]
-
-	for message: Dictionary in conversation_history:
-		messages.append(message)
-
-	messages.append({
-		"role": "user",
-		"content": player_text
-	})
-
-	var request_body: Dictionary = {
-		"model": model,
-		"messages": messages,
-		"stream": false,
-		"think": false,
-		"format": get_response_schema(),
-		"options": {
-			"temperature": temperature,
-			"num_predict": max_output_tokens,
-			"top_p": 0.92
-		}
-	}
+	var request_body: Dictionary = FastDialogue.build_request(self, player_text)
 
 	if debug_dialogue:
 		print(
@@ -1140,6 +1116,9 @@ func _on_request_completed(
 	_headers: PackedStringArray,
 	body: PackedByteArray
 ) -> void:
+	if FastDialogue.maybe_repair_reply(self, result, response_code, body):
+		return
+	body = FastDialogue.expand_response(self, body)
 	if not waiting_for_response:
 		return
 
@@ -2090,39 +2069,17 @@ func _print_dialogue(
 # ============================================================
 
 func type_text(value: String) -> void:
-	# С этого момента панда говорит.
 	is_typing = true
-
-	# Переключаем Thinking → Talking.
 	_update_animation_state()
-
 	text.text = value
 	text.visible_characters = 0
-
 	_fit_dialogue_text(value)
-
-	for index: int in range(value.length()):
-		text.visible_characters = index + 1
-
-		await get_tree().create_timer(
-			maxf(typing_speed, 0.001)
-		).timeout
-
-	text.visible_characters = -1
-
-	# Печать закончена.
+	await FastDialogue.reveal(text, value, typing_speed)
 	is_typing = false
-
-	# Ожидание ответа сбросится сразу после возвращения
-	# в _on_request_completed().
 	_play_animation(idle_animation)
 
-
-# ============================================================
-# ОШИБКИ ЗАПРОСА
-# ============================================================
-
 func _handle_request_error(message: String) -> void:
+	FastDialogue.stop_response_timer(self, false)
 	push_warning(
 		"[PANDA / OLLAMA] " + message
 	)

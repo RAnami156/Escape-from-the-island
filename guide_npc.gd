@@ -364,7 +364,8 @@ func build_request(value: String, introduction: bool) -> Dictionary:
 		# generation. This bounds preparation without an open-ended thinking pass.
 		"format": format,
 		"keep_alive": "15m",
-		"options": {"num_ctx": 2048, "num_predict": max_response_tokens + 32,
+		# Match the other NPCs' runner profile: switching context/batch sizes reloads the shared model.
+		"options": {"num_ctx": 4096, "num_batch": 512, "num_predict": max_response_tokens + 32,
 			"temperature": 0.6, "top_p": 0.9, "repeat_penalty": 1.05},
 	}
 

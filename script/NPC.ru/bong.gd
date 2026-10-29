@@ -1,5 +1,7 @@
 extends CharacterBody2D
 
+const FastDialogue = preload("res://script/npc_fast_dialogue.gd")
+
 
 # ============================================================
 # БАРОН КОНГ — AI NPC / QUEST SYSTEM
@@ -22,7 +24,7 @@ extends CharacterBody2D
 # OLLAMA
 # ============================================================
 
-const API_URL: String = "http://localhost:11434/api/chat"
+const API_URL: String = "http://127.0.0.1:11434/api/chat"
 
 @export_category("AI")
 
@@ -1686,54 +1688,7 @@ func send_message_to_ai(player_text: String) -> void:
 	# Conversation context.
 	# --------------------------------------------------------
 
-	var messages: Array[Dictionary] = []
-
-	messages.append({
-		"role": "system",
-		"content": get_system_prompt()
-	})
-
-
-	for message: Dictionary in conversation_history:
-
-		messages.append(message)
-
-
-	messages.append({
-		"role": "user",
-		"content": player_text
-	})
-
-
-	# --------------------------------------------------------
-	# Ollama request.
-	# --------------------------------------------------------
-
-	var request_body: Dictionary = {
-
-		"model": model,
-
-		"messages": messages,
-
-		"stream": false,
-
-		"think": false,
-
-		"format": get_response_schema(),
-
-		"options": {
-
-			"temperature": temperature,
-
-			"num_predict": max_output_tokens,
-
-			"top_p": 0.92,
-
-			"top_k": 50,
-
-			"repeat_penalty": 1.15
-		}
-	}
+	var request_body: Dictionary = FastDialogue.build_request(self, player_text)
 
 
 	var error: Error = http_request.request(
@@ -1767,6 +1722,9 @@ func _on_request_completed(
 	_headers: PackedStringArray,
 	body: PackedByteArray
 ) -> void:
+	if FastDialogue.maybe_repair_reply(self, result, response_code, body):
+		return
+	body = FastDialogue.expand_response(self, body)
 
 	waiting_for_response = false
 
@@ -3381,40 +3339,15 @@ func _on_button_next_pressed() -> void:
 # TYPE TEXT
 # ============================================================
 
-func type_text(
-	value: String
-) -> void:
-
-	anim.play(
-		"Talking"
-	)
-
-	text.text = ""
-
-
-	for i in range(
-		value.length()
-	):
-
-		text.text += value[i]
-
-		await get_tree().create_timer(
-			typing_speed
-		).timeout
-
-
-	anim.play(
-		"Idle"
-	)
-
-
-# ============================================================
-# ERROR
-# ============================================================
+func type_text(value: String) -> void:
+	anim.play("Talking")
+	await FastDialogue.reveal(text, value, typing_speed)
+	anim.play("Idle")
 
 func _handle_request_error(
 	message: String
 ) -> void:
+	FastDialogue.stop_response_timer(self, false)
 
 	waiting_for_response = false
 

@@ -6,6 +6,7 @@ var _settings_tween: Tween
 
 
 func _ready() -> void:
+	preload("res://script/npc_fast_dialogue.gd").warm_up(self)
 	language_option.select(1 if Global.language == "cz" else 0)
 	%AdvancedToggle.set_pressed_no_signal(Global.advanced_settings_enabled)
 	_localize()

@@ -1,0 +1,110 @@
+[gd_scene load_steps=4 format=3]
+
+[ext_resource type="Script" path="res://script/ranami_intro.gd" id="1_intro"]
+[ext_resource type="Texture2D" path="res://asets/branding/ranami_splash.png" id="2_splash"]
+[ext_resource type="Theme" path="res://asets/ui/menu_theme.tres" id="3_theme"]
+
+[node name="RanamiIntro" type="CanvasLayer"]
+layer = 100
+script = ExtResource("1_intro")
+
+[node name="Splash" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="Background" type="ColorRect" parent="Splash"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0.03137255, 0.05882353, 0.09411765, 1)
+
+[node name="Artwork" type="TextureRect" parent="Splash"]
+texture_filter = 1
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+texture = ExtResource("2_splash")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Loading" type="Control" parent="Splash"]
+layout_mode = 1
+anchor_left = 0.5
+anchor_top = 0.68
+anchor_right = 0.5
+anchor_bottom = 0.68
+offset_left = -410.0
+offset_right = 410.0
+offset_bottom = 210.0
+mouse_filter = 2
+theme = ExtResource("3_theme")
+
+[node name="Status" type="Label" parent="Splash/Loading"]
+layout_mode = 0
+offset_right = 820.0
+offset_bottom = 32.0
+theme_override_colors/font_color = Color(0.933, 0.91, 0.855, 1)
+theme_override_font_sizes/font_size = 25
+text = "Příprava dialogů…"
+horizontal_alignment = 1
+
+[node name="Track" type="ColorRect" parent="Splash/Loading"]
+layout_mode = 0
+offset_left = 170.0
+offset_top = 56.0
+offset_right = 650.0
+offset_bottom = 59.0
+mouse_filter = 2
+color = Color(0.53, 0.714, 0.788, 0.15)
+
+[node name="Fill" type="ColorRect" parent="Splash/Loading/Track"]
+layout_mode = 0
+offset_right = 100.0
+offset_bottom = 3.0
+mouse_filter = 2
+color = Color(0.53, 0.714, 0.788, 0.9)
+
+[node name="Hint" type="Label" parent="Splash/Loading"]
+layout_mode = 0
+offset_top = 80.0
+offset_right = 820.0
+offset_bottom = 130.0
+theme_override_colors/font_color = Color(0.65, 0.71, 0.76, 0.8)
+theme_override_font_sizes/font_size = 20
+horizontal_alignment = 1
+autowrap_mode = 2
+
+[node name="Actions" type="HBoxContainer" parent="Splash/Loading"]
+visible = false
+layout_mode = 0
+offset_left = 150.0
+offset_top = 148.0
+offset_right = 670.0
+offset_bottom = 202.0
+theme_override_constants/separation = 16
+alignment = 1
+
+[node name="Retry" type="Button" parent="Splash/Loading/Actions"]
+layout_mode = 2
+custom_minimum_size = Vector2(260, 48)
+theme_override_font_sizes/font_size = 23
+text = "Zkusit znovu"
+
+[node name="Exit" type="Button" parent="Splash/Loading/Actions"]
+layout_mode = 2
+custom_minimum_size = Vector2(180, 48)
+theme_override_font_sizes/font_size = 23
+text = "Konec"
