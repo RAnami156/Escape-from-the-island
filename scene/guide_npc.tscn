@@ -1,0 +1,326 @@
+[gd_scene format=3 uid="uid://cvjg052hfeys3"]
+
+[ext_resource type="Script" uid="uid://cf7ss03n8vgdy" path="res://guide_npc.gd" id="1_n27ub"]
+[ext_resource type="Texture2D" uid="uid://ftydrk25mp82" path="res://asets/guide_npc/idle.png" id="2_4atm5"]
+[ext_resource type="FontFile" uid="uid://dxa4u7yhh3vnh" path="res://asets/1 Minecraft-Regular.otf" id="2_6l8gu"]
+[ext_resource type="Texture2D" uid="uid://d3dtp42dfdbpe" path="res://asets/guide_npc/walk.png" id="3_6l8gu"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_3un4g"]
+atlas = ExtResource("2_4atm5")
+region = Rect2(0, 32, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_bhks1"]
+atlas = ExtResource("2_4atm5")
+region = Rect2(32, 32, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_g7bdm"]
+atlas = ExtResource("2_4atm5")
+region = Rect2(0, 64, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_xwyi3"]
+atlas = ExtResource("2_4atm5")
+region = Rect2(32, 64, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_vryrl"]
+atlas = ExtResource("2_4atm5")
+region = Rect2(0, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_333gr"]
+atlas = ExtResource("2_4atm5")
+region = Rect2(32, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_kk6om"]
+atlas = ExtResource("3_6l8gu")
+region = Rect2(0, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_prpna"]
+atlas = ExtResource("3_6l8gu")
+region = Rect2(32, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ngilo"]
+atlas = ExtResource("3_6l8gu")
+region = Rect2(64, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_y55os"]
+atlas = ExtResource("3_6l8gu")
+region = Rect2(96, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_txic0"]
+atlas = ExtResource("3_6l8gu")
+region = Rect2(0, 32, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_aaxu2"]
+atlas = ExtResource("3_6l8gu")
+region = Rect2(32, 32, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_l1bds"]
+atlas = ExtResource("3_6l8gu")
+region = Rect2(64, 32, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_pb7aw"]
+atlas = ExtResource("3_6l8gu")
+region = Rect2(96, 32, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ykkte"]
+atlas = ExtResource("3_6l8gu")
+region = Rect2(0, 64, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_w6rjt"]
+atlas = ExtResource("3_6l8gu")
+region = Rect2(32, 64, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_yd8oj"]
+atlas = ExtResource("3_6l8gu")
+region = Rect2(64, 64, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_xgyyo"]
+atlas = ExtResource("3_6l8gu")
+region = Rect2(96, 64, 32, 32)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_tpoh7"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_3un4g")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_bhks1")
+}],
+"loop": 1,
+"name": &"idle_side",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_g7bdm")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_xwyi3")
+}],
+"loop": 1,
+"name": &"idle_top",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_vryrl")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_333gr")
+}],
+"loop": 1,
+"name": &"ilde_down",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_kk6om")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_prpna")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ngilo")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_y55os")
+}],
+"loop": 1,
+"name": &"walk_down",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_txic0")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_aaxu2")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_l1bds")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_pb7aw")
+}],
+"loop": 1,
+"name": &"walk_side",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ykkte")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_w6rjt")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_yd8oj")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_xgyyo")
+}],
+"loop": 1,
+"name": &"walk_top",
+"speed": 5.0
+}]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_7o33r"]
+radius = 5.0
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_g4v7s"]
+radius = 66.27216
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_dialogue"]
+bg_color = Color(0.055, 0.085, 0.07, 0.96)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.7, 0.58, 0.32, 0.95)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+
+[node name="guide_npc" type="CharacterBody2D" unique_id=1844774340]
+z_index = 3
+collision_layer = 8
+script = ExtResource("1_n27ub")
+
+[node name="Label" type="Label" parent="." unique_id=1122033102]
+z_index = 2
+offset_left = -31.0
+offset_top = -48.0
+offset_right = 1039.0
+offset_bottom = 52.0
+scale = Vector2(0.06, 0.06)
+theme_override_colors/font_color = Color(1, 0.95, 0.81, 1)
+theme_override_colors/font_outline_color = Color(0.055, 0.085, 0.07, 1)
+theme_override_constants/outline_size = 8
+theme_override_fonts/font = ExtResource("2_6l8gu")
+theme_override_font_sizes/font_size = 100
+horizontal_alignment = 1
+autowrap_mode = 3
+max_lines_visible = 3
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=1556937889]
+sprite_frames = SubResource("SpriteFrames_tpoh7")
+animation = &"walk_top"
+autoplay = "ilde_down"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1783671083]
+position = Vector2(0, 2)
+shape = SubResource("CircleShape2D_7o33r")
+
+[node name="Area2D" type="Area2D" parent="." unique_id=626194432]
+collision_layer = 0
+collision_mask = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D" unique_id=173256677]
+z_index = 3
+y_sort_enabled = true
+shape = SubResource("CircleShape2D_g4v7s")
+
+[node name="Dialogue" type="CanvasLayer" parent="." unique_id=411288675]
+layer = 6
+
+[node name="ChatPanel" type="PanelContainer" parent="Dialogue" unique_id=1793871171]
+visible = false
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -804.0
+offset_top = -360.0
+offset_right = -24.0
+offset_bottom = -24.0
+grow_horizontal = 0
+grow_vertical = 0
+theme_override_styles/panel = SubResource("StyleBoxFlat_dialogue")
+
+[node name="Margin" type="MarginContainer" parent="Dialogue/ChatPanel" unique_id=1772397346]
+layout_mode = 2
+theme_override_constants/margin_left = 18
+theme_override_constants/margin_top = 14
+theme_override_constants/margin_right = 18
+theme_override_constants/margin_bottom = 14
+
+[node name="VBox" type="VBoxContainer" parent="Dialogue/ChatPanel/Margin" unique_id=813411486]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="Header" type="HBoxContainer" parent="Dialogue/ChatPanel/Margin/VBox" unique_id=1182805857]
+layout_mode = 2
+
+[node name="Title" type="Label" parent="Dialogue/ChatPanel/Margin/VBox/Header" unique_id=758989800]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.94, 0.82, 0.52, 1)
+theme_override_fonts/font = ExtResource("2_6l8gu")
+theme_override_font_sizes/font_size = 28
+text = "Майкл"
+
+[node name="Close" type="Button" parent="Dialogue/ChatPanel/Margin/VBox/Header" unique_id=1539697826]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("2_6l8gu")
+theme_override_font_sizes/font_size = 20
+text = "Закрыть"
+
+[node name="Transcript" type="RichTextLabel" parent="Dialogue/ChatPanel/Margin/VBox" unique_id=1243584568]
+custom_minimum_size = Vector2(0, 150)
+layout_mode = 2
+size_flags_vertical = 3
+focus_mode = 2
+theme_override_fonts/normal_font = ExtResource("2_6l8gu")
+theme_override_font_sizes/normal_font_size = 24
+scroll_following = true
+selection_enabled = true
+
+[node name="InputRow" type="HBoxContainer" parent="Dialogue/ChatPanel/Margin/VBox" unique_id=1390004940]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="Message" type="LineEdit" parent="Dialogue/ChatPanel/Margin/VBox/InputRow" unique_id=1682642715]
+custom_minimum_size = Vector2(0, 42)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_fonts/font = ExtResource("2_6l8gu")
+theme_override_font_sizes/font_size = 22
+placeholder_text = "Напиши Майклу…"
+max_length = 280
+
+[node name="Send" type="Button" parent="Dialogue/ChatPanel/Margin/VBox/InputRow" unique_id=1278127385]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("2_6l8gu")
+theme_override_font_sizes/font_size = 22
+text = "Отправить"
+
+[node name="Retry" type="Button" parent="Dialogue/ChatPanel/Margin/VBox" unique_id=1739308725]
+visible = false
+layout_mode = 2
+theme_override_fonts/font = ExtResource("2_6l8gu")
+theme_override_font_sizes/font_size = 22
+text = "Повторить"
+
+[node name="Status" type="Label" parent="Dialogue/ChatPanel/Margin/VBox" unique_id=297620871]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("2_6l8gu")
+theme_override_font_sizes/font_size = 18
+autowrap_mode = 3
+
+[node name="Talk" type="Button" parent="Dialogue" unique_id=1010264725]
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -244.0
+offset_top = -76.0
+offset_right = -24.0
+offset_bottom = -24.0
+grow_horizontal = 0
+grow_vertical = 0
+theme_override_fonts/font = ExtResource("2_6l8gu")
+theme_override_font_sizes/font_size = 24
+text = "F — Майкл"

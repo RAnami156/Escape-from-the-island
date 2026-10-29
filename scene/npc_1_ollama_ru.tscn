@@ -11,7 +11,7 @@
 [ext_resource type="Texture2D" uid="uid://cffmlkepyc1nm" path="res://asets/monkey (2)-Sheet (1).png" id="6_ivsbi"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_c105b"]
-radius = 64.28063
+radius = 131.00381
 
 [sub_resource type="GDScript" id="GDScript_trtyr"]
 script/source = "extends Node2D
@@ -262,7 +262,7 @@ animations = [{
 [node name="bong" type="CharacterBody2D" unique_id=1644685617]
 collision_mask = 0
 script = ExtResource("1_ivsbi")
-characters_per_line = 75
+characters_per_line = 126
 whiskey_scene = ExtResource("2_7h7ol")
 
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=1597038166]
@@ -271,7 +271,7 @@ scale = Vector2(0.21875, 0.21875)
 texture = ExtResource("2_p44ak")
 
 [node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="." unique_id=1015547831]
-polygon = PackedVector2Array(69, -14, 58, -2, 54, 3, 58, 13, 55, 26, 64, 25, 73, 34, 75, 49, 58, 49, 19, 52, -27, 53, -39, 45, -54, 41, -66, 31, -74, 1, -62, -39, -95, -24, -108, -23, -110, -35, -87, -60, -103, -67, -70, -80, -33, -84, -22, -83, 46, -79, 55, -76, 49, -49, 86, -44, 95, -37)
+polygon = PackedVector2Array(69, -14, 58, -2, 54, 3, 58, 13, 55, 26, 64, 25, 73, 34, 75, 49, 58, 49, 26, 64, -38, 60, -55, 53, -54, 41, -66, 31, -74, 1, -62, -39, -95, -24, -108, -23, -110, -35, -87, -60, -103, -67, -70, -80, -33, -84, -22, -83, 46, -79, 55, -76, 49, -49, 86, -44, 95, -37)
 
 [node name="Area2D" type="Area2D" parent="." unique_id=1897364586]
 collision_layer = 0

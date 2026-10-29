@@ -36,7 +36,7 @@ animations = [{
 "speed": 3.0
 }]
 
-[node name="fly" type="Node2D" unique_id=1144280868]
+[node name="fly" type="Node2D" unique_id=1144280868 groups=["quest_items"]]
 z_index = 25
 scale = Vector2(0.5, 0.5)
 script = ExtResource("1_ry56p")

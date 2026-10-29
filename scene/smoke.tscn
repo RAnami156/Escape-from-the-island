@@ -1,0 +1,111 @@
+[gd_scene format=3 uid="uid://b2nd28ylhv8tr"]
+
+[ext_resource type="Texture2D" uid="uid://cfgkopjg0e5rm" path="res://asets/smoke_0001.png" id="1_vepdb"]
+[ext_resource type="Texture2D" uid="uid://cn4i1xu6ffem" path="res://asets/smoke_0002.png" id="2_cupgj"]
+[ext_resource type="Texture2D" uid="uid://cs7qq7ccxp6qg" path="res://asets/smoke_0003.png" id="3_udhhy"]
+
+[sub_resource type="Animation" id="Animation_cg1xo"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Smoke0003:visible")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Smoke0001:visible")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Smoke0002:visible")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+
+[sub_resource type="Animation" id="Animation_phb13"]
+resource_name = "new_animation"
+length = 0.7
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Smoke0003:visible")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.15),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [true, false]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Smoke0001:visible")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.16, 0.32),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 1,
+"values": [false, true, false]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Smoke0002:visible")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.34, 0.52),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 1,
+"values": [false, true, false]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_8ghq8"]
+_data = {
+&"RESET": SubResource("Animation_cg1xo"),
+&"new_animation": SubResource("Animation_phb13")
+}
+
+[node name="Smoke" type="Node2D" unique_id=703800737]
+
+[node name="Smoke0001" type="Sprite2D" parent="." unique_id=242925566]
+visible = false
+position = Vector2(758.00006, 164.00002)
+scale = Vector2(1.28125, 1.28125)
+texture = ExtResource("1_vepdb")
+
+[node name="Smoke0002" type="Sprite2D" parent="." unique_id=1281291930]
+position = Vector2(764.5, 160.75)
+scale = Vector2(1.2343751, 1.3046874)
+texture = ExtResource("2_cupgj")
+
+[node name="Smoke0003" type="Sprite2D" parent="." unique_id=941620992]
+position = Vector2(760, 164)
+scale = Vector2(1.359375, 1.296875)
+texture = ExtResource("3_udhhy")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=224677975]
+libraries/ = SubResource("AnimationLibrary_8ghq8")

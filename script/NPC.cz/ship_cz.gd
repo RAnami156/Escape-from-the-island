@@ -33,7 +33,7 @@ func _ready() -> void:
 	sail_anim.hide()
 	planks_anim.play("default")
 
-	final_text.text = "Chcete odplout?\nE — Ano"
+	final_text.text = "Отплыть?\nE — Да" if Global.language == "ru" else "Chcete odplout?\nE — Ano"
 	final_text.hide()
 
 	update_prompts()
@@ -113,19 +113,19 @@ func update_prompts() -> void:
 	planks_text.visible = planks and not planks_repaired
 
 	if Global.helm:
-		helm_text.text = "E — nainstalovat kormidelní kolo"
+		helm_text.text = "E — установить штурвал" if Global.language == "ru" else "E — nainstalovat kormidelní kolo"
 	else:
-		helm_text.text = "Je potřeba kormidelní kolo"
+		helm_text.text = "Нужен штурвал" if Global.language == "ru" else "Je potřeba kormidelní kolo"
 
 	if Global.parus:
-		sail_text.text = "E — nainstalovat plachtu"
+		sail_text.text = "E — установить парус" if Global.language == "ru" else "E — nainstalovat plachtu"
 	else:
-		sail_text.text = "Je potřeba plachta"
+		sail_text.text = "Нужен парус" if Global.language == "ru" else "Je potřeba plachta"
 
 	if Global.bamboo_boards:
-		planks_text.text = "E — opravit trup"
+		planks_text.text = "E — починить корпус" if Global.language == "ru" else "E — opravit trup"
 	else:
-		planks_text.text = "Jsou potřeba prkna"
+		planks_text.text = "Нужны доски" if Global.language == "ru" else "Jsou potřeba prkna"
 
 	final_text.visible = (
 		ship_ready

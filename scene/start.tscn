@@ -3,9 +3,15 @@
 [ext_resource type="Texture2D" uid="uid://cjwrrln1qsc4u" path="res://asets/start.png" id="1_gbpcu"]
 [ext_resource type="Script" uid="uid://cctiye8pynbmt" path="res://script/start.gd" id="1_xmel7"]
 [ext_resource type="Texture2D" uid="uid://b4prn5eco7mi5" path="res://asets/pixellab-Airplane-for-a-cut-scene--side-1791530251417.png" id="2_xmel7"]
+<<<<<<< HEAD
 [ext_resource type="Texture2D" uid="uid://diyf6vqg8jkci" path="res://asets/smoke_0001.png" id="3_bnuxd"]
 [ext_resource type="Texture2D" uid="uid://dgd5kdy76n0qt" path="res://asets/smoke_0002.png" id="4_srnb1"]
 [ext_resource type="Texture2D" uid="uid://jag0jslehj76" path="res://asets/smoke_0003.png" id="5_7xr4q"]
+=======
+[ext_resource type="Texture2D" uid="uid://cfgkopjg0e5rm" path="res://asets/smoke_0001.png" id="3_bnuxd"]
+[ext_resource type="Texture2D" uid="uid://cn4i1xu6ffem" path="res://asets/smoke_0002.png" id="4_srnb1"]
+[ext_resource type="Texture2D" uid="uid://cs7qq7ccxp6qg" path="res://asets/smoke_0003.png" id="5_7xr4q"]
+>>>>>>> 092fc288f96e425997b17b3db911d10774280dd2
 
 [sub_resource type="Animation" id="Animation_bhewb"]
 length = 0.001
@@ -91,7 +97,11 @@ tracks/6/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 0,
+<<<<<<< HEAD
 "values": [Vector2(2025, 191)]
+=======
+"values": [Vector2(2020, 187.00002)]
+>>>>>>> 092fc288f96e425997b17b3db911d10774280dd2
 }
 tracks/7/type = "value"
 tracks/7/imported = false
@@ -103,12 +113,20 @@ tracks/7/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 0,
+<<<<<<< HEAD
 "values": [Color(1, 1, 1, 1)]
+=======
+"values": [Color(0, 0, 0, 1)]
+>>>>>>> 092fc288f96e425997b17b3db911d10774280dd2
 }
 
 [sub_resource type="Animation" id="Animation_bnuxd"]
 resource_name = "new_animation"
+<<<<<<< HEAD
 length = 3.0
+=======
+length = 2.5666666
+>>>>>>> 092fc288f96e425997b17b3db911d10774280dd2
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
@@ -116,7 +134,11 @@ tracks/0/path = NodePath("PixellabAirplaneForACutSceneSide1791530251417:position
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
+<<<<<<< HEAD
 "times": PackedFloat32Array(0, 2.498333),
+=======
+"times": PackedFloat32Array(0, 2.1333332),
+>>>>>>> 092fc288f96e425997b17b3db911d10774280dd2
 "transitions": PackedFloat32Array(1, 1),
 "update": 0,
 "values": [Vector2(2050, 179), Vector2(400, 496)]
@@ -128,7 +150,11 @@ tracks/1/path = NodePath("PixellabAirplaneForACutSceneSide1791530251417:rotation
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
+<<<<<<< HEAD
 "times": PackedFloat32Array(0, 2.498333),
+=======
+"times": PackedFloat32Array(0, 2.1333332),
+>>>>>>> 092fc288f96e425997b17b3db911d10774280dd2
 "transitions": PackedFloat32Array(1, 1),
 "update": 0,
 "values": [0.0, 0.0]
@@ -140,7 +166,11 @@ tracks/2/path = NodePath("PixellabAirplaneForACutSceneSide1791530251417:scale")
 tracks/2/interp = 1
 tracks/2/loop_wrap = true
 tracks/2/keys = {
+<<<<<<< HEAD
 "times": PackedFloat32Array(0, 2.498333),
+=======
+"times": PackedFloat32Array(0, 2.1333332),
+>>>>>>> 092fc288f96e425997b17b3db911d10774280dd2
 "transitions": PackedFloat32Array(1, 1),
 "update": 0,
 "values": [Vector2(1, 1), Vector2(1, 1)]
@@ -152,7 +182,11 @@ tracks/3/path = NodePath("PixellabAirplaneForACutSceneSide1791530251417:visible"
 tracks/3/interp = 1
 tracks/3/loop_wrap = true
 tracks/3/keys = {
+<<<<<<< HEAD
 "times": PackedFloat32Array(0, 2.5083332),
+=======
+"times": PackedFloat32Array(0, 2.1433334),
+>>>>>>> 092fc288f96e425997b17b3db911d10774280dd2
 "transitions": PackedFloat32Array(1, 1),
 "update": 1,
 "values": [true, false]
@@ -164,7 +198,11 @@ tracks/4/path = NodePath("Start:modulate")
 tracks/4/interp = 1
 tracks/4/loop_wrap = true
 tracks/4/keys = {
+<<<<<<< HEAD
 "times": PackedFloat32Array(1.9083333, 2.5),
+=======
+"times": PackedFloat32Array(1.5433335, 2.1),
+>>>>>>> 092fc288f96e425997b17b3db911d10774280dd2
 "transitions": PackedFloat32Array(1, 1),
 "update": 0,
 "values": [Color(1, 1, 1, 1), Color(0, 0, 0, 1)]
@@ -176,7 +214,11 @@ tracks/5/path = NodePath("PixellabAirplaneForACutSceneSide1791530251417:modulate
 tracks/5/interp = 1
 tracks/5/loop_wrap = true
 tracks/5/keys = {
+<<<<<<< HEAD
 "times": PackedFloat32Array(1.9083333, 2.498333),
+=======
+"times": PackedFloat32Array(1.5433335, 2.1333332),
+>>>>>>> 092fc288f96e425997b17b3db911d10774280dd2
 "transitions": PackedFloat32Array(1, 1),
 "update": 0,
 "values": [Color(1, 1, 1, 1), Color(0, 0, 0, 1)]
@@ -188,10 +230,17 @@ tracks/6/path = NodePath("AnimatedSprite2D:position")
 tracks/6/interp = 1
 tracks/6/loop_wrap = true
 tracks/6/keys = {
+<<<<<<< HEAD
 "times": PackedFloat32Array(0, 2.5),
 "transitions": PackedFloat32Array(1, 1),
 "update": 0,
 "values": [Vector2(2025, 191), Vector2(380.99997, 506.00003)]
+=======
+"times": PackedFloat32Array(0, 2.07),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector2(2020, 187.00002), Vector2(421, 493.00003)]
+>>>>>>> 092fc288f96e425997b17b3db911d10774280dd2
 }
 tracks/7/type = "value"
 tracks/7/imported = false
@@ -200,7 +249,11 @@ tracks/7/path = NodePath("AnimatedSprite2D:modulate")
 tracks/7/interp = 1
 tracks/7/loop_wrap = true
 tracks/7/keys = {
+<<<<<<< HEAD
 "times": PackedFloat32Array(1.9000001, 2.5),
+=======
+"times": PackedFloat32Array(1.54, 2.07),
+>>>>>>> 092fc288f96e425997b17b3db911d10774280dd2
 "transitions": PackedFloat32Array(1, 1),
 "update": 0,
 "values": [Color(1, 1, 1, 1), Color(0, 0, 0, 1)]
@@ -212,7 +265,11 @@ _data = {
 &"start": SubResource("Animation_bnuxd")
 }
 
+<<<<<<< HEAD
 [sub_resource type="SpriteFrames" id="SpriteFrames_ujs4p"]
+=======
+[sub_resource type="SpriteFrames" id="SpriteFrames_4iubr"]
+>>>>>>> 092fc288f96e425997b17b3db911d10774280dd2
 animations = [{
 "frames": [{
 "duration": 1.0,
@@ -237,7 +294,7 @@ libraries/ = SubResource("AnimationLibrary_srnb1")
 
 [node name="Start" type="Sprite2D" parent="." unique_id=1928240548]
 modulate = Color(0, 0, 0, 1)
-position = Vector2(1100, 547.5)
+position = Vector2(1092, 543)
 scale = Vector2(4.2851563, 4.2851563)
 texture = ExtResource("1_gbpcu")
 
@@ -245,8 +302,17 @@ texture = ExtResource("1_gbpcu")
 position = Vector2(2050, 179)
 texture = ExtResource("2_xmel7")
 
+<<<<<<< HEAD
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=115789779]
 position = Vector2(2025, 191)
 scale = Vector2(1.679688, 1.59375)
 sprite_frames = SubResource("SpriteFrames_ujs4p")
 frame_progress = 0.38601354
+=======
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=1873261642]
+modulate = Color(0, 0, 0, 1)
+position = Vector2(2020, 187.00002)
+scale = Vector2(2.2509756, 2.0230286)
+sprite_frames = SubResource("SpriteFrames_4iubr")
+frame_progress = 0.7869551
+>>>>>>> 092fc288f96e425997b17b3db911d10774280dd2

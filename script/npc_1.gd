@@ -12,7 +12,7 @@ const MODEL: String = "openai/gpt-oss-20b"
 
 const MAX_HISTORY: int = 4
 const MAX_LINES: int = 3
-const CHARS_PER_LINE: int = 51
+const CHARS_PER_LINE: int = 126
 const TYPE_DELAY: float = 0.035
 
 var player_in: bool = false

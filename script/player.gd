@@ -9,10 +9,24 @@ extends CharacterBody2D
 var last_direction: String = "down"
 
 
-func _physics_process(_delta: float) -> void:
+func _ready() -> void:
+	Global.player = self
+	Global.player_position = global_position
 
-	if Input.is_action_just_pressed("esc"):
+
+func _exit_tree() -> void:
+	if Global.player == self:
+		Global.player_position = global_position
+		Global.player = null
+
+
+func _unhandled_input(event: InputEvent) -> void:
+	if event.is_action_pressed("esc"):
+		get_viewport().set_input_as_handled()
 		get_tree().change_scene_to_file("res://scene/menu.tscn")
+
+
+func _physics_process(_delta: float) -> void:
 
 	# ========================================================
 	# MOVEMENT BLOCK

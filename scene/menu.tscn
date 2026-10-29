@@ -2,9 +2,65 @@
 
 [ext_resource type="Script" uid="uid://ddrpwja8xf1jn" path="res://script/menu.gd" id="1_8hxod"]
 [ext_resource type="FontFile" uid="uid://dxa4u7yhh3vnh" path="res://asets/1 Minecraft-Regular.otf" id="1_e5g8k"]
+[ext_resource type="Texture2D" uid="uid://bftnt46n8fnqx" path="res://asets/menu/background_16x9_v2.png" id="2_bo06a"]
+[ext_resource type="Texture2D" uid="uid://gv7umhabbdu4" path="res://asets/menu/loop_v1/spritesheet_5x1.png" id="3_15se8"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_15se8"]
+atlas = ExtResource("3_15se8")
+region = Rect2(0, 0, 1920, 1080)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_xs5te"]
+atlas = ExtResource("3_15se8")
+region = Rect2(1920, 0, 1920, 1080)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_vi6sp"]
+atlas = ExtResource("3_15se8")
+region = Rect2(3840, 0, 1920, 1080)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_1qlln"]
+atlas = ExtResource("3_15se8")
+region = Rect2(5760, 0, 1920, 1080)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_wd6lm"]
+atlas = ExtResource("3_15se8")
+region = Rect2(7680, 0, 1920, 1080)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_c105b"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_15se8")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_xs5te")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_vi6sp")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_1qlln")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_wd6lm")
+}],
+"loop": 1,
+"name": &"default",
+"speed": 5.0
+}]
 
 [node name="menu" type="Node2D" unique_id=846329223]
 script = ExtResource("1_8hxod")
+
+[node name="Background16x9V2" type="Sprite2D" parent="." unique_id=59763446]
+visible = false
+position = Vector2(966, 538)
+texture = ExtResource("2_bo06a")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=1964517535]
+position = Vector2(960, 538.25006)
+scale = Vector2(0.99895835, 1.0078704)
+sprite_frames = SubResource("SpriteFrames_c105b")
+autoplay = "default"
 
 [node name="exit" type="Button" parent="." unique_id=1325983146]
 offset_left = 288.0
@@ -37,3 +93,4 @@ popup/item_1/id = 1
 
 [connection signal="pressed" from="exit" to="." method="_on_exit_pressed"]
 [connection signal="pressed" from="play" to="." method="_on_play_pressed"]
+[connection signal="item_selected" from="OptionButton" to="." method="_on_option_button_item_selected"]

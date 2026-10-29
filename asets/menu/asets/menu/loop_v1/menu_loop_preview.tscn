@@ -1,0 +1,12 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="SpriteFrames" path="res://asets/menu/loop_v1/menu_loop.tres" id="1"]
+
+[node name="MenuLoopPreview" type="Node2D"]
+
+[node name="Background" type="AnimatedSprite2D" parent="."]
+texture_filter = 1
+sprite_frames = ExtResource("1")
+animation = &"default"
+autoplay = "default"
+centered = false
