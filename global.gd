@@ -1,6 +1,7 @@
 extends Node
 
-var language: String = "ru"
+var language: String = "cz"
+var advanced_settings_enabled: bool = true
 
 var player_can_move: bool = true
 

@@ -5,6 +5,10 @@
 [ext_resource type="FontFile" uid="uid://dxa4u7yhh3vnh" path="res://asets/1 Minecraft-Regular.otf" id="2_6l8gu"]
 [ext_resource type="Texture2D" uid="uid://d3dtp42dfdbpe" path="res://asets/guide_npc/walk.png" id="3_6l8gu"]
 
+[ext_resource type="Theme" path="res://asets/ui/island_theme.tres" id="UI_theme"]
+
+[ext_resource type="Script" path="res://script/island_ui_hover.gd" id="UI_hover"]
+
 [sub_resource type="AtlasTexture" id="AtlasTexture_3un4g"]
 atlas = ExtResource("2_4atm5")
 region = Rect2(0, 32, 32, 32)
@@ -170,17 +174,6 @@ radius = 5.0
 [sub_resource type="CircleShape2D" id="CircleShape2D_g4v7s"]
 radius = 66.27216
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_dialogue"]
-bg_color = Color(0.055, 0.085, 0.07, 0.96)
-border_width_left = 2
-border_width_top = 2
-border_width_right = 2
-border_width_bottom = 2
-border_color = Color(0.7, 0.58, 0.32, 0.95)
-corner_radius_top_left = 4
-corner_radius_top_right = 4
-corner_radius_bottom_right = 4
-corner_radius_bottom_left = 4
 
 [node name="guide_npc" type="CharacterBody2D" unique_id=1844774340]
 z_index = 3
@@ -237,7 +230,7 @@ offset_right = -24.0
 offset_bottom = -24.0
 grow_horizontal = 0
 grow_vertical = 0
-theme_override_styles/panel = SubResource("StyleBoxFlat_dialogue")
+theme = ExtResource("UI_theme")
 
 [node name="Margin" type="MarginContainer" parent="Dialogue/ChatPanel" unique_id=1772397346]
 layout_mode = 2
@@ -256,14 +249,13 @@ layout_mode = 2
 [node name="Title" type="Label" parent="Dialogue/ChatPanel/Margin/VBox/Header" unique_id=758989800]
 layout_mode = 2
 size_flags_horizontal = 3
-theme_override_colors/font_color = Color(0.94, 0.82, 0.52, 1)
-theme_override_fonts/font = ExtResource("2_6l8gu")
+theme_override_colors/font_color = Color(0.91, 0.96, 0.93, 1)
 theme_override_font_sizes/font_size = 28
 text = "Майкл"
 
 [node name="Close" type="Button" parent="Dialogue/ChatPanel/Margin/VBox/Header" unique_id=1539697826]
+script = ExtResource("UI_hover")
 layout_mode = 2
-theme_override_fonts/font = ExtResource("2_6l8gu")
 theme_override_font_sizes/font_size = 20
 text = "Закрыть"
 
@@ -272,7 +264,6 @@ custom_minimum_size = Vector2(0, 150)
 layout_mode = 2
 size_flags_vertical = 3
 focus_mode = 2
-theme_override_fonts/normal_font = ExtResource("2_6l8gu")
 theme_override_font_sizes/normal_font_size = 24
 scroll_following = true
 selection_enabled = true
@@ -285,31 +276,31 @@ theme_override_constants/separation = 10
 custom_minimum_size = Vector2(0, 42)
 layout_mode = 2
 size_flags_horizontal = 3
-theme_override_fonts/font = ExtResource("2_6l8gu")
 theme_override_font_sizes/font_size = 22
 placeholder_text = "Напиши Майклу…"
 max_length = 280
 
 [node name="Send" type="Button" parent="Dialogue/ChatPanel/Margin/VBox/InputRow" unique_id=1278127385]
+script = ExtResource("UI_hover")
 layout_mode = 2
-theme_override_fonts/font = ExtResource("2_6l8gu")
 theme_override_font_sizes/font_size = 22
 text = "Отправить"
 
 [node name="Retry" type="Button" parent="Dialogue/ChatPanel/Margin/VBox" unique_id=1739308725]
+script = ExtResource("UI_hover")
 visible = false
 layout_mode = 2
-theme_override_fonts/font = ExtResource("2_6l8gu")
 theme_override_font_sizes/font_size = 22
 text = "Повторить"
 
 [node name="Status" type="Label" parent="Dialogue/ChatPanel/Margin/VBox" unique_id=297620871]
 layout_mode = 2
-theme_override_fonts/font = ExtResource("2_6l8gu")
 theme_override_font_sizes/font_size = 18
 autowrap_mode = 3
 
 [node name="Talk" type="Button" parent="Dialogue" unique_id=1010264725]
+script = ExtResource("UI_hover")
+theme = ExtResource("UI_theme")
 anchors_preset = 3
 anchor_left = 1.0
 anchor_top = 1.0
@@ -321,6 +312,5 @@ offset_right = -24.0
 offset_bottom = -24.0
 grow_horizontal = 0
 grow_vertical = 0
-theme_override_fonts/font = ExtResource("2_6l8gu")
 theme_override_font_sizes/font_size = 24
 text = "F — Майкл"

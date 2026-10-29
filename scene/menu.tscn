@@ -2,8 +2,11 @@
 
 [ext_resource type="Script" uid="uid://ddrpwja8xf1jn" path="res://script/menu.gd" id="1_8hxod"]
 [ext_resource type="FontFile" uid="uid://dxa4u7yhh3vnh" path="res://asets/1 Minecraft-Regular.otf" id="1_e5g8k"]
+[ext_resource type="Theme" path="res://asets/ui/menu_theme.tres" id="5_theme"]
 [ext_resource type="Texture2D" uid="uid://bftnt46n8fnqx" path="res://asets/menu/background_16x9_v2.png" id="2_bo06a"]
 [ext_resource type="Texture2D" uid="uid://gv7umhabbdu4" path="res://asets/menu/loop_v1/spritesheet_5x1.png" id="3_15se8"]
+
+[ext_resource type="Script" path="res://script/island_ui_hover.gd" id="UI_hover"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_15se8"]
 atlas = ExtResource("3_15se8")
@@ -48,7 +51,87 @@ animations = [{
 "speed": 5.0
 }]
 
-[node name="menu" type="Node2D" unique_id=846329223]
+[sub_resource type="Gradient" id="BackdropGradient"]
+offsets = PackedFloat32Array(0, 0.32, 0.62, 1)
+colors = PackedColorArray(0.025, 0.025, 0.025, 0.86, 0.025, 0.025, 0.025, 0.67, 0.025, 0.025, 0.025, 0.12, 0.025, 0.025, 0.025, 0)
+
+[sub_resource type="GradientTexture2D" id="Backdrop"]
+gradient = SubResource("BackdropGradient")
+width = 512
+height = 64
+fill_from = Vector2(0, 0)
+fill_to = Vector2(1, 0)
+
+[sub_resource type="FontVariation" id="LeadFont"]
+base_font = ExtResource("1_e5g8k")
+spacing_glyph = 3
+
+[sub_resource type="StyleBoxFlat" id="MenuItem"]
+content_margin_left = 24.0
+content_margin_right = 24.0
+content_margin_top = 12.0
+content_margin_bottom = 12.0
+bg_color = Color(0.12, 0.12, 0.12, 0.76)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.70, 0.70, 0.70, 0.38)
+corner_radius_top_left = 3
+corner_radius_top_right = 3
+corner_radius_bottom_left = 3
+corner_radius_bottom_right = 3
+
+[sub_resource type="StyleBoxFlat" id="MenuHover"]
+content_margin_left = 24.0
+content_margin_right = 24.0
+content_margin_top = 12.0
+content_margin_bottom = 12.0
+bg_color = Color(0.25, 0.25, 0.25, 0.88)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.95, 0.95, 0.95, 0.85)
+corner_radius_top_left = 3
+corner_radius_top_right = 3
+corner_radius_bottom_left = 3
+corner_radius_bottom_right = 3
+
+[sub_resource type="StyleBoxFlat" id="MenuPressed"]
+content_margin_left = 24.0
+content_margin_right = 24.0
+content_margin_top = 12.0
+content_margin_bottom = 12.0
+bg_color = Color(0.07, 0.07, 0.07, 0.90)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.95, 0.95, 0.95, 0.95)
+corner_radius_top_left = 3
+corner_radius_top_right = 3
+corner_radius_bottom_left = 3
+corner_radius_bottom_right = 3
+
+[sub_resource type="StyleBoxEmpty" id="MenuFocus"]
+
+[sub_resource type="StyleBoxFlat" id="SettingsSurface"]
+content_margin_left = 28.0
+content_margin_right = 28.0
+content_margin_top = 24.0
+content_margin_bottom = 24.0
+bg_color = Color(0.055, 0.055, 0.055, 0.89)
+border_width_top = 1
+border_color = Color(0.83, 0.83, 0.83, 0.35)
+
+[node name="menu" type="Control" unique_id=846329223]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("5_theme")
 script = ExtResource("1_8hxod")
 
 [node name="Background16x9V2" type="Sprite2D" parent="." unique_id=59763446]
@@ -62,35 +145,176 @@ scale = Vector2(0.99895835, 1.0078704)
 sprite_frames = SubResource("SpriteFrames_c105b")
 autoplay = "default"
 
-[node name="exit" type="Button" parent="." unique_id=1325983146]
-offset_left = 288.0
-offset_top = 734.0
-offset_right = 1094.0
-offset_bottom = 920.0
-theme_override_fonts/font = ExtResource("1_e5g8k")
-theme_override_font_sizes/font_size = 80
-text = "EXIT"
+[node name="Backdrop" type="TextureRect" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = SubResource("Backdrop")
+expand_mode = 1
+mouse_filter = 2
+
+[node name="Title" type="VBoxContainer" parent="."]
+anchor_left = 0.12
+anchor_top = 0.2
+anchor_right = 0.12
+anchor_bottom = 0.2
+offset_right = 760.0
+offset_bottom = 220.0
+theme_override_constants/separation = 0
+mouse_filter = 2
+
+[node name="Lead" type="Label" parent="Title"]
+layout_mode = 2
+theme_override_fonts/font = SubResource("LeadFont")
+theme_override_font_sizes/font_size = 24
+theme_override_colors/font_color = Color(0.82, 0.82, 0.82, 1)
+text = "ESCAPE FROM THE"
+mouse_filter = 2
+
+[node name="Name" type="Label" parent="Title"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 132
+theme_override_colors/font_color = Color(0.97, 0.97, 0.97, 1)
+text = "ISLAND"
+mouse_filter = 2
+
+[node name="Accent" type="ColorRect" parent="."]
+anchor_left = 0.12
+anchor_top = 0.2
+anchor_right = 0.12
+anchor_bottom = 0.2
+offset_top = 212.0
+offset_right = 76.0
+offset_bottom = 214.0
+color = Color(0.83, 0.83, 0.83, 0.75)
+mouse_filter = 2
 
 [node name="play" type="Button" parent="." unique_id=1226888545]
-offset_left = 232.0
-offset_top = 194.0
-offset_right = 1590.0
-offset_bottom = 472.0
-theme_override_fonts/font = ExtResource("1_e5g8k")
-theme_override_font_sizes/font_size = 100
-text = "PLAY"
+anchor_left = 0.12
+anchor_top = 0.2
+anchor_right = 0.12
+anchor_bottom = 0.2
+offset_top = 300.0
+offset_right = 410.0
+offset_bottom = 382.0
+theme_override_styles/normal = SubResource("MenuItem")
+theme_override_styles/hover = SubResource("MenuHover")
+theme_override_styles/pressed = SubResource("MenuPressed")
+theme_override_styles/focus = SubResource("MenuFocus")
+theme_override_font_sizes/font_size = 40
+text = "Hrát"
+alignment = 1
+script = ExtResource("UI_hover")
 
-[node name="OptionButton" type="OptionButton" parent="." unique_id=1400017649]
-offset_left = 1384.0
-offset_top = 592.0
-offset_right = 1580.0
-offset_bottom = 692.0
+[node name="SettingsButton" type="Button" parent="."]
+anchor_left = 0.12
+anchor_top = 0.2
+anchor_right = 0.12
+anchor_bottom = 0.2
+offset_top = 402.0
+offset_right = 410.0
+offset_bottom = 470.0
+theme_override_styles/normal = SubResource("MenuItem")
+theme_override_styles/hover = SubResource("MenuHover")
+theme_override_styles/pressed = SubResource("MenuPressed")
+theme_override_styles/focus = SubResource("MenuFocus")
+theme_override_font_sizes/font_size = 28
+text = "Nastavení"
+alignment = 1
+script = ExtResource("UI_hover")
+
+[node name="exit" type="Button" parent="." unique_id=1325983146]
+anchor_left = 0.12
+anchor_top = 0.2
+anchor_right = 0.12
+anchor_bottom = 0.2
+offset_top = 482.0
+offset_right = 410.0
+offset_bottom = 550.0
+theme_override_styles/normal = SubResource("MenuItem")
+theme_override_styles/hover = SubResource("MenuHover")
+theme_override_styles/pressed = SubResource("MenuPressed")
+theme_override_styles/focus = SubResource("MenuFocus")
+theme_override_font_sizes/font_size = 28
+text = "Konec"
+alignment = 1
+script = ExtResource("UI_hover")
+
+[node name="SettingsPanel" type="PanelContainer" parent="."]
+visible = false
+anchor_left = 0.72
+anchor_top = 0.57
+anchor_right = 0.72
+anchor_bottom = 0.57
+offset_left = -340.0
+offset_top = -175.0
+offset_right = 340.0
+offset_bottom = 175.0
+theme_override_styles/panel = SubResource("SettingsSurface")
+
+[node name="Content" type="VBoxContainer" parent="SettingsPanel"]
+layout_mode = 2
+theme_override_constants/separation = 18
+
+[node name="Header" type="HBoxContainer" parent="SettingsPanel/Content"]
+layout_mode = 2
+
+[node name="SettingsTitle" type="Label" parent="SettingsPanel/Content/Header"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 30
+text = "Nastavení"
+
+[node name="CloseSettings" type="Button" parent="SettingsPanel/Content/Header"]
+unique_name_in_owner = true
+layout_mode = 2
+custom_minimum_size = Vector2(48, 48)
+text = "×"
+script = ExtResource("UI_hover")
+
+[node name="LanguageRow" type="HBoxContainer" parent="SettingsPanel/Content"]
+layout_mode = 2
+theme_override_constants/separation = 30
+
+[node name="LanguageLabel" type="Label" parent="SettingsPanel/Content/LanguageRow"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Jazyk"
+
+[node name="OptionButton" type="OptionButton" parent="SettingsPanel/Content/LanguageRow" unique_id=1400017649]
+unique_name_in_owner = true
+layout_mode = 2
+custom_minimum_size = Vector2(300, 52)
 item_count = 2
-popup/item_0/text = "ru"
+selected = 1
+popup/item_0/text = "Русский"
 popup/item_0/id = 0
-popup/item_1/text = "cz"
+popup/item_1/text = "Čeština"
 popup/item_1/id = 1
+script = ExtResource("UI_hover")
 
-[connection signal="pressed" from="exit" to="." method="_on_exit_pressed"]
+[node name="AdvancedToggle" type="CheckButton" parent="SettingsPanel/Content" ]
+unique_name_in_owner = true
+layout_mode = 2
+custom_minimum_size = Vector2(0, 56)
+button_pressed = true
+text = "Rozšířená nastavení"
+
+[node name="AdvancedHint" type="Label" parent="SettingsPanel/Content"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_font_sizes/font_size = 20
+theme_override_colors/font_color = Color(0.78, 0.78, 0.78, 0.8)
+text = "Tab — herní nabídka"
+
 [connection signal="pressed" from="play" to="." method="_on_play_pressed"]
-[connection signal="item_selected" from="OptionButton" to="." method="_on_option_button_item_selected"]
+[connection signal="pressed" from="exit" to="." method="_on_exit_pressed"]
+[connection signal="pressed" from="SettingsButton" to="." method="_on_settings_pressed"]
+[connection signal="pressed" from="SettingsPanel/Content/Header/CloseSettings" to="." method="_on_close_settings_pressed"]
+[connection signal="item_selected" from="SettingsPanel/Content/LanguageRow/OptionButton" to="." method="_on_option_button_item_selected"]
+[connection signal="toggled" from="SettingsPanel/Content/AdvancedToggle" to="." method="_on_advanced_toggled"]

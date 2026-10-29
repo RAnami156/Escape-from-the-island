@@ -8,47 +8,18 @@
 [ext_resource type="FontFile" uid="uid://cngqnpge8crta" path="res://asets/r-classic_8.ttf" id="6_bof67"]
 [ext_resource type="Texture2D" uid="uid://dmheejmj7v25v" path="res://asets/plant-Sheet.png" id="6_wa8mu"]
 
+[ext_resource type="Theme" path="res://asets/ui/island_theme.tres" id="UI_theme"]
+[ext_resource type="Script" path="res://script/island_npc_ui.gd" id="UI_script"]
+
+[ext_resource type="Script" path="res://script/island_ui_hover.gd" id="UI_hover"]
+
 [sub_resource type="CircleShape2D" id="CircleShape2D_x244a"]
 radius = 56.718605
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_c105b"]
 radius = 67.0
 
-[sub_resource type="GDScript" id="GDScript_trtyr"]
-script/source = "extends Node2D
-"
 
-[sub_resource type="GDScript" id="GDScript_7h7ol"]
-script/source = "extends LineEdit
-
-var initial_width: float
-var center_x: float
-
-
-func _ready() -> void:
-	initial_width = size.x
-	center_x = position.x + size.x / 2.0
-
-	text_changed.connect(_on_text_changed)
-	_on_text_changed(text)
-
-
-func _on_text_changed(new_text: String) -> void:
-	var font: Font = get_theme_font(\"font\")
-	var font_size: int = get_theme_font_size(\"font_size\")
-
-	var text_width: float = font.get_string_size(
-		new_text,
-		HORIZONTAL_ALIGNMENT_LEFT,
-		-1,
-		font_size
-	).x
-
-	var new_width: float = max(initial_width, text_width + 30.0)
-
-	size.x = new_width
-	position.x = center_x - new_width / 2.0
-"
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_bof67"]
 atlas = ExtResource("6_wa8mu")
@@ -269,106 +240,244 @@ shape = SubResource("CircleShape2D_c105b")
 [node name="HTTPRequest" type="HTTPRequest" parent="." unique_id=827291519]
 
 [node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=1913535278]
+process_priority = 100
+layer = 4
+script = ExtResource("UI_script")
+npc_key = "flycatcher"
 
-[node name="text_ui" type="Node2D" parent="CanvasLayer" unique_id=1979163601]
-position = Vector2(0.00012207031, 6.1035156e-05)
-scale = Vector2(0.99999994, 0.99999994)
-script = SubResource("GDScript_trtyr")
+[node name="text_ui" type="Control" parent="CanvasLayer" unique_id=1979163601]
+visible = false
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
 
-[node name="Sprite2D" type="Sprite2D" parent="CanvasLayer/text_ui" unique_id=2085070655]
-modulate = Color(0, 0, 0, 1)
-position = Vector2(953.9998, 1033.5)
-scale = Vector2(16.874998, 1.3046874)
-texture = ExtResource("3_ttyes")
+[node name="Sprite2D" type="Panel" parent="CanvasLayer/text_ui"]
+anchor_top = 1.0
+anchor_bottom = 1.0
+anchor_right = 1.0
+offset_left = 24.0
+offset_top = -270.0
+offset_right = -24.0
+offset_bottom = -24.0
+theme = ExtResource("UI_theme")
+mouse_filter = 2
 
-[node name="button_next" type="Button" parent="CanvasLayer/text_ui" unique_id=1735556637]
-offset_left = 1867.9998
-offset_top = 987.0
-offset_right = 1903.0
-offset_bottom = 1058.0
+[node name="Name" type="Label" parent="CanvasLayer/text_ui"]
+anchor_top = 1.0
+anchor_bottom = 1.0
+anchor_right = 1.0
+offset_left = 52.0
+offset_top = -250.0
+offset_right = -300.0
+offset_bottom = -211.0
+theme = ExtResource("UI_theme")
+theme_override_font_sizes/font_size = 30
+text = "Барон Конг"
+mouse_filter = 2
 
-[node name="button_>back" type="Button" parent="CanvasLayer/text_ui" unique_id=1217722093]
-offset_left = 10.999879
-offset_top = 968.99994
-offset_right = 54.999878
-offset_bottom = 1068.0
+[node name="EnterHint" type="Label" parent="CanvasLayer/text_ui"]
+anchor_top = 1.0
+anchor_bottom = 1.0
+anchor_right = 1.0
+offset_left = 52.0
+offset_top = -246.0
+offset_right = -52.0
+offset_bottom = -211.0
+theme = ExtResource("UI_theme")
+theme_override_font_sizes/font_size = 22
+theme_override_colors/font_color = Color(0.72, 0.84, 0.80, 0.8)
+text = "Enter — отправить"
+horizontal_alignment = 2
+mouse_filter = 2
 
-[node name="next" type="Label" parent="CanvasLayer/text_ui" unique_id=1198546168]
-offset_left = 1867.9999
-offset_top = 993.99994
-offset_right = 25241.0
-offset_bottom = 4744.0
-scale = Vector2(0.33, 0.33)
-theme_override_fonts/font = ExtResource("4_rk7qn")
-theme_override_font_sizes/font_size = 200
-text = ">"
+[node name="text" type="Label" parent="CanvasLayer/text_ui"]
+anchor_top = 1.0
+anchor_bottom = 1.0
+anchor_right = 1.0
+offset_left = 52.0
+offset_top = -199.0
+offset_right = -52.0
+offset_bottom = -103.0
+theme = ExtResource("UI_theme")
+theme_override_font_sizes/font_size = 24
+mouse_filter = 2
 
-[node name="back" type="Label" parent="CanvasLayer/text_ui" unique_id=1545718421]
-offset_left = 10.999879
-offset_top = 991.99994
-offset_right = 23384.0
-offset_bottom = 4742.0
-scale = Vector2(0.33, 0.33)
-theme_override_fonts/font = ExtResource("4_rk7qn")
-theme_override_font_sizes/font_size = 200
+[node name="LineEdit" type="LineEdit" parent="CanvasLayer/text_ui"]
+anchor_top = 1.0
+anchor_bottom = 1.0
+anchor_right = 1.0
+offset_left = 52.0
+offset_top = -90.0
+offset_right = -208.0
+offset_bottom = -44.0
+theme = ExtResource("UI_theme")
+theme_override_font_sizes/font_size = 24
+placeholder_text = "Напиши сюда…"
+
+[node name="button_>back" type="Button" parent="CanvasLayer/text_ui"]
+script = ExtResource("UI_hover")
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -192.0
+offset_right = -132.0
+theme = ExtResource("UI_theme")
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_top = -90.0
+offset_bottom = -44.0
 text = "<"
 
-[node name="LineEdit" type="LineEdit" parent="CanvasLayer/text_ui" unique_id=1975410061]
-offset_left = 834.0
-offset_top = 824.0
-offset_right = 1118.0
-offset_bottom = 909.0
-theme_override_fonts/font = ExtResource("4_rk7qn")
-theme_override_font_sizes/font_size = 22
-placeholder_text = "напиши сюда"
-alignment = 1
-script = SubResource("GDScript_7h7ol")
+[node name="button_next" type="Button" parent="CanvasLayer/text_ui"]
+script = ExtResource("UI_hover")
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -120.0
+offset_right = -60.0
+theme = ExtResource("UI_theme")
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_top = -90.0
+offset_bottom = -44.0
+text = ">"
 
-[node name="text" type="Label" parent="CanvasLayer/text_ui" unique_id=1466429651]
-offset_left = 115.99988
-offset_top = 965.99994
-offset_right = 23489.0
-offset_bottom = 4716.0
-scale = Vector2(0.33, 0.33)
-theme_override_fonts/font = ExtResource("6_bof67")
-theme_override_font_sizes/font_size = 70
-text = "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been 
-the industry's standard dummy text ever since 1966, when designers at Letraset and James Mosley, the librarian at St Bride Printing Library in London,
- took a 1914 Cicero translation and scrambled it to make dummy text for Letraset's Body Type sheets. It has survived not only many decades, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised thanks to these sheets and more recently with desktop publishing software like Aldus PageMaker and Microsoft Word including versions of Lorem Ipsum."
+[node name="relationship" type="Control" parent="CanvasLayer" unique_id=886946545]
+visible = false
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
 
-[node name="relationship" type="Node2D" parent="CanvasLayer" unique_id=886946545]
-position = Vector2(1476.0001, 15.000002)
-scale = Vector2(2.03, 2.03)
+[node name="Background" type="Panel" parent="CanvasLayer/relationship"]
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -432.0
+offset_top = 24.0
+offset_right = -24.0
+offset_bottom = 268.0
+theme = ExtResource("UI_theme")
+mouse_filter = 2
 
-[node name="respect_text" type="Label" parent="CanvasLayer/relationship" unique_id=1351973188]
-offset_right = 40.0
-offset_bottom = 23.0
-theme_override_fonts/font = ExtResource("6_bof67")
-text = "уважение: "
-
-[node name="frindship_text" type="Label" parent="CanvasLayer/relationship" unique_id=180137240]
-offset_left = -2.0
-offset_top = 22.0
-offset_right = 63.0
-offset_bottom = 45.0
-theme_override_fonts/font = ExtResource("6_bof67")
-text = "дружба:"
-
-[node name="irritation_text" type="Label" parent="CanvasLayer/relationship" unique_id=628448976]
-offset_left = -3.0
-offset_top = 39.0
-offset_right = 115.0
-offset_bottom = 62.0
-theme_override_fonts/font = ExtResource("6_bof67")
-text = "раздражение: "
-
-[node name="deal_text" type="Label" parent="CanvasLayer/relationship" unique_id=2002867507]
-offset_left = -4.0
-offset_top = 57.0
-offset_right = 60.0
+[node name="Heading" type="Label" parent="CanvasLayer/relationship"]
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -408.0
+offset_top = 42.0
+offset_right = -48.0
 offset_bottom = 80.0
-theme_override_fonts/font = ExtResource("6_bof67")
-text = "сделка: "
+theme = ExtResource("UI_theme")
+theme_override_font_sizes/font_size = 22
+theme_override_colors/font_color = Color(0.72, 0.84, 0.80, 0.85)
+text = "Отношения"
+mouse_filter = 2
+
+[node name="respect_text" type="Label" parent="CanvasLayer/relationship"]
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -408.0
+offset_top = 96.0
+offset_right = -132.0
+offset_bottom = 128.0
+theme = ExtResource("UI_theme")
+theme_override_font_sizes/font_size = 24
+theme_override_colors/font_color = Color(0.75, 0.85, 0.81, 1)
+text = "Уважение"
+mouse_filter = 2
+
+[node name="respect_text_value" type="Label" parent="CanvasLayer/relationship"]
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -120.0
+offset_top = 96.0
+offset_right = -48.0
+offset_bottom = 128.0
+theme = ExtResource("UI_theme")
+theme_override_font_sizes/font_size = 24
+text = "0"
+horizontal_alignment = 2
+mouse_filter = 2
+
+[node name="frindship_text" type="Label" parent="CanvasLayer/relationship"]
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -408.0
+offset_top = 132.0
+offset_right = -132.0
+offset_bottom = 164.0
+theme = ExtResource("UI_theme")
+theme_override_font_sizes/font_size = 24
+theme_override_colors/font_color = Color(0.75, 0.85, 0.81, 1)
+text = "Дружба"
+mouse_filter = 2
+
+[node name="frindship_text_value" type="Label" parent="CanvasLayer/relationship"]
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -120.0
+offset_top = 132.0
+offset_right = -48.0
+offset_bottom = 164.0
+theme = ExtResource("UI_theme")
+theme_override_font_sizes/font_size = 24
+text = "0"
+horizontal_alignment = 2
+mouse_filter = 2
+
+[node name="irritation_text" type="Label" parent="CanvasLayer/relationship"]
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -408.0
+offset_top = 168.0
+offset_right = -132.0
+offset_bottom = 200.0
+theme = ExtResource("UI_theme")
+theme_override_font_sizes/font_size = 24
+theme_override_colors/font_color = Color(0.75, 0.85, 0.81, 1)
+text = "Раздражение"
+mouse_filter = 2
+
+[node name="irritation_text_value" type="Label" parent="CanvasLayer/relationship"]
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -120.0
+offset_top = 168.0
+offset_right = -48.0
+offset_bottom = 200.0
+theme = ExtResource("UI_theme")
+theme_override_font_sizes/font_size = 24
+text = "0"
+horizontal_alignment = 2
+mouse_filter = 2
+
+[node name="deal_text" type="Label" parent="CanvasLayer/relationship"]
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -408.0
+offset_top = 204.0
+offset_right = -132.0
+offset_bottom = 236.0
+theme = ExtResource("UI_theme")
+theme_override_font_sizes/font_size = 24
+theme_override_colors/font_color = Color(0.75, 0.85, 0.81, 1)
+text = "Сделка"
+mouse_filter = 2
+
+[node name="deal_text_value" type="Label" parent="CanvasLayer/relationship"]
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -120.0
+offset_top = 204.0
+offset_right = -48.0
+offset_bottom = 236.0
+theme = ExtResource("UI_theme")
+theme_override_font_sizes/font_size = 24
+text = "0"
+horizontal_alignment = 2
+mouse_filter = 2
 
 [node name="backround" type="AnimatedSprite2D" parent="." unique_id=1767605339]
 position = Vector2(-1, -4)

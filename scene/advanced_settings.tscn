@@ -3,72 +3,268 @@
 [ext_resource type="Script" uid="uid://cmbhpnlum6hdu" path="res://script/advanced_settings.gd" id="1_x1s76"]
 [ext_resource type="FontFile" uid="uid://dxa4u7yhh3vnh" path="res://asets/1 Minecraft-Regular.otf" id="2_sb6yy"]
 
+[sub_resource type="StyleBoxFlat" id="Panel"]
+content_margin_left = 20.0
+content_margin_top = 16.0
+content_margin_right = 20.0
+content_margin_bottom = 16.0
+bg_color = Color(0.07, 0.07, 0.07, 0.94)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.36, 0.36, 0.36, 1)
+
+[sub_resource type="StyleBoxFlat" id="Button"]
+content_margin_left = 12.0
+content_margin_top = 8.0
+content_margin_right = 12.0
+content_margin_bottom = 8.0
+bg_color = Color(0.20, 0.20, 0.20, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.4, 0.4, 0.4, 1)
+
+[sub_resource type="StyleBoxFlat" id="Hover"]
+content_margin_left = 12.0
+content_margin_top = 8.0
+content_margin_right = 12.0
+content_margin_bottom = 8.0
+bg_color = Color(0.29, 0.29, 0.29, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.6, 0.6, 0.6, 1)
+
+[sub_resource type="StyleBoxFlat" id="Pressed"]
+content_margin_left = 12.0
+content_margin_top = 8.0
+content_margin_right = 12.0
+content_margin_bottom = 8.0
+bg_color = Color(0.12, 0.12, 0.12, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.7, 0.7, 0.7, 1)
+
+[sub_resource type="StyleBoxFlat" id="Disabled"]
+content_margin_left = 12.0
+content_margin_top = 8.0
+content_margin_right = 12.0
+content_margin_bottom = 8.0
+bg_color = Color(0.13, 0.13, 0.13, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.23, 0.23, 0.23, 1)
+
+[sub_resource type="StyleBoxFlat" id="Focus"]
+bg_color = Color(0, 0, 0, 0)
+draw_center = false
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.85, 0.85, 0.85, 1)
+
+[sub_resource type="Theme" id="Theme"]
+default_font = ExtResource("2_sb6yy")
+default_font_size = 26
+Button/colors/font_color = Color(0.9, 0.9, 0.9, 1)
+Button/colors/font_hover_color = Color(1, 1, 1, 1)
+Button/colors/font_pressed_color = Color(1, 1, 1, 1)
+Button/colors/font_disabled_color = Color(0.45, 0.45, 0.45, 1)
+Button/styles/normal = SubResource("Button")
+Button/styles/hover = SubResource("Hover")
+Button/styles/pressed = SubResource("Pressed")
+Button/styles/disabled = SubResource("Disabled")
+Button/styles/focus = SubResource("Focus")
+Label/colors/font_color = Color(0.85, 0.85, 0.85, 1)
+VBoxContainer/constants/separation = 10
+HBoxContainer/constants/separation = 24
+
 [node name="advanced_settings" type="CanvasLayer" unique_id=1963392657]
 process_mode = 3
 layer = 10
 visible = false
 script = ExtResource("1_x1s76")
 
-[node name="Label" type="Label" parent="." unique_id=1562306602]
-offset_left = 197.0
-offset_top = 155.0
-offset_right = 280.0
-offset_bottom = 178.0
-theme_override_fonts/font = ExtResource("2_sb6yy")
-text = "teleport to:"
+[node name="Dim" type="ColorRect" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0.35)
 
-[node name="tp_bong" type="Button" parent="." unique_id=1716911269]
-offset_left = 129.0
-offset_top = 227.0
-offset_right = 431.0
-offset_bottom = 307.0
-theme_override_fonts/font = ExtResource("2_sb6yy")
-text = "Bong"
+[node name="Center" type="CenterContainer" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme = SubResource("Theme")
 
-[node name="tp_panda" type="Button" parent="." unique_id=118097248]
-offset_left = 126.0
-offset_top = 356.0
-offset_right = 428.0
-offset_bottom = 436.0
-theme_override_fonts/font = ExtResource("2_sb6yy")
-text = "Panda"
+[node name="Panel" type="PanelContainer" parent="Center"]
+custom_minimum_size = Vector2(940, 0)
+layout_mode = 2
+theme_override_styles/panel = SubResource("Panel")
 
-[node name="tp_flycatcher" type="Button" parent="." unique_id=1104816632]
-offset_left = 123.0
-offset_top = 483.0
-offset_right = 425.0
-offset_bottom = 563.0
-theme_override_fonts/font = ExtResource("2_sb6yy")
-text = "Flycatcher"
+[node name="Content" type="VBoxContainer" parent="Center/Panel"]
+layout_mode = 2
+theme_override_constants/separation = 16
 
-[node name="tp_ship" type="Button" parent="." unique_id=709881770]
-offset_left = 121.0
-offset_top = 619.0
-offset_right = 423.0
-offset_bottom = 699.0
-theme_override_fonts/font = ExtResource("2_sb6yy")
-text = "ship
-"
+[node name="Header" type="HBoxContainer" parent="Center/Panel/Content"]
+layout_mode = 2
 
-[node name="tp_baobab" type="Button" parent="." unique_id=25592361]
-offset_left = 117.0
-offset_top = 745.0
-offset_right = 419.0
-offset_bottom = 825.0
-theme_override_fonts/font = ExtResource("2_sb6yy")
-text = "baobab"
+[node name="Title" type="Label" parent="Center/Panel/Content/Header"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Меню"
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 32
 
-[node name="Label2" type="Label" parent="." unique_id=1568442597]
-offset_left = 455.0
-offset_top = 15.0
-offset_right = 1395.0
-offset_bottom = 152.0
-theme_override_fonts/font = ExtResource("2_sb6yy")
-theme_override_font_sizes/font_size = 100
-text = "advanced_settings"
+[node name="CloseButton" type="Button" parent="Center/Panel/Content/Header"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(48, 52)
+layout_mode = 2
+text = "X"
 
-[connection signal="pressed" from="tp_bong" to="." method="_on_tp_bong_pressed"]
-[connection signal="pressed" from="tp_panda" to="." method="_on_tp_panda_pressed"]
-[connection signal="pressed" from="tp_flycatcher" to="." method="_on_tp_flycatcher_pressed"]
-[connection signal="pressed" from="tp_ship" to="." method="_on_tp_ship_pressed"]
-[connection signal="pressed" from="tp_baobab" to="." method="_on_tp_baobab_pressed"]
+[node name="Columns" type="HBoxContainer" parent="Center/Panel/Content"]
+layout_mode = 2
+
+[node name="Teleport" type="VBoxContainer" parent="Center/Panel/Content/Columns"]
+custom_minimum_size = Vector2(340, 0)
+layout_mode = 2
+
+[node name="TeleportTitle" type="Label" parent="Center/Panel/Content/Columns/Teleport"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Телепорт"
+
+
+[node name="tp_bong" type="Button" parent="Center/Panel/Content/Columns/Teleport"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 52)
+layout_mode = 2
+text = "Бонг"
+
+[node name="tp_panda" type="Button" parent="Center/Panel/Content/Columns/Teleport"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 52)
+layout_mode = 2
+text = "Панда"
+
+[node name="tp_flycatcher" type="Button" parent="Center/Panel/Content/Columns/Teleport"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 52)
+layout_mode = 2
+text = "Мухоловка"
+
+[node name="tp_ship" type="Button" parent="Center/Panel/Content/Columns/Teleport"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 52)
+layout_mode = 2
+text = "Корабль"
+
+[node name="tp_baobab" type="Button" parent="Center/Panel/Content/Columns/Teleport"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 52)
+layout_mode = 2
+text = "Баобаб"
+
+[node name="Actions" type="VBoxContainer" parent="Center/Panel/Content/Columns"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="ShipTitle" type="Label" parent="Center/Panel/Content/Columns/Actions"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Лодка"
+
+
+[node name="RepairButton" type="Button" parent="Center/Panel/Content/Columns/Actions"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 52)
+layout_mode = 2
+text = "Починить всю лодку"
+
+[node name="ShipStatus" type="Label" parent="Center/Panel/Content/Columns/Actions"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Починено: 0/3"
+theme_override_font_sizes/font_size = 22
+theme_override_colors/font_color = Color(0.6, 0.6, 0.6, 1)
+
+[node name="Gap" type="Control" parent="Center/Panel/Content/Columns/Actions"]
+custom_minimum_size = Vector2(0, 20)
+layout_mode = 2
+mouse_filter = 2
+
+[node name="FinalTitle" type="Label" parent="Center/Panel/Content/Columns/Actions"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Катсцены"
+
+
+[node name="GoodFinalButton" type="Button" parent="Center/Panel/Content/Columns/Actions"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 52)
+layout_mode = 2
+text = "Хороший финал"
+
+[node name="BadFinalButton" type="Button" parent="Center/Panel/Content/Columns/Actions"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 52)
+layout_mode = 2
+text = "Плохой финал"
+
+[node name="ActionStatus" type="Label" parent="Center/Panel/Content"]
+unique_name_in_owner = true
+layout_mode = 2
+text = ""
+custom_minimum_size = Vector2(0, 28)
+theme_override_font_sizes/font_size = 22
+autowrap_mode = 2
+
+[node name="Footer" type="HBoxContainer" parent="Center/Panel/Content"]
+layout_mode = 2
+
+[node name="KeyboardHint" type="Label" parent="Center/Panel/Content/Footer"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Tab / Esc — закрыть"
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 21
+
+[node name="ResumeButton" type="Button" parent="Center/Panel/Content/Footer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(260, 52)
+layout_mode = 2
+text = "Продолжить"
+
+[connection signal="pressed" from="Center/Panel/Content/Columns/Teleport/tp_bong" to="." method="_on_tp_bong_pressed"]
+
+[connection signal="pressed" from="Center/Panel/Content/Columns/Teleport/tp_panda" to="." method="_on_tp_panda_pressed"]
+
+[connection signal="pressed" from="Center/Panel/Content/Columns/Teleport/tp_flycatcher" to="." method="_on_tp_flycatcher_pressed"]
+
+[connection signal="pressed" from="Center/Panel/Content/Columns/Teleport/tp_ship" to="." method="_on_tp_ship_pressed"]
+
+[connection signal="pressed" from="Center/Panel/Content/Columns/Teleport/tp_baobab" to="." method="_on_tp_baobab_pressed"]
+
+[connection signal="pressed" from="Center/Panel/Content/Header/CloseButton" to="." method="_on_resume_pressed"]
+
+[connection signal="pressed" from="Center/Panel/Content/Footer/ResumeButton" to="." method="_on_resume_pressed"]
+
+[connection signal="pressed" from="Center/Panel/Content/Columns/Actions/RepairButton" to="." method="_on_repair_ship_pressed"]
+
+[connection signal="pressed" from="Center/Panel/Content/Columns/Actions/GoodFinalButton" to="." method="_on_final_good_pressed"]
+
+[connection signal="pressed" from="Center/Panel/Content/Columns/Actions/BadFinalButton" to="." method="_on_final_bad_pressed"]

@@ -134,6 +134,19 @@ func update_prompts() -> void:
 	)
 
 
+func repair_all() -> void:
+	# The quick-action panel repairs the same state and visuals as normal play.
+	helm_repaired = true
+	sail_repaired = true
+	planks_repaired = true
+	helm_anim.show()
+	helm_anim.play("default")
+	sail_anim.show()
+	sail_anim.play("default")
+	planks_anim.play("fixed")
+	check_ship()
+
+
 func check_ship() -> void:
 	if helm_repaired and sail_repaired and planks_repaired:
 		ship_ready = true
