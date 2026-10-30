@@ -27,6 +27,7 @@
 [ext_resource type="Script" uid="uid://b3pbsqj4saurc" path="res://script/main.gd" id="21_main"]
 [ext_resource type="Script" uid="uid://brh5f4fbtltvi" path="res://script/quest_route.gd" id="22_quest_route"]
 [ext_resource type="Shader" uid="uid://e8bff66iq618" path="res://asets/shaders/island_water.gdshader" id="23_water"]
+[ext_resource type="Texture2D" path="res://asets/water_effects/shore_distance.png" id="24_shore_distance"]
 
 [sub_resource type="CompressedTexture2D" id="CompressedTexture2D_brvut"]
 
@@ -1035,6 +1036,10 @@ texture_region_size = Vector2i(32, 32)
 shader = ExtResource("23_water")
 shader_parameter/water_pattern = ExtResource("13_jcbur")
 shader_parameter/shoreline = false
+shader_parameter/surf_enabled = true
+shader_parameter/shore_distance = ExtResource("24_shore_distance")
+shader_parameter/shore_bounds = Vector4(241, -325, 9599, 7962)
+shader_parameter/shore_distance_range = 96.0
 shader_parameter/wave_speed = 0.65
 shader_parameter/wave_amount = 1.25
 
@@ -1048,6 +1053,10 @@ texture_region_size = Vector2i(32, 32)
 shader = ExtResource("23_water")
 shader_parameter/water_pattern = ExtResource("13_jcbur")
 shader_parameter/shoreline = true
+shader_parameter/surf_enabled = true
+shader_parameter/shore_distance = ExtResource("24_shore_distance")
+shader_parameter/shore_bounds = Vector4(241, -325, 9599, 7962)
+shader_parameter/shore_distance_range = 96.0
 shader_parameter/wave_speed = 0.65
 shader_parameter/wave_amount = 1.25
 
