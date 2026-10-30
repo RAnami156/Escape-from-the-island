@@ -18,6 +18,29 @@ func _frames() -> void:
 		await physics_frame
 	await process_frame
 
+func _area_center(area: Area2D) -> Vector2:
+	for child: Node in area.get_children():
+		if child is CollisionShape2D:
+			return child.global_position
+		if child is CollisionPolygon2D:
+			# A concave shoreline's average vertex position may lie outside it.
+			# Use the center of its largest filled triangle as a physical entry point.
+			var triangles := Geometry2D.triangulate_polygon(child.polygon)
+			var largest := 0.0
+			var center := Vector2.ZERO
+			for index in range(0, triangles.size(), 3):
+				var a: Vector2 = child.polygon[triangles[index]]
+				var b: Vector2 = child.polygon[triangles[index + 1]]
+				var c: Vector2 = child.polygon[triangles[index + 2]]
+				var triangle_area := absf((b - a).cross(c - a))
+				if triangle_area > largest:
+					largest = triangle_area
+					center = (a + b + c) / 3.0
+			_check(largest > 0.0, "The observation polygon must have a valid interior")
+			return child.to_global(center)
+	_check(false, "Observation area must have a collision shape or polygon")
+	return area.global_position
+
 func _run() -> void:
 	var authored: Node2D = load("res://scene/main.tscn").instantiate()
 	var main_guide: Node = authored.get_node("guide_npc")
@@ -56,7 +79,7 @@ func _run() -> void:
 		guide.reset_dialogue()
 		for zone: String in AreaContext.ZONES:
 			var area: Area2D = zones.get_node(zone)
-			var center: Vector2 = area.get_node("CollisionShape2D").global_position
+			var center := _area_center(area)
 			_check(area.collision_mask == 8 and area.collision_layer == 0, "Only Michael must trigger areas")
 			player.global_position = center
 			await _frames()

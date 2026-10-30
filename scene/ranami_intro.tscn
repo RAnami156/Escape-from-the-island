@@ -1,8 +1,9 @@
-[gd_scene load_steps=4 format=3]
+[gd_scene load_steps=5 format=3]
 
 [ext_resource type="Script" path="res://script/ranami_intro.gd" id="1_intro"]
 [ext_resource type="Texture2D" path="res://asets/branding/ranami_splash.png" id="2_splash"]
 [ext_resource type="Theme" path="res://asets/ui/menu_theme.tres" id="3_theme"]
+[ext_resource type="Script" path="res://script/ranami_atmosphere.gd" id="4_atmosphere"]
 
 [node name="RanamiIntro" type="CanvasLayer"]
 layer = 100
@@ -39,6 +40,16 @@ mouse_filter = 2
 texture = ExtResource("2_splash")
 expand_mode = 1
 stretch_mode = 5
+
+[node name="Atmosphere" type="Control" parent="Splash"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("4_atmosphere")
 
 [node name="Loading" type="Control" parent="Splash"]
 layout_mode = 1
