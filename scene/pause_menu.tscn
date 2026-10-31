@@ -1,0 +1,104 @@
+[gd_scene load_steps=4 format=3]
+
+[ext_resource type="Script" path="res://script/pause_menu.gd" id="1"]
+[ext_resource type="Theme" path="res://asets/ui/menu_theme.tres" id="2"]
+
+[sub_resource type="StyleBoxFlat" id="Surface"]
+content_margin_left = 36.0
+content_margin_right = 36.0
+content_margin_top = 28.0
+content_margin_bottom = 28.0
+bg_color = Color(0.035, 0.035, 0.035, 0.91)
+border_width_top = 1
+border_width_bottom = 1
+border_color = Color(0.8, 0.8, 0.8, 0.3)
+
+[node name="PauseMenu" type="CanvasLayer"]
+process_mode = 3
+layer = 90
+script = ExtResource("1")
+
+[node name="Overlay" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("2")
+
+[node name="Dim" type="ColorRect" parent="Overlay"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+color = Color(0, 0, 0, 0.4)
+
+[node name="Center" type="CenterContainer" parent="Overlay"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+
+[node name="Panel" type="PanelContainer" parent="Overlay/Center"]
+custom_minimum_size = Vector2(620, 0)
+layout_mode = 2
+theme_override_styles/panel = SubResource("Surface")
+
+[node name="Content" type="VBoxContainer" parent="Overlay/Center/Panel"]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="Title" type="Label" parent="Overlay/Center/Panel/Content"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 38
+text = "Pauza"
+
+[node name="Resume" type="Button" parent="Overlay/Center/Panel/Content"]
+custom_minimum_size = Vector2(0, 54)
+layout_mode = 2
+text = "Pokračovat"
+
+[node name="Save" type="Button" parent="Overlay/Center/Panel/Content"]
+custom_minimum_size = Vector2(0, 54)
+layout_mode = 2
+text = "Uložit hru"
+
+[node name="Load" type="Button" parent="Overlay/Center/Panel/Content"]
+custom_minimum_size = Vector2(0, 54)
+layout_mode = 2
+text = "Načíst uloženou hru"
+
+[node name="Menu" type="Button" parent="Overlay/Center/Panel/Content"]
+custom_minimum_size = Vector2(0, 54)
+layout_mode = 2
+text = "Uložit a do menu"
+
+[node name="Quit" type="Button" parent="Overlay/Center/Panel/Content"]
+custom_minimum_size = Vector2(0, 54)
+layout_mode = 2
+text = "Uložit a ukončit"
+
+[node name="Status" type="Label" parent="Overlay/Center/Panel/Content"]
+custom_minimum_size = Vector2(0, 52)
+layout_mode = 2
+theme_override_font_sizes/font_size = 22
+autowrap_mode = 2
+
+[node name="Hint" type="Label" parent="Overlay/Center/Panel/Content"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 20
+modulate = Color(1, 1, 1, 0.65)
+text = "F5 — uložit · F9 — načíst"
+
+[node name="Toast" type="Label" parent="."]
+offset_left = 24.0
+offset_top = 24.0
+offset_right = 1200.0
+offset_bottom = 64.0
+theme = ExtResource("2")
+theme_override_font_sizes/font_size = 24
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.85)
+theme_override_constants/shadow_offset_x = 2
+theme_override_constants/shadow_offset_y = 2
+mouse_filter = 2

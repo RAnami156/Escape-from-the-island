@@ -166,6 +166,7 @@ func leave_island() -> void:
 	if leaving or not ship_ready:
 		return
 
+	SaveGame.save_game(false)
 	leaving = true
 	final_text.hide()
 

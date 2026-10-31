@@ -276,10 +276,17 @@ func _input(event: InputEvent) -> void:
 	if chat_panel.visible and event.is_action_pressed("esc"):
 		close_chat()
 		get_viewport().set_input_as_handled()
-	elif event is InputEventKey and event.pressed and not event.echo and event.physical_keycode == KEY_F:
-		if not input.has_focus():
-			open_chat()
-			get_viewport().set_input_as_handled()
+
+
+func _unhandled_key_input(event: InputEvent) -> void:
+	# Let the focused editor consume text before treating F as a game shortcut.
+	if not event is InputEventKey or not event.pressed or event.echo or event.physical_keycode != KEY_F:
+		return
+	var focused := get_viewport().gui_get_focus_owner()
+	if focused is LineEdit or focused is TextEdit:
+		return
+	open_chat()
+	get_viewport().set_input_as_handled()
 
 
 func open_chat() -> void:
@@ -542,7 +549,7 @@ func _remember_player_name(value: String) -> bool:
 
 
 func reset_dialogue() -> void:
-	# Each new Main instance is a new acquaintance. Old user:// saves are ignored.
+	# New games start fresh. SaveGame restores this state explicitly when continuing.
 	if is_instance_valid(_client):
 		_client.cancel()
 	_on_input_focus_exited()

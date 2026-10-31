@@ -23,7 +23,11 @@ func _exit_tree() -> void:
 func _unhandled_input(event: InputEvent) -> void:
 	if event.is_action_pressed("esc"):
 		get_viewport().set_input_as_handled()
-		get_tree().change_scene_to_file("res://scene/menu.tscn")
+		var pause_menu := get_tree().current_scene.get_node_or_null("PauseMenu")
+		if pause_menu != null:
+			pause_menu.open()
+		else:
+			get_tree().change_scene_to_file("res://scene/menu.tscn")
 
 
 func _physics_process(_delta: float) -> void:

@@ -8,12 +8,19 @@ const RUSSIAN_NPC_SCRIPTS: Dictionary = {
 
 
 func _enter_tree() -> void:
+	SaveGame.prepare_main()
 	# Select scripts before the NPCs initialize their dialogue and signals.
 	if Global.language != "ru":
 		return
 	for npc_path: NodePath in RUSSIAN_NPC_SCRIPTS:
 		_set_npc_script(get_node(npc_path), RUSSIAN_NPC_SCRIPTS[npc_path])
 	$panda.sprite_path = ^"AnimatedSprite2D"
+
+
+func _ready() -> void:
+	SaveGame.restore_main(self)
+	var pause_menu := preload("res://scene/pause_menu.tscn").instantiate()
+	add_child(pause_menu)
 
 
 func _set_npc_script(npc: Node, localized_script: Script) -> void:
