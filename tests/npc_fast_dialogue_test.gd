@@ -32,6 +32,7 @@ func _respond(npc: Node, message: String, wire: Dictionary) -> void:
 
 
 func _run() -> void:
+	root.get_node("SaveGame").save_path = "user://npc-regression-unused/slot.json"
 	for bad: String in ["Ты пришла после крушения?", "Ты уже готова?", "Садись, приготовь чай.", "Я тебя провожу.", "Тебе нужно поесть.", "Я принесу тебе книгу."]:
 		_check(not Fast.reply_violations(bad, false).is_empty(), "Unsupported Russian reply must be caught: " + bad)
 	for good: String in ["Ты пришёл после крушения?", "Я сама сделала доски.", "Здесь нельзя сесть или приготовить еду.", "Принеси книгу из руин храма."]:
@@ -50,6 +51,7 @@ func _run() -> void:
 		main.get_node("guide_npc").auto_introduction = false
 		root.add_child(main)
 		current_scene = main
+		root.get_node("SaveGame")._autosave_left = 999999.0
 		for key: String in ["bong", "flycather", "panda"]:
 			var npc: Node = main.get_node(key)
 			var who := Fast.kind(npc)
@@ -86,7 +88,8 @@ func _run() -> void:
 			var hello := "Ahoj, jak se jmenuješ?" if language == "cz" else "Привет, как тебя зовут?"
 			var request := _prepare(npc, hello)
 			_check(npc.get_meta("response_timing").state == "running" and npc.get_meta("response_timing").elapsed_ms == 0, "Every accepted message must reset and start its own timer")
-			await create_timer(0.03).timeout
+			while Time.get_ticks_msec() - int(npc.get_meta("response_timing").started_ms) < 30:
+				await process_frame
 			var ui: Node = npc.get_node("CanvasLayer")
 			ui._update_response_time(language == "cz")
 			var running_text: String = npc.get_node("CanvasLayer/text_ui/ResponseTime").text

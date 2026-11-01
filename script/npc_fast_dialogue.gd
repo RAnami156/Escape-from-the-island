@@ -2,6 +2,8 @@ extends RefCounted
 ## Shared request optimization for Kong, Flycatcher and Panda only.
 ## Existing NPC handlers remain the authority for phases, scoring and rewards.
 
+const CzechDialogue = preload("res://script/npc_czech_dialogue.gd")
+
 const MODEL := "qwen3:8b"
 const CONTEXT_SIZE := 4096
 const BATCH_SIZE := 512
@@ -42,6 +44,13 @@ static func scripted_reply(npc: Node) -> bool:
 static func build_request(npc: Node, player_text: String) -> Dictionary:
 	var who := kind(npc)
 	var czech: bool = npc.get_script().resource_path.contains("/NPC.cz/")
+	if czech:
+		var bounded := CzechDialogue.build_request(npc, player_text, scripted_reply(npc), CONTEXT_SIZE, BATCH_SIZE)
+		start_response_timer(npc)
+		npc.set_meta("fast_reply_repairs", 0)
+		npc.set_meta("fast_reply_filtered", false)
+		npc.set_meta("fast_request_payload", bounded)
+		return bounded
 	var locale := "natural Czech with diacritics" if czech else "natural Russian"
 	if not npc.has_meta("fast_world_base"):
 		npc.set_meta("fast_world_base", npc.get("world_memory"))
@@ -190,6 +199,8 @@ static func reply_violations(value: String, czech: bool, npc: Node = null) -> Ar
 		_speech_patterns[czech] = compiled
 	var violations: Array[String] = []
 	var normalized := value.to_lower()
+	if czech:
+		violations.append_array(CzechDialogue.action_violations(value))
 	for rule: Dictionary in _speech_patterns[czech]:
 		if rule.regex.search(normalized) != null:
 			violations.append(rule.reason)
@@ -210,6 +221,8 @@ static func reply_violations(value: String, czech: bool, npc: Node = null) -> Ar
 
 
 static func maybe_repair_reply(npc: Node, result: int, code: int, body: PackedByteArray) -> bool:
+	if npc.get_script().resource_path.contains("/NPC.cz/"):
+		return false # Czech replies are selected from valid lines, never regenerated.
 	if result != HTTPRequest.RESULT_SUCCESS or code != 200 or scripted_reply(npc) or int(npc.get_meta("fast_reply_repairs", 0)) >= 1:
 		return false
 	var outer: Variant = JSON.parse_string(body.get_string_from_utf8())
@@ -242,6 +255,8 @@ static func expand_response(npc: Node, body: PackedByteArray) -> PackedByteArray
 	if not outer is Dictionary or not outer.get("message") is Dictionary:
 		return body
 	var response: Variant = JSON.parse_string(str(outer.message.get("content", "")))
+	if response is Dictionary and npc.get_script().resource_path.contains("/NPC.cz/"):
+		CzechDialogue.expand_selection(npc, response)
 	if response is Dictionary and response.has("h") and not response.has("d") and kind(npc) == "panda" and phase(npc) == 3:
 		response.d = [0, 0, 0, 0]
 	if not response is Dictionary:
@@ -263,6 +278,8 @@ static func expand_response(npc: Node, body: PackedByteArray) -> PackedByteArray
 	if valid:
 		var spoken: String = response.r
 		var czech: bool = npc.get_script().resource_path.contains("/NPC.cz/")
+		if czech and not scripted_reply(npc):
+			spoken = CzechDialogue.guard(npc, spoken)
 		if not scripted_reply(npc) and not reply_violations(spoken, czech, npc).is_empty():
 			# One correction attempt is enough. An unsafe second draft never reaches the UI.
 			spoken = "Zeptej se na ostrov. Odpovím, pokud to vím." if czech else "Спроси об острове — отвечу, если знаю."
