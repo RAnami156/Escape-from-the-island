@@ -7,6 +7,7 @@
 [ext_resource type="FontFile" uid="uid://cngqnpge8crta" path="res://asets/r-classic_8.ttf" id="4_fbih1"]
 [ext_resource type="Texture2D" uid="uid://c4n5k1tplsng0" path="res://asets/boat(Vrstva 4) _0001.png" id="4_luj81"]
 [ext_resource type="Texture2D" uid="uid://l5mpxh7i7m6b" path="res://asets/boat(Vrstva 3) _0001.png" id="5_d5n2l"]
+[ext_resource type="PackedScene" path="res://scene/ship_ui.tscn" id="UI_ship"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_jm20t"]
 atlas = ExtResource("2_j3ojk")
@@ -66,7 +67,7 @@ animations = [{
 }]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_x244a"]
-size = Vector2(269, 92)
+size = Vector2(198, 77)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_c105b"]
 size = Vector2(32, 32)
@@ -87,7 +88,6 @@ sprite_frames = SubResource("SpriteFrames_c105b")
 autoplay = "default"
 
 [node name="sail_anim" type="AnimatedSprite2D" parent="." unique_id=682109177]
-z_index = 1
 position = Vector2(-29, 7.999998)
 scale = Vector2(3.28125, 3.2812498)
 sprite_frames = SubResource("SpriteFrames_x244a")
@@ -103,7 +103,7 @@ collision_layer = 0
 collision_mask = 2
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D" unique_id=1845699529]
-position = Vector2(-31, 87)
+position = Vector2(-36, 79.5)
 shape = SubResource("RectangleShape2D_x244a")
 
 [node name="ИзображениеChatGpt30Сент_2026Г_,112451" type="Sprite2D" parent="Area2D" unique_id=1026652310]
@@ -175,6 +175,8 @@ offset_right = 3.0
 offset_bottom = -30.0
 theme_override_fonts/font = ExtResource("4_fbih1")
 text = "67 ребята"
+
+[node name="ShipUI" parent="." unique_id=1934646706 instance=ExtResource("UI_ship")]
 
 [connection signal="body_entered" from="Area2D" to="." method="_on_area_2d_body_entered"]
 [connection signal="body_entered" from="helm" to="." method="_on_helm_body_entered"]

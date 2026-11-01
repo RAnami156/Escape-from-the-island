@@ -49,6 +49,10 @@ var panda_deal: int = 0
 var book: bool = false
 var bamboo_boards: bool = false
 
+# Optional beach discovery, independent of the NPC quest chains.
+var compass_chest_opened: bool = false
+var compass_found: bool = false
+
 
 # Runs in the autoload so the request survives the menu being freed.
 func teleport_player_to(target_path: NodePath, offset: Vector2 = Vector2(0, 80)) -> void:

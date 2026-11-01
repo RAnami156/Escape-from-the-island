@@ -10,6 +10,7 @@ const GLOBAL_FIELDS := [
 	"bong_respect", "bong_friendship", "bong_irritation", "bong_deal", "whiskey", "helm",
 	"flycatcher_respect", "flycatcher_friendship", "flycatcher_irritation", "flycatcher_deal", "fly", "parus",
 	"panda_respect", "panda_friendship", "panda_irritation", "panda_deal", "book", "bamboo_boards",
+	"compass_chest_opened", "compass_found",
 ]
 const NPC_FIELDS := [
 	"current_phase", "request_phase", "phase_1_message_count", "phase_3_message_count",
@@ -291,6 +292,9 @@ func _valid_save(data: Variant) -> bool:
 	if not _valid_position(data.player.get("position")) or data.player.get("direction") not in ["down", "top", "left", "rigth"]:
 		return false
 	for field: String in GLOBAL_FIELDS:
+		# Saves made before the beach discovery default to an unopened chest.
+		if field in ["compass_chest_opened", "compass_found"] and not data.globals.has(field):
+			continue
 		var default: Variant = Global.get(field)
 		if not _same_type(data.globals.get(field), default):
 			return false

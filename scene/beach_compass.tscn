@@ -1,0 +1,34 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://script/beach_compass.gd" id="1"]
+[ext_resource type="Script" path="res://script/beach_compass_ui.gd" id="2"]
+
+[sub_resource type="RectangleShape2D" id="ChestShape"]
+size = Vector2(32, 16)
+
+[node name="BeachCompass" type="Node2D"]
+z_index = 4
+script = ExtResource("1")
+
+[node name="Body" type="StaticBody2D" parent="."]
+collision_mask = 0
+
+[node name="Shape" type="CollisionShape2D" parent="Body"]
+position = Vector2(0, 4)
+shape = SubResource("ChestShape")
+
+[node name="UI" type="CanvasLayer" parent="."]
+layer = 30
+
+[node name="Display" type="Control" parent="UI"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("2")
+
+[node name="Sound" type="AudioStreamPlayer" parent="."]
+volume_db = -20.0

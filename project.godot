@@ -20,7 +20,7 @@ config/icon="res://asets/icon.svg"
 
 [autoload]
 
-Global="*uid://bpc6h8fr4yffk"
+Global="*res://global.gd"
 SaveGame="*res://script/save_game.gd"
 MCPRuntimeServer="*res://addons/godot_mcp_toolkit/runtime/mcp_runtime_server.gd"
 
