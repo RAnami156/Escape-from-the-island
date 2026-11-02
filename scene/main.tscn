@@ -30,6 +30,7 @@
 [ext_resource type="Texture2D" uid="uid://myakchkjof6" path="res://asets/water_effects/shore_distance.png" id="24_shore_distance"]
 [ext_resource type="PackedScene" path="res://scene/island_details.tscn" id="25_island_details"]
 [ext_resource type="PackedScene" path="res://scene/beach_compass.tscn" id="26_beach_compass"]
+[ext_resource type="Script" path="res://script/coconut.gd" id="27_coconut"]
 
 [sub_resource type="CompressedTexture2D" id="CompressedTexture2D_brvut"]
 
@@ -1520,6 +1521,10 @@ scale = Vector2(1.0004878, 1.021582)
 
 [node name="BeachCompass" parent="." unique_id=158472883 instance=ExtResource("26_beach_compass")]
 position = Vector2(7290, 2110)
+
+[node name="Coconut" type="Node2D" parent="."]
+position = Vector2(7410, 1940)
+script = ExtResource("27_coconut")
 
 [connection signal="body_entered" from="for_npc/bong" to="for_npc" method="_on_bong_body_entered"]
 [connection signal="body_exited" from="for_npc/bong" to="for_npc" method="_on_bong_body_exited"]

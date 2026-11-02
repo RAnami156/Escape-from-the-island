@@ -28,7 +28,7 @@ const API_URL: String = "http://127.0.0.1:11434/api/chat"
 
 @export_category("Umělá inteligence")
 
-@export var model: String = "qwen3:8b"
+@export var model: String = FastDialogue.CzechDialogue.MODEL
 
 @export_range(0.0, 2.0, 0.05)
 var temperature: float = 0.45
@@ -1386,12 +1386,14 @@ func _on_request_completed(
 
 		conversation_history.append({
 			"role": "user",
+			"profile": FastDialogue.CzechDialogue.PROFILE_VERSION,
 			"content": player_text
 		})
 
 
 	conversation_history.append({
 		"role": "assistant",
+		"profile": FastDialogue.CzechDialogue.PROFILE_VERSION,
 		"content": reply
 	})
 
@@ -1547,30 +1549,9 @@ func sanitize_stationary_reply(
 	response_phase: QuestPhase
 ) -> String:
 
-	var lower_reply: String = _normalize_czech_text(reply)
-	var forbidden_phrases: Array[String] = [
-		"sedni si",
-		"posed se",
-		"pojďme si sednout",
-		"pojďme",
-		"pojď",
-		"jdeme",
-		"pojď se mnou",
-		"pojď za mnou",
-		"ukážu",
-		"ukážu ti",
-		"provedu",
-		"provedu tě",
-		"mám čaj",
-		"šálek čaje",
-		"dáme si čaj",
-		"napijeme se čaje"
-	]
-
-	for phrase: String in forbidden_phrases:
-		if lower_reply.contains(_normalize_czech_text(phrase)):
-			return get_safe_fallback_reply(response_phase)
-
+	# Free speech is checked against game constraints, not a keyword blacklist.
+	if not FastDialogue.reply_violations(reply, true, self).is_empty():
+		return get_safe_fallback_reply(response_phase)
 	return reply
 
 

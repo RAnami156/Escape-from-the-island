@@ -147,7 +147,8 @@ func _show_error(reason: String) -> void:
 			hint = "Zkontroluj, že běží Ollama. Připojení zkusíme automaticky." if _czech else "Проверь, что Ollama запущена. Подключимся автоматически."
 		"model_missing":
 			title = "Chybí model pro dialogy." if _czech else "Модель для диалогов не установлена."
-			hint = "Nainstaluj qwen3:8b v Ollamě a zkus to znovu." if _czech else "Установи qwen3:8b в Ollama и попробуй ещё раз."
+			var required_model := FastDialogue.default_model(_czech)
+			hint = ("Nainstaluj %s v Ollamě a zkus to znovu." if _czech else "Установи %s в Ollama и попробуй ещё раз.") % required_model
 		"timeout":
 			title = "Načítání dialogů trvá příliš dlouho." if _czech else "Загрузка диалогов заняла слишком много времени."
 			hint = "Připojení zkusíme automaticky znovu." if _czech else "Проверим подключение снова автоматически."

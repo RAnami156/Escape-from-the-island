@@ -61,6 +61,9 @@ func _run() -> void:
 		bong.quest_location = "Test original destination"
 		bong.phase_1_message_count = 2
 		bong.conversation_history.assign([{"role": "user", "content": "Ahoj"}, {"role": "assistant", "content": "Ahoj, trosečníku."}])
+		if language == "cz":
+			for message: Dictionary in bong.conversation_history:
+				message.profile = preload("res://script/npc_czech_dialogue.gd").PROFILE_VERSION
 		bong.dialogue_history.assign([{"player": "Ahoj", "npc": "Ahoj, trosečníku."}])
 		bong.dialogue_history_index = 0
 		var fly: Node = scene.get_node("flycather")
@@ -108,6 +111,8 @@ func _run() -> void:
 		ship = scene.get_node("ship")
 		_check(bong.current_phase == 4 and bong.quest_location_type == 2 and bong.quest_location == "Test original destination", "Quest state and destination restored")
 		_check(bong.conversation_history.size() == 2 and bong.dialogue_history.size() == 1, "NPC conversation history restored")
+		if language == "cz":
+			_check(bong.conversation_history[1].get("profile") == preload("res://script/npc_czech_dialogue.gd").PROFILE_VERSION, "New dialogue provenance survives saving and loading")
 		_check(is_instance_valid(bong.whiskey_instance), "Outstanding quest item respawned")
 		_check(bong.whiskey_instance.global_position == bong.get_whiskey_spawn_position(), "Item stays at original authored coordinates")
 		_check(not is_instance_valid(fly.fly_instance) and fly.quest_reward_given, "Completed quest does not respawn its item")

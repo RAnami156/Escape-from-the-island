@@ -4,6 +4,7 @@ extends Node2D
 const INTERACTION_DISTANCE := 62.0
 const TARGET_WIDTH := 0.19
 const REQUIRED_HITS := 2
+const OPEN_DURATION := 0.85
 
 var active := false
 var hits := 0
@@ -27,6 +28,7 @@ var _previous_physics := true
 
 func _ready() -> void:
 	light_mask = 0
+	texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
 	process_priority = 10
 	_was_open = Global.compass_chest_opened
 	for frequency: int in [180, 640, 980]:
@@ -50,7 +52,7 @@ func _process(delta: float) -> void:
 				advance_cursor(delta)
 	if Global.compass_chest_opened != _was_open:
 		_was_open = Global.compass_chest_opened
-		reveal_left = 0.7 if _was_open and not Global.compass_found else 0.0
+		reveal_left = OPEN_DURATION if _was_open and not Global.compass_found else 0.0
 	if Global.compass_found and is_instance_valid(Global.player):
 		var offset := target_offset()
 		if offset.length() > 1.0:
@@ -180,7 +182,7 @@ func attempt_hit() -> void:
 	_play(640)
 	if hits >= REQUIRED_HITS:
 		Global.compass_chest_opened = true
-		reveal_left = 0.7
+		reveal_left = OPEN_DURATION
 		close_lock()
 		SaveGame.save_game(false)
 	else:
@@ -226,27 +228,53 @@ func _tone(frequency: int) -> AudioStreamWAV:
 
 
 func _draw() -> void:
-	# A few plain boards and a latch, like the other small homemade props.
 	var opened := Global.compass_chest_opened
-	var edge := Color("372e26")
-	draw_rect(Rect2(-17, 8, 35, 5), Color(0, 0, 0, 0.18))
-	draw_rect(Rect2(-17, -12, 34, 24), edge)
-	draw_rect(Rect2(-15, -10, 30, 20), Color("99764f"))
-	draw_line(Vector2(-15, 1), Vector2(14, 2), edge)
-	draw_line(Vector2(-5, 2), Vector2(-5, 9), edge)
-	draw_line(Vector2(7, -8), Vector2(7, 1), edge)
-	draw_rect(Rect2(-17, -12 if not opened else -23, 34, 10), edge)
-	draw_rect(Rect2(-15, -10 if not opened else -21, 30, 6), Color("ad895d"))
-	draw_line(Vector2(-12, -7 if not opened else -18), Vector2(10, -6 if not opened else -18), Color("806341"))
-	if opened:
-		draw_rect(Rect2(-13, -9, 26, 7), Color("493a2a"))
-	else:
-		draw_rect(Rect2(-2, -5, 5, 7), Color("b6b2a4"))
-		draw_rect(Rect2(0, -3, 1, 3), edge)
-	for point: Vector2 in [Vector2(-12, 6), Vector2(11, 7), Vector2(11, -8)]:
-		draw_rect(Rect2(point, Vector2(1, 1)), edge)
+	var progress := 1.0 - clampf(reveal_left / OPEN_DURATION, 0.0, 1.0) if opened else 0.0
+	var lift := 1.0 - pow(1.0 - progress, 3.0)
+	var edge := Color("392a24")
+	var wood := Color("a97044")
+	var light := Color("d2a06a")
+	var shade := Color("795034")
+	var gold := Color("e4c278")
+	draw_rect(Rect2(-15, 9, 32, 4), Color(0, 0, 0, 0.16))
+	# Plain wood, one latch and small corner caps.
+	draw_rect(Rect2(-17, -1, 34, 11), edge)
+	draw_rect(Rect2(-15, 10, 30, 2), edge)
+	draw_rect(Rect2(-15, 1, 30, 7), wood)
+	draw_rect(Rect2(-15, 7, 30, 3), shade)
+	for x: int in [-15, 12]:
+		draw_rect(Rect2(x, 6, 3, 4), gold)
+	# The lid pivots around the back edge, exposing the dark interior.
+	draw_rect(Rect2(-17, -12, 34, 13), edge)
+	draw_rect(Rect2(-15, -10, 30, 9), Color("50382c"))
+	var pulse := sin(progress * PI)
 	if opened and not Global.compass_found:
-		var center := Vector2(0, -12)
-		draw_circle(center, 5.0, edge)
-		draw_circle(center, 4.0, Color("c0bca7"))
-		draw_line(center + Vector2(-1, 2), center + Vector2(1, -3), Color("a04637"), 1.0)
+		draw_rect(Rect2(-12, -9, 24, 8), Color(1.0, 0.8, 0.4, pulse * 0.3))
+	var tilt := cos(lift * 2.45)
+	# Avoid a singular transform as the lid passes through its edge-on position.
+	if absf(tilt) > 0.02:
+		draw_set_transform(Vector2(0, -12), 0.0, Vector2(1.0, tilt))
+		draw_rect(Rect2(-15, 0, 30, 13), edge)
+		draw_rect(Rect2(-17, 2, 34, 9), edge)
+		draw_rect(Rect2(-15, 2, 30, 9), wood if tilt > 0.0 else shade)
+		draw_rect(Rect2(-13, 2, 26, 2), light)
+		draw_rect(Rect2(-15, 9, 30, 2), shade)
+		draw_rect(Rect2(-3, 8, 6, 7), edge)
+		draw_rect(Rect2(-2, 9, 4, 5), gold)
+		draw_rect(Rect2(-1, 10, 2, 2), edge)
+		draw_set_transform(Vector2.ZERO)
+	if opened and not Global.compass_found:
+		var reveal := smoothstep(0.25, 1.0, progress)
+		draw_set_transform(Vector2(0, lerpf(1.0, -7.0, reveal)))
+		draw_rect(Rect2(-3, -5, 6, 10), Color(edge, reveal))
+		draw_rect(Rect2(-5, -3, 10, 6), Color(edge, reveal))
+		draw_rect(Rect2(-3, -3, 6, 6), Color(gold, reveal))
+		draw_rect(Rect2(-1, -3, 2, 3), Color(Color("b94b40"), reveal))
+		draw_rect(Rect2(-1, 0, 2, 3), Color(Color("637c91"), reveal))
+		draw_set_transform(Vector2.ZERO)
+		# Three brief pixel glints follow the compass as it rises.
+		for point: Vector2 in [Vector2(-9, -6), Vector2(9, -10), Vector2(0, -18)]:
+			var glint := point + Vector2(0, -4.0 * lift)
+			var color := Color(gold, pulse * 0.8)
+			draw_rect(Rect2(glint - Vector2(2, 0), Vector2(5, 1)), color)
+			draw_rect(Rect2(glint - Vector2(0, 2), Vector2(1, 5)), color)

@@ -33,11 +33,11 @@ func _respond(npc: Node, message: String, wire: Dictionary) -> void:
 
 func _run() -> void:
 	root.get_node("SaveGame").save_path = "user://npc-regression-unused/slot.json"
-	for bad: String in ["Ты пришла после крушения?", "Ты уже готова?", "Садись, приготовь чай.", "Я тебя провожу.", "Тебе нужно поесть.", "Я принесу тебе книгу."]:
+	for bad: String in ["Ты пришла после крушения?", "Ты уже готова?", "Садись, приготовь чай.", "Я тебя провожу.", "Тебе нужно поесть.", "Я принесу тебе книгу.", "Хочешь выпить?", "Давай немного посидим."]:
 		_check(not Fast.reply_violations(bad, false).is_empty(), "Unsupported Russian reply must be caught: " + bad)
 	for good: String in ["Ты пришёл после крушения?", "Я сама сделала доски.", "Здесь нельзя сесть или приготовить еду.", "Принеси книгу из руин храма."]:
 		_check(Fast.reply_violations(good, false).is_empty(), "Valid Russian speech must remain intact: " + good)
-	for bad: String in ["Přežila jsi havárii?", "Jsi připravená?", "Sedni si a uvař čaj.", "Pojď se mnou.", "Musíš se najíst a odpočinout.", "Mohu ti ukázat cestu do lesa.", "A já jsem tady, abych ti mouchy chytala.", "Chceš něco pít?", "Nechceš něco k pití?", "Dáš si čaj?", "To se stane. Ale teď si užij svůj nový život. Chceš něco pít? Nebo třeba najít nějakou láhev?"]:
+	for bad: String in ["Přežila jsi havárii?", "Jsi připravená?", "Sedni si a uvař čaj.", "Pojď se mnou.", "Musíš se najíst a odpočinout.", "Mohu ti ukázat cestu do lesa.", "A já jsem tady, abych ti mouchy chytala.", "Chceš něco pít?", "Nechceš něco k pití?", "Dáš si čaj?", "Nechceš si zatraceně sednout a popovídat?", "Můžeme si sednout na pláž.", "Mohli bychom si dát čaj.", "Čaj si můžeme dát, pokud chceš.", "Sedím u kamene.", "To se stane. Ale teď si užij svůj nový život. Chceš něco pít? Nebo třeba najít nějakou láhev?"]:
 		_check(not Fast.reply_violations(bad, true).is_empty(), "Unsupported Czech reply must be caught: " + bad)
 	for good: String in ["Přežil jsi havárii?", "Sama jsem vyrobila prkna.", "Tady se nedá sedět ani vařit.", "Přines knihu z chrámu.", "Mám rád whisky.", "Tady není kde pít."]:
 		_check(Fast.reply_violations(good, true).is_empty(), "Valid Czech speech must remain intact: " + good)
@@ -66,7 +66,7 @@ func _run() -> void:
 					npc.current_phase = inactive_phase
 					if who == "panda":
 						npc.request_phase = inactive_phase
-					_check(not Fast.reply_violations("Nebo třeba najít nějakou láhev?", true, npc).is_empty(), "A bottle hunt outside the current quest must be rejected")
+					_check(not Fast.reply_violations("Ale nejdřív si musíš najít kormidlo a plachtu.", true, npc).is_empty(), "A bottle hunt outside the current quest must be rejected")
 				npc.current_phase = 4
 				if who == "panda":
 					npc.request_phase = 4

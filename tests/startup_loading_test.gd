@@ -15,6 +15,7 @@ func _check(condition: bool, message: String) -> void:
 
 
 func _run() -> void:
+	root.get_node("SaveGame").save_path = "/private/tmp/island-startup-unused-%d.json" % Time.get_ticks_usec()
 	# Passive prewarming is disabled headlessly. Complete requests explicitly to
 	# exercise slow loading, errors and recovery without a real model or network.
 	for language: String in ["ru", "cz"]:

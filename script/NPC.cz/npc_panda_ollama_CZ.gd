@@ -78,7 +78,7 @@ var anim: AnimatedSprite2D = null
 
 @export_category("Umělá inteligence")
 
-@export var model: String = "qwen3:8b"
+@export var model: String = FastDialogue.CzechDialogue.MODEL
 @export var api_url: String = "http://127.0.0.1:11434/api/chat"
 
 @export_range(0.0, 2.0, 0.05)
@@ -1333,11 +1333,13 @@ func _on_request_completed(
 
 	conversation_history.append({
 		"role": "user",
+		"profile": FastDialogue.CzechDialogue.PROFILE_VERSION,
 		"content": player_text
 	})
 
 	conversation_history.append({
 		"role": "assistant",
+		"profile": FastDialogue.CzechDialogue.PROFILE_VERSION,
 		"content": _clean_text(displayed)
 	})
 
@@ -1558,49 +1560,10 @@ func sanitize_reply(
 	reply: String,
 	player_text: String
 ) -> String:
-	var forbidden: Array[String] = [
-		"sedni si",
-		"posed se",
-		"pojďme",
-		"pojď se mnou",
-		"pojďme spolu",
-		"ukážu",
-		"ukážu ti",
-		"odvedu tě",
-		"provedu",
-		"pojď za mnou",
-		"šálek čaje",
-		"pohostím",
-		"mám čaj",
-		"přines",
-		"chyť",
-		"najdi mi",
-		"pojďme si sednout",
-		"napijeme se"
-	]
-
-	var kept: PackedStringArray = []
-
-	for sentence: String in _split_sentences(
-		_clean_text(reply)
-	):
-		var lower: String = _normalize_czech_text(sentence)
-		var blocked: bool = false
-
-		for phrase: String in forbidden:
-			if lower.contains(
-				_normalize_czech_text(phrase)
-			):
-				blocked = true
-				break
-
-		if not blocked:
-			kept.append(sentence)
-
-	if kept.is_empty():
+	# A valid new sentence must survive even if it contains words used in a quest.
+	if not FastDialogue.reply_violations(reply, true, self).is_empty():
 		return _fallback_reply(player_text)
-
-	return " ".join(kept)
+	return _clean_text(reply)
 
 
 # ============================================================

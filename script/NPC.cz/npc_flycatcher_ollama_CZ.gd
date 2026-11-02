@@ -28,7 +28,7 @@ const API_URL: String = "http://127.0.0.1:11434/api/chat"
 
 @export_category("Umělá inteligence")
 
-@export var model: String = "qwen3:8b"
+@export var model: String = FastDialogue.CzechDialogue.MODEL
 
 @export_range(0.0, 2.0, 0.05)
 var temperature: float = 0.45
@@ -1184,8 +1184,7 @@ func _on_request_completed(
 
 		delta = raw_delta
 
-	# Мухоловка принимает только прямую похвалу или любовь к мухам.
-	# Все остальные реплики гарантированно ухудшают отношения.
+	# Особая реакция на лесть сохраняется; обычный разговор оценивается по смыслу.
 	delta = enforce_flycatcher_relationship_delta(player_text, delta)
 
 	# Ответ игрока на единственный вопрос фазы 3 формирует
@@ -1355,12 +1354,14 @@ func _on_request_completed(
 
 		conversation_history.append({
 			"role": "user",
+			"profile": FastDialogue.CzechDialogue.PROFILE_VERSION,
 			"content": player_text
 		})
 
 
 	conversation_history.append({
 		"role": "assistant",
+		"profile": FastDialogue.CzechDialogue.PROFILE_VERSION,
 		"content": reply
 	})
 
@@ -1752,7 +1753,7 @@ func enforce_flycatcher_relationship_delta(
 		delta["friendship"] = maxi(int(delta.get("friendship", 0)), 20)
 		delta["deal_affinity"] = maxi(int(delta.get("deal_affinity", 0)), 20)
 		delta["irritation"] = mini(int(delta.get("irritation", 0)), -20)
-	else:
+	elif current_phase == QuestPhase.PHASE_4_GIVE_QUEST:
 		delta["respect"] = mini(int(delta.get("respect", 0)), -20)
 		delta["friendship"] = mini(int(delta.get("friendship", 0)), -20)
 		delta["deal_affinity"] = mini(int(delta.get("deal_affinity", 0)), -20)
