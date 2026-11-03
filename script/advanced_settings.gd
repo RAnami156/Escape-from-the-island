@@ -8,6 +8,9 @@ var _transitioning := false
 
 
 func _ready() -> void:
+	%RepairHelmButton.pressed.connect(_repair_part.bind(&"helm"))
+	%RepairSailButton.pressed.connect(_repair_part.bind(&"sail"))
+	%RepairPlanksButton.pressed.connect(_repair_part.bind(&"planks"))
 	_localize()
 	_refresh_ship()
 
@@ -61,8 +64,11 @@ func _localize() -> void:
 	%tp_flycatcher.text = _t("Мухоловка", "Mucholapka")
 	%tp_ship.text = _t("Корабль", "Loď")
 	%tp_baobab.text = _t("Баобаб", "Baobab")
+	%tp_plane.text = _t("Самолёт", "Letadlo")
 	%ShipTitle.text = _t("Лодка", "Loď")
-	%RepairButton.text = _t("Починить всю лодку", "Opravit celou loď")
+	%RepairHelmButton.text = _t("Починить штурвал", "Opravit kormidlo")
+	%RepairSailButton.text = _t("Починить парус", "Opravit plachtu")
+	%RepairPlanksButton.text = _t("Починить корпус", "Opravit trup")
 	%FinalTitle.text = _t("Катсцены", "Scény")
 	%GoodFinalButton.text = _t("Хороший финал", "Dobrý konec")
 	%BadFinalButton.text = _t("Плохой финал", "Špatný konec")
@@ -79,11 +85,15 @@ func _refresh_ship() -> void:
 	var ship := _ship()
 	if ship == null:
 		%ShipStatus.text = _t("Лодка недоступна", "Loď není dostupná")
-		%RepairButton.disabled = true
+		%RepairHelmButton.disabled = true
+		%RepairSailButton.disabled = true
+		%RepairPlanksButton.disabled = true
 		return
 	var repaired := int(ship.helm_repaired) + int(ship.sail_repaired) + int(ship.planks_repaired)
 	%ShipStatus.text = _t("Лодка починена", "Loď je opravená") if repaired == 3 else _t("Починено: %d/3", "Opraveno: %d/3") % repaired
-	%RepairButton.disabled = repaired == 3
+	%RepairHelmButton.disabled = ship.helm_repaired
+	%RepairSailButton.disabled = ship.sail_repaired
+	%RepairPlanksButton.disabled = ship.planks_repaired
 
 
 func _teleport_to(path: NodePath, offset: Vector2, ru: String, cz: String) -> void:
@@ -111,14 +121,28 @@ func _on_tp_baobab_pressed() -> void:
 	_teleport_to(^"structures/Baobab100_byRavan", Vector2(0, 160), "баобаб", "baobab")
 
 
-func _on_repair_ship_pressed() -> void:
+func _on_tp_plane_pressed() -> void:
+	_teleport_to(^"structures/ExecDd02c218Bec745d392EaBe1141136940", Vector2(140, -37), "самолёт", "letadlo")
+
+
+func _repair_part(part: StringName) -> void:
 	var ship := _ship()
-	if ship == null or not ship.has_method("repair_all"):
+	if ship == null or not ship.has_method("repair_part"):
 		%ActionStatus.text = _t("Корабль недоступен.", "Loď není dostupná.")
 		return
-	ship.repair_all()
+	if not ship.repair_part(part):
+		return
 	_refresh_ship()
-	%ActionStatus.text = _t("Лодка полностью починена. Можно отплывать!", "Loď je kompletně opravená. Můžeme vyplout!")
+	if ship.ship_ready:
+		%ActionStatus.text = _t("Лодка полностью починена. Можно отплывать!", "Loď je kompletně opravená. Můžeme vyplout!")
+	else:
+		match part:
+			&"helm":
+				%ActionStatus.text = _t("Штурвал установлен.", "Kormidlo je nainstalováno.")
+			&"sail":
+				%ActionStatus.text = _t("Парус установлен.", "Plachta je nainstalována.")
+			&"planks":
+				%ActionStatus.text = _t("Корпус починен.", "Trup je opravený.")
 
 
 func _on_resume_pressed() -> void:

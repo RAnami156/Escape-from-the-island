@@ -27,6 +27,11 @@ func _action(action: StringName) -> void:
 
 func _run() -> void:
 	var global: Node = root.get_node("Global")
+	root.get_node("SaveGame").save_path = "/private/tmp/island-advanced-settings-%d.json" % Time.get_ticks_usec()
+	node_added.connect(func(node: Node) -> void:
+		if node.name == "guide_npc":
+			node.auto_introduction = false
+	)
 	change_scene_to_file("res://scene/menu.tscn")
 	await scene_changed
 	for language: String in ["ru", "cz"]:
@@ -57,11 +62,27 @@ func _run() -> void:
 		global.helm = true
 		global.parus = true
 		global.bamboo_boards = true
-		panel.get_node("%RepairButton").pressed.emit()
-		_check(ship.ship_ready and ship.helm_repaired and ship.sail_repaired and ship.planks_repaired, "Repair button must repair every boat part")
+		_check(panel.get_node("%tp_plane").text == ("Letadlo" if language == "cz" else "Самолёт"), "Plane teleport must use the selected language")
+		var repairs := [
+			["%RepairHelmButton", "helm", "Opravit kormidlo", "Починить штурвал"],
+			["%RepairSailButton", "sail", "Opravit plachtu", "Починить парус"],
+			["%RepairPlanksButton", "planks", "Opravit trup", "Починить корпус"],
+		]
+		for index in repairs.size():
+			var button: Button = panel.get_node(repairs[index][0])
+			_check(button.text == repairs[index][2 if language == "cz" else 3], "Individual repair buttons must be localized")
+			_check(not button.disabled, "An unrepaired part must be available")
+			button.pressed.emit()
+			for other in repairs.size():
+				_check(bool(ship.get(repairs[other][1] + "_repaired")) == (other <= index), "Repairing one part must leave the other parts unchanged")
+			_check(button.disabled and not ship.repair_part(repairs[index][1]), "An installed part cannot be repaired twice")
+			_check(ship.ship_ready == (index == 2), "Departure becomes available only after all three separate repairs")
+			if index < 2:
+				_check(panel.get_node("%ShipStatus").text == (("Opraveno: %d/3" if language == "cz" else "Починено: %d/3") % (index + 1)), "Each repair updates the progress counter")
 		_check(ship.helm_anim.visible and ship.sail_anim.visible and ship.planks_anim.animation == &"fixed", "Full repair must update the boat visuals")
 		_check(global.helm and global.parus and global.bamboo_boards, "Quick repair must not consume quest items")
-		_check(panel.get_node("%RepairButton").disabled and panel.get_node("%ShipStatus").text == ("Loď je opravená" if language == "cz" else "Лодка починена"), "Panel must show a fully repaired boat")
+		_check(panel.get_node("%ShipStatus").text == ("Loď je opravená" if language == "cz" else "Лодка починена"), "Panel must show a fully repaired boat")
+		_check(panel.get_node("Center/Panel").size.y <= root.get_visible_rect().size.y, "The expanded menu must fit the viewport")
 		ship.repair_all()
 		_check(ship.ship_ready, "Full repair must be safe to repeat")
 		var destinations := [
@@ -70,11 +91,20 @@ func _run() -> void:
 			["%tp_flycatcher", "flycather", Vector2(0, 80)],
 			["%tp_baobab", "structures/Baobab100_byRavan", Vector2(0, 160)],
 			["%tp_ship", "ship", Vector2(-100, 0)],
+			["%tp_plane", "structures/ExecDd02c218Bec745d392EaBe1141136940", Vector2(140, -37)],
 		]
 		for destination in destinations:
 			panel.get_node(destination[0]).pressed.emit()
 			var target: Node2D = main.get_node(destination[1])
 			_check(global.player_position.is_equal_approx(target.global_position + destination[2]), "Teleport must keep its original destination: " + destination[1])
+		var query := PhysicsShapeQueryParameters2D.new()
+		var player_shape := CircleShape2D.new()
+		player_shape.radius = 10.0
+		query.shape = player_shape
+		query.collision_mask = global.player.collision_mask
+		query.transform = Transform2D(0.0, global.player_position)
+		query.exclude = [global.player.get_rid()]
+		_check(global.player.get_world_2d().direct_space_state.intersect_shape(query).is_empty(), "Plane teleport must land outside aircraft and shoreline collisions")
 		_check(paused, "Teleport must keep the panel paused until it is closed")
 		await _action(&"esc")
 		_check(not panel.visible and not paused and current_scene == main, "Escape must close the panel without leaving Main")

@@ -147,8 +147,11 @@ func _run() -> void:
 			_check(npc.current_phase == 6 and npc.quest_reward_given, "Returning the item must unlock free conversation")
 			_check(global.get(reward) and not global.get(item), "The original item must be exchanged for the original boat part")
 			global.set(reward, false)
+			var before_small_talk: int = global.get(who + "_friendship")
 			await _respond(npc, hello, {"d": [0, 0, 0, 0], "r": "Rád tě vidím." if language == "cz" else "Рад тебя видеть."})
 			_check(not global.get(reward) and npc.current_phase == 6, "Free conversation must not duplicate quest rewards")
+			if language == "cz" or who != "flycatcher":
+				_check(global.get(who + "_friendship") == before_small_talk + 1 and npc.last_relationship_delta.friendship == 1, "Zero-rated ordinary conversation must apply and display +1 friendship")
 			if who == "panda":
 				npc.current_phase = 2
 				npc.quest_reward_given = false

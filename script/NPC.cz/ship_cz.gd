@@ -135,16 +135,34 @@ func update_prompts() -> void:
 
 
 func repair_all() -> void:
-	# The quick-action panel repairs the same state and visuals as normal play.
-	helm_repaired = true
-	sail_repaired = true
-	planks_repaired = true
-	helm_anim.show()
-	helm_anim.play("default")
-	sail_anim.show()
-	sail_anim.play("default")
-	planks_anim.play("fixed")
+	for part: StringName in [&"helm", &"sail", &"planks"]:
+		repair_part(part)
+
+
+func repair_part(part: StringName) -> bool:
+	# Debug repairs update only the selected part, without consuming quest items.
+	match part:
+		&"helm":
+			if helm_repaired:
+				return false
+			helm_repaired = true
+			helm_anim.show()
+			helm_anim.play("default")
+		&"sail":
+			if sail_repaired:
+				return false
+			sail_repaired = true
+			sail_anim.show()
+			sail_anim.play("default")
+		&"planks":
+			if planks_repaired:
+				return false
+			planks_repaired = true
+			planks_anim.play("fixed")
+		_:
+			return false
 	check_ship()
+	return true
 
 
 func check_ship() -> void:

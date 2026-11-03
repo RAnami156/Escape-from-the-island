@@ -390,6 +390,11 @@ static func expand_response(npc: Node, body: PackedByteArray) -> PackedByteArray
 				delta[key] = maxi(0, delta[key])
 			delta.irritation = mini(0, delta.irritation)
 	if valid:
+		# A normal conversation still builds a little familiarity when AI returns four zeros.
+		# Panda's joke verdict continues to use its authored scoring in the handler.
+		if response.get("behavior", "neutral") != "hostile" and not (kind(npc) == "panda" and phase(npc) == 3):
+			if delta.values().all(func(value: int) -> bool: return value == 0):
+				delta.friendship = 1
 		var spoken: String = response.r
 		var czech: bool = npc.get_script().resource_path.contains("/NPC.cz/")
 		if not scripted_reply(npc) and not reply_violations(spoken, czech, npc).is_empty():

@@ -179,6 +179,12 @@ custom_minimum_size = Vector2(0, 52)
 layout_mode = 2
 text = "Баобаб"
 
+[node name="tp_plane" type="Button" parent="Center/Panel/Content/Columns/Teleport"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 52)
+layout_mode = 2
+text = "Самолёт"
+
 [node name="Actions" type="VBoxContainer" parent="Center/Panel/Content/Columns"]
 layout_mode = 2
 size_flags_horizontal = 3
@@ -189,11 +195,23 @@ layout_mode = 2
 text = "Лодка"
 
 
-[node name="RepairButton" type="Button" parent="Center/Panel/Content/Columns/Actions"]
+[node name="RepairHelmButton" type="Button" parent="Center/Panel/Content/Columns/Actions"]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(0, 52)
 layout_mode = 2
-text = "Починить всю лодку"
+text = "Починить штурвал"
+
+[node name="RepairSailButton" type="Button" parent="Center/Panel/Content/Columns/Actions"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 52)
+layout_mode = 2
+text = "Починить парус"
+
+[node name="RepairPlanksButton" type="Button" parent="Center/Panel/Content/Columns/Actions"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 52)
+layout_mode = 2
+text = "Починить корпус"
 
 [node name="ShipStatus" type="Label" parent="Center/Panel/Content/Columns/Actions"]
 unique_name_in_owner = true
@@ -259,11 +277,11 @@ text = "Продолжить"
 
 [connection signal="pressed" from="Center/Panel/Content/Columns/Teleport/tp_baobab" to="." method="_on_tp_baobab_pressed"]
 
+[connection signal="pressed" from="Center/Panel/Content/Columns/Teleport/tp_plane" to="." method="_on_tp_plane_pressed"]
+
 [connection signal="pressed" from="Center/Panel/Content/Header/CloseButton" to="." method="_on_resume_pressed"]
 
 [connection signal="pressed" from="Center/Panel/Content/Footer/ResumeButton" to="." method="_on_resume_pressed"]
-
-[connection signal="pressed" from="Center/Panel/Content/Columns/Actions/RepairButton" to="." method="_on_repair_ship_pressed"]
 
 [connection signal="pressed" from="Center/Panel/Content/Columns/Actions/GoodFinalButton" to="." method="_on_final_good_pressed"]
 
